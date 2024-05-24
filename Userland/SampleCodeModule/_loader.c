@@ -17,12 +17,12 @@ int _start() {
 }
 
 
-void * memset(void * destination, int32_t c, uint64_t length) {
+void * memset(void * destiation, int32_t c, uint64_t length) {
 	uint8_t chr = (uint8_t)c;
-	char * dst = (char*)destination;
+	char * dst = (char*)destiation;
 
 	while(length--)
 		dst[length] = chr;
 
-	return destination;
+	return destiation;
 }

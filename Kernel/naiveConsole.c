@@ -16,6 +16,21 @@ void ncPrint(const char * string)
 		ncPrintChar(string[i]);
 }
 
+void writeCharacter(unsigned char c, unsigned char forecolour, unsigned char backcolour)
+{
+    uint16_t attrib = (backcolour << 4) | (forecolour & 0x0F);
+
+    *currentVideo = c;
+    *(currentVideo+1) = attrib;
+    currentVideo+=2;
+}
+
+void writeStr(char * str, unsigned char forecolour, unsigned char backcolour) {
+    for (int i = 0 ; *(str+i) != '\0' ; i++) {
+        writeCharacter(*(str+i), forecolour, backcolour);
+    }
+}
+
 void ncPrintChar(char character)
 {
 	*currentVideo = character;

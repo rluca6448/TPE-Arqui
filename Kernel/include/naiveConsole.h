@@ -3,6 +3,11 @@
 
 #include <stdint.h>
 
+/* Estas no venian */
+void writeCharacter(unsigned char c, unsigned char forecolour, unsigned char backcolour);
+void writeStr(char * str, unsigned char forecolour, unsigned char backcolour);
+
+/* Estas ya venian */
 void ncPrint(const char * string);
 void ncPrintChar(char character);
 void ncNewline();

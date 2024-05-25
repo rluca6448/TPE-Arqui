@@ -18,9 +18,6 @@ static void * const sampleDataModuleAddress = (void*)0x500000;
 
 typedef int (*EntryPoint)();
 
-void writeStr(char * str);
-void writeCharacter(unsigned char c, unsigned char forecolour, unsigned char backcolour, int x, int y);
-
 void clearBSS(void * bssAddress, uint64_t bssSize)
 {
 	memset(bssAddress, 0, bssSize);
@@ -84,10 +81,13 @@ void * initializeKernelBinary()
 
 int main()
 {	
-	ncPrint("Arquitectura de Computadoras");
-	ncNewline();
-	
-	ncPrint("[Kernel Main]");
+	writeStr("Arquitectura de Computadoras", 0xF, 0x2);
+    ncNewline();
+
+    writeStr(RTC(), 0xF, 0x2);
+    ncNewline();
+
+	writeStr("[Kernel Main]", 0x7, 0x0);
 	ncNewline();
 	ncPrint("  Sample code module at 0x");
 	ncPrintHex((uint64_t)sampleCodeModuleAddress);
@@ -104,20 +104,7 @@ int main()
 	ncPrint((char*)sampleDataModuleAddress);
 	ncNewline();
 
-	ncPrint("[Finished]");
+	writeStr("[Finished]", 0x7, 0x0);
 	return 0;
 }
 
-void writeCharacter(unsigned char c, unsigned char forecolour, unsigned char backcolour, int x, int y)
-{
-     uint16_t attrib = (backcolour << 4) | (forecolour & 0x0F);
-     volatile uint16_t * where;
-     where = (volatile uint16_t *)0xB8000 + (y * 80 + x) ;
-     *where = c | (attrib << 8);
-}
-
-void writeStr(char * str) {
-	for (int i = 0 ; *(str+i) != '\0' ; i++) {
-		writeCharacter(*(str+i), 2, 15, i, 0);
-	}
-}

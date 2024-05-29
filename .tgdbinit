@@ -97,7 +97,7 @@ gdb_window = Window('gdb')
 # Tamano ideal 64bits = 60 columnas
 stack_pane = gdb_window.split(
         dir=Pane.SplitDir.HORIZONTAL_RIGHT,
-        percentage='60',
+        percentage='62',
         module_name='stackmemory'
     )
 stack_pane.add_extra_module('breakpoints')
@@ -105,7 +105,7 @@ stack_pane.add_extra_module('breakpoints')
 # Tamano preferido lineas para zona memoria = 15 lineas
 memory_pane = stack_pane.split(
         dir=Pane.SplitDir.VERTICAL_ABOVE,
-        percentage=15,
+        percentage=63,
         module_name='memory'
     )
 memory_pane.add_extra_module('threads')
@@ -113,7 +113,7 @@ memory_pane.add_extra_module('threads')
 
 source_pane = gdb_window.splitResizeCurrent(
         dir=Pane.SplitDir.VERTICAL_BELOW,
-        percentage=19,
+        percentage=64,
         module_name='source'
     )
 # dashboard_pane.set_dashboard()
@@ -122,7 +122,7 @@ source_pane.add_extra_module('variables')
 # Tamano ideal 64bits = 82 columnas
 registers_pane = gdb_window.split(
         dir=Pane.SplitDir.HORIZONTAL_RIGHT,
-        percentage=82,
+        percentage=65,
         module_name='registers'
     )
 registers_pane.add_extra_module('history')
@@ -131,7 +131,7 @@ registers_pane.add_extra_module('expressions')
 # Tamano ideal 64bits = 55 columnas (al menos)
 assembly_pane = source_pane.split(
         dir=Pane.SplitDir.HORIZONTAL_RIGHT,
-        percentage=55,
+        percentage=66,
         module_name='assembly'
     )
 
@@ -161,6 +161,38 @@ gdb.execute(f'dashboard memory watch $esp 28')
 #gdb.execute(f'dashboard history')
 #gdb.execute(f'dashboard stack')
 
+"""
+def get_ip_address(interface):
+    try:
+        # Execute the bash command to get the IP address
+        result = sp.run(
+            f"ip -4 addr show {interface} | grep -oP '(?<=inet\\s)\\d+(\\.\\d+){3}'",
+            shell=True,
+            capture_output=True,
+            text=True
+        )
+        # Check if the command was successful
+        if result.returncode != 0:
+            print(f"Command failed with return code {result.returncode}")
+            print(f"stderr: {result.stderr}")
+            return None
+
+        # The IP address will be in result.stdout if the command was successful
+        ip_address = result.stdout.strip()
+        if not ip_address:
+            print("No IP address found.")
+            return None
+
+        return ip_address
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
+
+
+interface = 'wlp2s0'
+ip_address = get_ip_address(interface)
+gdb_command = f'target remote {ip_address}:1234'
+"""
 
 # para debug docker
 # set debuginfod enabled off

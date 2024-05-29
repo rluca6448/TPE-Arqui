@@ -27,68 +27,170 @@ cpuVendor:
 	ret
 
 global RTC
-global numToStr
+global hexToString
 
-numToStr:
-		mov ebp, ebx	; guardo la direccion
-
+; recibe en eax un numero, y deja en eax un string
+hexToString:
+		push rbp
+		mov rbp, rsp
+        push rbx
         push rcx
         push rdx
+		push rax
 
-		push rax		; guardo el numero
+        mov rbx, 0x10
+        mov rcx, 0
 
+    .len:
+        mov rdx, 0
+        div rbx
+        inc rcx
 
-		mov rbx, 0x0
-		mov rcx, 0xa	; dividendo
-		mov rdx, 0x0	; resto
-	len1:
-		div rcx			; divido el numero por 10
-		inc rbx			; aumento la longitud
-		mov rdx, 0x0
-		cmp rax, 0x0  	; si eax es distinto
-		jne len1		; de 0, divido de nuevo
+        cmp rax, 0
+        jne .len
 
-		pop rax
-		mov byte [rbp+rbx], 0
-		dec rbx
+    ; Ahora tengo en rcx la cantidad de digitos
 
-		cmp rbx, 10
-		jae err1
-	cicle1:
-		div rcx
-		add rdx, '0'
-		mov byte [rbp+rbx], dl
-		mov rdx, 0
-		dec rbx
-		cmp rbx, 0
-		jge cicle1
-		jmp fin1
-	err1:
-		mov rdx, [warn]
-		mov [rbp], rdx
-	fin1:
-		mov rbx, rbp
+        pop rax     ; recupero el numero
 
-		pop rdx
-		pop rcx
-		ret     ; ahora esta en ebx la dir del string
+    .loop:
+        mov rdx, 0
+        div rbx
+
+        add rdx, 0x30
+        mov byte [placeholder+rcx-1], dl
+        dec rcx
+
+        cmp rax, 0
+        jne .loop
+
+	.fin:
+	    pop rdx
+	    pop rcx
+	    pop rbx
+
+	    mov eax, placeholder
+        mov rsp, rbp
+        pop rbp
+        ret
+
+hexToStr:
 
 RTC:
-    mov al, 0
-    out 70h, al
-    in ax, 71h
+        push rbp
+        mov rbp, rsp
+        push rbx
 
-    mov rbx, placeholder
-    call numToStr
-    mov [date], rbx
-    mov rax, date
-    ret
+        mov rax, 0
+
+        ; horas
+
+    .wait1:
+        mov al, 0x8A           ; Register 0x0A, with NMI disabled
+        out 0x70, al           ; Select register 0x0A
+        in al, 0x71            ; Read the value
+
+        test al, 0x80          ; Check if update in progress (bit 7)
+        jnz .wait1             ; If bit 7 is set, wait
+
+        xor rax, rax
+        mov al, 0x04
+
+        out 70h, al
+        in al, 71h
+
+        call hexToString
+        mov bx, [rax]
+        mov word [date+0x0], bx
+
+        ; minutos
+
+    .wait2:
+        mov al, 0x8A           ; Register 0x0A, with NMI disabled
+        out 0x70, al           ; Select register 0x0A
+        in al, 0x71            ; Read the value
+
+        test al, 0x80          ; Check if update in progress (bit 7)
+        jnz .wait2             ; If bit 7 is set, wait
+
+        xor rax, rax
+        mov al, 0x02
+
+        out 70h, al
+        in al, 71h
+
+        call hexToString
+        mov bx, [rax]
+        mov word [date+0x3], bx
+
+        ; segundos
+
+    .wait3:
+        mov al, 0x8A           ; Register 0x0A, with NMI disabled
+        out 0x70, al           ; Select register 0x0A
+        in al, 0x71            ; Read the value
+
+        test al, 0x80          ; Check if update in progress (bit 7)
+        jnz .wait3             ; If bit 7 is set, wait
+
+        xor rax, rax
+        mov al, 0x00
+
+        out 70h, al
+        in al, 71h
+
+        call hexToString
+        mov bx, [rax]
+        mov word [date+0x6], bx
+
+        ; devuelvo el string en eax
+        mov rax, date
+
+    .fin:
+        pop rbx
+        mov rsp, rbp
+        pop rbp
+        ret
+
+GLOBAL keyPress
+
+keyPress:
+        push rbp
+        mov rbp, rsp
+        push rbx
+        push rcx
+        mov rax, 0
+
+    .loop:
+        in al, 0x64
+        mov cl, al
+        and al, 0x01
+        cmp al, 0
+        je .loop
+
+        in al, 0x60
+
+        mov cl, al
+        in al, 0xED
+
+        test al, 0x04 ; 00000100 & ?????1??
+        jnz .fin
+
+    .toLower:
+        mov byte [result+0x01], 0x01
+    .fin:
+        mov byte [result+0x00], cl
+        mov eax, result
+        pop rcx
+        mov rsp, rbp
+        pop rbp
+        ret
+
+;==========================================0
 
 section .data
-    date db "--:--:--"
+    date db "00:00:00", 0
 
 section .bss
-    placeholder resb 64
-
-section .rodata
-	warn db "ERR", 10, 0
+    placeholder resb 2
+    result resb 2

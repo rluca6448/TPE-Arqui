@@ -6,7 +6,6 @@
 /* Estas no venian */
 void writeCharacter(unsigned char c, unsigned char forecolour, unsigned char backcolour);
 void writeStr(char * str, unsigned char forecolour, unsigned char backcolour);
-char mapKey(char character[2]);
 
 /* Estas ya venian */
 void ncPrint(const char * string);

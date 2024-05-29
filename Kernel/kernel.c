@@ -1,9 +1,8 @@
 #include <stdint.h>
-#include <string.h>
 #include <lib.h>
 #include <moduleLoader.h>
 #include <naiveConsole.h>
-#include <stdio.h>
+#include <keyboard.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -18,6 +17,8 @@ static void *const sampleCodeModuleAddress = (void *) 0x400000;
 static void *const sampleDataModuleAddress = (void *) 0x500000;
 
 typedef int (*EntryPoint)();
+
+int keyFlag[4] = {0,0};        // index 0: bloq-mayus ; index 1: {1=shift ; 2=CTRL ; 3=alt}
 
 void clearBSS(void *bssAddress, uint64_t bssSize) {
     memset(bssAddress, 0, bssSize);
@@ -109,16 +110,41 @@ int main() {
     writeStr("Ahora podes escribir...", 0xF, 0x0);
     ncNewline();*/
 
-    char i[2] = { '\0', 0 };
+    char i = getKey();
+    char key;
 
-    while (i[0] != '\x03') {
-        char * pressedKey = keyPress();
-        i[0] = pressedKey[0];
-        i[1] = pressedKey[1];
-
-        if (mapKey(i) != '\0') {
-            writeCharacter(mapKey(i), 0xF, 0x0);
+    while ((key = mapKey(i, keyFlag)) != '\x03') {
+        switch (i) {
+            case '\x3A':    // bloq-mayus
+                keyFlag[0] = !keyFlag[0];
+                break;
+            case '\x36':    // right-shift pressed
+            case '\x2A':    // left-shift pressed
+                keyFlag[0] = !keyFlag[0];
+                keyFlag[1] = 1;
+                break;
+            case '\xAA':    // left-shift released
+                keyFlag[0] = !keyFlag[0];
+                keyFlag[1] = 0;
+                break;
+            case '\x9D':    // left-ctrl released
+            case '\xB8':    // left-alt released
+            case '\xB6':    // right-shift released
+                keyFlag[1] = 0;
+                break;
+            case '\x1D':    // left-ctrl pressed
+                keyFlag[1] = 2;
+                break;
+            case '\x38':    // left-alt pressed
+                keyFlag[1] = 3;
+                break;
+            default:
+                if (key != '\0') {
+                    writeCharacter(key, 0xF, 0x0);
+                }
+                break;
         }
+        i = getKey();
     }
 
     ncNewline();

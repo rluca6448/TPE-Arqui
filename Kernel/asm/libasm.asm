@@ -152,14 +152,11 @@ RTC:
         pop rbp
         ret
 
-GLOBAL keyPress
+GLOBAL getKey
 
-keyPress:
+getKey:
         push rbp
         mov rbp, rsp
-        push rbx
-        push rcx
-        mov rax, 0
 
     .loop:
         in al, 0x64
@@ -169,19 +166,7 @@ keyPress:
         je .loop
 
         in al, 0x60
-
-        mov cl, al
-        in al, 0xED
-
-        test al, 0x04 ; 00000100 & ?????1??
-        jnz .fin
-
-    .toLower:
-        mov byte [result+0x01], 0x01
     .fin:
-        mov byte [result+0x00], cl
-        mov eax, result
-        pop rcx
         mov rsp, rbp
         pop rbp
         ret
@@ -193,4 +178,3 @@ section .data
 
 section .bss
     placeholder resb 2
-    result resb 2

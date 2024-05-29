@@ -8,6 +8,5 @@ void * memcpy(void * destination, const void * source, uint64_t length);
 
 char * cpuVendor(char *result);
 char * RTC();
-char * keyPress();
 
 #endif

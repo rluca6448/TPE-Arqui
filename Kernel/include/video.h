@@ -14,5 +14,7 @@ void newFontSize(int newSize);
 
 int getWidth();
 int getHeight();
+int xOutOfBounds(uint64_t * x);
+int yOutOfBounds(uint64_t * y);
 
 #endif //TPE_ARQUI_VIDEO_H

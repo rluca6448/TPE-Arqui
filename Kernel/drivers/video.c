@@ -54,6 +54,15 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
 }
 
 void putCharAt(uint8_t c, uint64_t * x, uint64_t * y, uint64_t foreColor, uint64_t backgroundColor) {
+
+    if (xOutOfBounds(x)) {
+        newLine(x, y);
+    }
+
+    if (yOutOfBounds(y)) {
+        clearScreen(backgroundColor);
+    }
+
     uint8_t charMap[FONT_HEIGHT][FONT_WIDTH];
     getCharMap(c, charMap);
 
@@ -67,7 +76,9 @@ void putCharAt(uint8_t c, uint64_t * x, uint64_t * y, uint64_t foreColor, uint64
 }
 
 void deleteCharAt(uint64_t * x, uint64_t * y, uint64_t foreColor, uint64_t backgroundColor) {
-
+    *x -= FONT_WIDTH * fontSize;;
+    putCharAt(' ', x, y, foreColor, backgroundColor);
+    *x -= FONT_WIDTH * fontSize;;
 }
 
 void clearScreen(uint32_t hexColor) {
@@ -95,4 +106,12 @@ int getWidth() {
 
 int getHeight() {
     return VBE_mode_info->height;
+}
+
+int xOutOfBounds(uint64_t * x) {
+    return *x >= getWidth();
+}
+
+int yOutOfBounds(uint64_t * y) {
+    return *y >= getHeight();
 }

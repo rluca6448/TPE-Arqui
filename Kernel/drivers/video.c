@@ -49,3 +49,115 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
     framebuffer[offset+1]   =  (hexColor >> 8) & 0xFF;
     framebuffer[offset+2]   =  (hexColor >> 16) & 0xFF;
 }
+
+// Alex (a partir de acá)
+
+static char stdout[9999] = {0};
+static int sizeOut = 0;
+static char stdin[9999] = {0};
+static int sizeIn = 0;
+static char stderr[9999] = {0};
+static int sizeErr = 0;
+
+static int CHAR_SIZE = 10;
+
+int getSizeIn(){
+	return sizeIn;
+}
+
+void putOut(char c){
+	// TODO: falta manejar excepciones especialmente si sizeOut es demasiado grande
+	stdout[sizeOut++]=c;
+    printOutInScreen(CHAR_SIZE);
+}
+
+void putErr(char c){
+	// TODO: falta manejar excepciones
+	stderr[sizeErr++]=c;
+    printOutInScreen(CHAR_SIZE);
+}
+
+void putIn(char c){
+    switch (stdin[sizeIn])      //agregar quizás casos especiales
+    {
+    default:
+    	// TODO: falta manejar excepciones
+        stdin[sizeIn++] = c;
+    }
+}
+
+void clearIn(){
+    sizeIn = 0;
+}
+
+void clearOut(){
+    sizeOut = 0;
+}
+
+
+static char videoModeOn = 0;
+
+void disableTextScreen(){
+    videoModeOn = 0;
+}
+
+void enableTextScreen(){
+    videoModeOn = 1;
+}
+
+void sys_write(int fd, const char* buf, int count){
+    if (fd==1){
+        for(int i=0; i<count; i++){
+            putOut(buf[i]);
+        }
+    }
+    if (fd==2){
+        for(int i=0; i<count; i++){
+            putErr(buf[i]);
+        }
+    }
+}
+
+void sys_read(int fd, char* buf, int count){
+    if (fd==0){
+        for(int i=0; i<count && i<sizeIn; i++){
+            buf[i] = stdin[i];
+        }
+    }
+}
+
+//TODO: convertir a stdIn y stdOut en arrays ciclicos.
+// Agregaría una variable startsOut en stdOut
+// Info útil: desde startsOut hasta startsOut + #chars_in_screen
+// Por esto, nunca va a haber información cruzada
+
+// Agregaría una variable startsIn en stdIn
+// Info útil: desde startsIn hasta startsIn + sizeIn
+// sizeIn >= tamaño vector es cuando se pasa del límite
+
+void printOutInScreen(int size){    // size AHORA es pixeles x letra. Esto lo tengo que cambiar
+    if (videoModeOn==1) return;
+    putPixel(0x00FFFFFF, 1, 1);
+	int perLine = 1024/size; //reemplazar con macro
+	int height = 768/size;
+	int k = 0;
+	for(int i=0; i<height && k<sizeOut; i++){
+		for(int j=0; j<perLine; j++, k++) {
+			if (stdout[k]=='\n'){
+				break;
+			}
+			switch (stdout[k]){
+				case '\t': j+=3; break;
+                default:
+				printCharInScreen(stdout[k], j*size, i*size);
+			}
+		}
+	}
+}
+
+void printCharInScreen(char c, int x, int y){
+    // esto es para probar
+    putPixel(0x00FFFFFF, x, y);
+}
+
+//1024 width 768 height

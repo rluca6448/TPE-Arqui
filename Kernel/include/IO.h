@@ -6,6 +6,6 @@
 void putChar(char c);
 void putCharColoured(char c, uint64_t foreGround, uint64_t backGround);
 
-void printf(const char * str, ...);
+void printf(char * str);
 
 #endif //TPE_ARQUI_IO_H

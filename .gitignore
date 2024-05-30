@@ -284,6 +284,4 @@ fabric.properties
 
 .bash_history
 .gdb_history
-x64BareBonesImage.*
-
-# End of https://mrkandreev.name/snippets/gitignore-generator/#C,CMake,Python,Assembler,JetBrains
+/Image/x64BareBonesImage.*

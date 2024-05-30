@@ -60,9 +60,8 @@ void putCharAt(uint8_t c, uint64_t * x, uint64_t * y, uint64_t foreColor, uint64
     }
 
     if (yOutOfBounds(y)) {
-        *x = 0;
-        *y = 0;
         clearScreen(backgroundColor);
+        *y = FONT_HEIGHT * fontSize;
     }
 
     uint8_t charMap[FONT_HEIGHT][FONT_WIDTH];
@@ -86,7 +85,7 @@ void deleteCharAt(uint64_t * x, uint64_t * y, uint64_t foreColor, uint64_t backg
 void clearScreen(uint32_t hexColor) {
     for (int i = 0; i < VBE_mode_info->height ; i++) {
         for (int j = 0; j < VBE_mode_info->width ; j++) {
-            putPixel(0x000000, j, i);
+            putPixel(hexColor, j, i);
         }
     }
 }
@@ -111,9 +110,9 @@ int getHeight() {
 }
 
 int xOutOfBounds(uint64_t * x) {
-    return *x >= getWidth();
+    return *x + FONT_WIDTH * fontSize >= getWidth();
 }
 
 int yOutOfBounds(uint64_t * y) {
-    return *y >= getHeight() - FONT_HEIGHT * fontSize;
+    return *y + FONT_HEIGHT * fontSize >= getHeight();
 }

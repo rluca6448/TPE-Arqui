@@ -83,14 +83,39 @@ SECTION .text
 	pushState
 	;Obtener todos los registros
 
+  mov [regex + 8*0], rax
+  mov [regex + 8*1], rbx
+  mov [regex + 8*2], rcx
+  mov [regex + 8*3], rdx
+  mov [regex + 8*4], rsi
+  mov [regex + 8*5], rdi
+  mov [regex + 8*6], rbp
+  mov [regex + 8*7], rsp
+  mov [regex + 8*8], r8
+  mov [regex + 8*9], r9
+  mov [regex + 8*10], r10
+  mov [regex + 8*11], r11
+  mov [regex + 8*12], r12
+  mov [regex + 8*13], r13
+  mov [regex + 8*14], r14
+  mov [regex + 8*15], r15
 
+	mov rax, [rsp] ; RIP
+	mov [regs+8*10], rax
 
-	mov rdi, %1 ; pasaje de parametro
+	mov rax, [rsp+8] ; CS
+  mov [regs+8*11], rax
+
+  mov rax, [rsp+8*2] ; RFLAGS
+  mov [regs+8*12], rax
+
+	mov rdi, %1 ; pasaje de parametros
+	mov rsi, regex
 	call exceptionDispatcher
 
+	;incompleto
 	call getStackBase
 	mov rsp, rax
-
 	;incompleto
 
 	popState
@@ -171,3 +196,4 @@ haltcpu:
 
 SECTION .bss
 	aux resq 1
+	regex resq 19 ;reserva espacio para 18 qwords (cada registro para mostrarlos en las excepciones)

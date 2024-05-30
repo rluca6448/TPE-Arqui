@@ -3,7 +3,6 @@
 #include <moduleLoader.h>
 #include <naiveConsole.h>
 #include <keyboard.h>
-#include <video.h>
 #include <IO.h>
 
 extern uint8_t text;
@@ -149,8 +148,7 @@ int main() {
         i = getKey();
     }
 
-    ncNewline();
-    writeStr("Terminado!", 0xF, 0x0);
+    printf("Terminado!");
     return 0;
 }
 

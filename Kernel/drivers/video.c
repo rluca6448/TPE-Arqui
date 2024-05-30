@@ -1,5 +1,9 @@
 #include <video.h>
 
+// macros Alex:
+#define SIZE_BUFFER 65536
+
+
 struct vbe_mode_info_structure {
     uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
     uint8_t window_a;			// deprecated
@@ -50,39 +54,57 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
     framebuffer[offset+2]   =  (hexColor >> 16) & 0xFF;
 }
 
-// Alex (a partir de acá)
 
-static char stdout[9999] = {0};
+// Comandos Alex (a partir de acá)
+
+static int charSize = 10;
+
+static char stdoutArr[SIZE_BUFFER];
 static int sizeOut = 0;
-static char stdin[9999] = {0};
+static int startsOut = 0;
+static char stdinArr[SIZE_BUFFER];
 static int sizeIn = 0;
-static char stderr[9999] = {0};
+static int startsIn = 0;
+static char stderrArr[SIZE_BUFFER];
 static int sizeErr = 0;
-
-static int CHAR_SIZE = 10;
+static int startsErr = 0;
 
 int getSizeIn(){
 	return sizeIn;
 }
 
 void putOut(char c){
-	// TODO: falta manejar excepciones especialmente si sizeOut es demasiado grande
-	stdout[sizeOut++]=c;
-    printOutInScreen(CHAR_SIZE);
+    // mete c en el vector cíclico
+    // TODO: falta manejar excepciones especialmente si sizeOut es demasiado grande
+
+    int pos = (startsOut + sizeOut) % SIZE_BUFFER;
+	stdoutArr[pos]=c;
+    sizeOut++;
+    if (sizeOut > SIZE_BUFFER) sizeOut -= SIZE_BUFFER;
+
+    printOutInScreen(charSize);
 }
 
 void putErr(char c){
 	// TODO: falta manejar excepciones
-	stderr[sizeErr++]=c;
-    printOutInScreen(CHAR_SIZE);
+	stderrArr[sizeErr++ % SIZE_BUFFER]=c;
+    printOutInScreen(charSize);
 }
 
 void putIn(char c){
-    switch (stdin[sizeIn])      //agregar quizás casos especiales
-    {
+    // caso especial donde se pasa del límite: no se pueden agregar caracteres
+    // podríamos hacer que aparezca un mensaje o algo así
+    if (sizeIn >= SIZE_BUFFER-1) return;
+
+    // mete c en el vector cíclico
+    int pos = (startsIn + sizeIn) % SIZE_BUFFER;
+
+    switch (stdinArr[pos]){      //agregar quizás casos especiales
     default:
     	// TODO: falta manejar excepciones
-        stdin[sizeIn++] = c;
+        stdinArr[pos] = c;
+        sizeIn++;
+
     }
 }
 
@@ -121,43 +143,69 @@ void sys_write(int fd, const char* buf, int count){
 void sys_read(int fd, char* buf, int count){
     if (fd==0){
         for(int i=0; i<count && i<sizeIn; i++){
-            buf[i] = stdin[i];
+            buf[i] = stdinArr[i];
         }
     }
 }
 
-//TODO: convertir a stdIn y stdOut en arrays ciclicos.
-// Agregaría una variable startsOut en stdOut
-// Info útil: desde startsOut hasta startsOut + #chars_in_screen
-// Por esto, nunca va a haber información cruzada
+void sys_textmode(char enabled, int newSize){
+    if (enabled) videoModeOn = 0;
+    else videoModeOn = 1;
+    // el size se cambia de todas formas si está en un valor en el rango;
+    if (newSize > 1 && newSize < 50) {
+        charSize = newSize;
+    }
+}
 
-// Agregaría una variable startsIn en stdIn
-// Info útil: desde startsIn hasta startsIn + sizeIn
-// sizeIn >= tamaño vector es cuando se pasa del límite
+void sys_putPixel(uint32_t hexColor, uint64_t x, uint64_t y){
+    if (!videoModeOn) return;
+    putPixel(hexColor, x, y);
+}
+
+
 
 void printOutInScreen(int size){    // size AHORA es pixeles x letra. Esto lo tengo que cambiar
     if (videoModeOn==1) return;
-    putPixel(0x00FFFFFF, 1, 1);
-	int perLine = 1024/size; //reemplazar con macro
+    
+	int perLine = 1024/size;
 	int height = 768/size;
 	int k = 0;
-	for(int i=0; i<height && k<sizeOut; i++){
-		for(int j=0; j<perLine; j++, k++) {
-			if (stdout[k]=='\n'){
-				break;
-			}
-			switch (stdout[k]){
-				case '\t': j+=3; break;
-                default:
-				printCharInScreen(stdout[k], j*size, i*size);
-			}
-		}
-	}
+    int secondLine = 0;     //esto después se va a modificar
+    while (k<sizeOut){
+        for(int i=0; i<height && k<sizeOut; i++){
+            if (i==1) {
+                secondLine = (startsOut + k) % SIZE_BUFFER;
+            }
+		    for(int j=0; j<perLine && k<sizeOut; j++, k++) {
+                int pos = (startsOut + k) % SIZE_BUFFER;
+
+			    if (stdoutArr[pos]=='\n'){
+				    break;
+			    }
+			    switch (stdoutArr[pos]){
+			    	case '\t': j+=3; break;
+                    default:
+			    	printCharInScreen(stdoutArr[pos], j*size, i*size);
+			    }
+		    }
+	    }
+        if (k<sizeOut) {
+            sizeOut -= (secondLine-startsOut) % SIZE_BUFFER;
+            startsOut = secondLine;
+            k = 0;
+        }
+    }
+	
 }
 
+
+
 void printCharInScreen(char c, int x, int y){
-    // esto es para probar
-    putPixel(0x00FFFFFF, x, y);
+    if (c == 'c'){
+        // esto es para probar
+        putPixel(0x00ffffff, x, y);
+    }
+
 }
 
 //1024 width 768 height

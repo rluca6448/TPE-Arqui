@@ -19,7 +19,8 @@ void _irq05Handler(void);
 
 // void _int80Handler(void);
 
-void _exception0Handler(void);
+void _exception00Handler(void);
+void _exception06Handler(void);
 
 void _cli(void);
 

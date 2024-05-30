@@ -13,7 +13,9 @@ GLOBAL _irq03Handler
 GLOBAL _irq04Handler
 GLOBAL _irq05Handler
 
-GLOBAL _exception0Handler
+GLOBAL _exception00Handler
+GLOBAL _exception06Handler
+
 
 GLOBAL _int80Handler
 
@@ -144,8 +146,12 @@ _irq05Handler:
 
 
 ;Zero Division Exception
-_exception0Handler:
+_exception00Handler:
 	exceptionHandler 0
+
+;Invalid Opcode Exception
+_exception00Handler:
+	exceptionHandler 1
 
 haltcpu:
 	cli

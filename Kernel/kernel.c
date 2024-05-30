@@ -4,6 +4,7 @@
 #include <naiveConsole.h>
 #include <keyboard.h>
 #include <IO.h>
+#include <video.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -80,6 +81,12 @@ void *initializeKernelBinary() {
 }
 
 int main() {
+    for (int i=0 ; i < 10 ; i++){
+        putChar('C');
+    }
+    for (int i=0 ; i < 10 ; i++){
+        putOut('O');
+    }
     /*
     writeStr("[Kernel Main]", 0x7, 0x0);
     ncNewline();

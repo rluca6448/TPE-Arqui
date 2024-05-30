@@ -1,4 +1,6 @@
-char csv_content[4096][8] = {
+#include <font.h>
+
+char mappedChars[4096][8] = {
 	// 0x00 "^@" NUL
 	{0, 0, 0, 0, 0, 0, 0, 0},
 	{0, 0, 0, 0, 0, 0, 0, 0},
@@ -4352,3 +4354,11 @@ char csv_content[4096][8] = {
 	{1, 1, 1, 1, 1, 1, 0, 0},
 	{0, 0, 0, 0, 0, 0, 0, 0}
 };
+
+void getCharMap(char c, uint8_t charMap[FONT_HEIGHT][FONT_WIDTH]) {
+    for (int i = c * FONT_HEIGHT, j = 0 ; j < FONT_HEIGHT ; i++, j++) {
+        for (int k = 0 ; k < FONT_WIDTH ; k++) {
+            charMap[j][k] = mappedChars[i][k];
+        }
+    }
+}

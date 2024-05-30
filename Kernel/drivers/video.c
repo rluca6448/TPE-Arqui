@@ -1,4 +1,5 @@
 #include <video.h>
+#include <font.h>
 
 struct vbe_mode_info_structure {
     uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
@@ -42,10 +43,56 @@ typedef struct vbe_mode_info_structure * VBEInfoPtr;
 
 VBEInfoPtr VBE_mode_info = (VBEInfoPtr) 0x0000000000005C00;
 
+uint8_t fontSize = 1;
+
 void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
-    uint8_t * framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
+    uint8_t * framebuffer = (uint8_t *) ((uint64_t) VBE_mode_info->framebuffer);
     uint64_t offset = (x * ((VBE_mode_info->bpp)/8)) + (y * VBE_mode_info->pitch);
     framebuffer[offset]     =  (hexColor) & 0xFF;
     framebuffer[offset+1]   =  (hexColor >> 8) & 0xFF;
     framebuffer[offset+2]   =  (hexColor >> 16) & 0xFF;
+}
+
+void putCharAt(uint8_t c, uint64_t * x, uint64_t * y, uint64_t foreColor, uint64_t backgroundColor) {
+    uint8_t charMap[FONT_HEIGHT][FONT_WIDTH];
+    getCharMap(c, charMap);
+
+    for (int i = 0; i < FONT_HEIGHT * fontSize ; i++) {
+        for (int j = 0; j < FONT_WIDTH * fontSize ; j++) {
+            uint8_t pixelIsOn = charMap[i][j];
+            putPixel(pixelIsOn ? foreColor : backgroundColor, *x + j, *y * fontSize + i + 12);
+        }
+    }
+    *x += FONT_WIDTH * fontSize;
+}
+
+void deleteCharAt(uint64_t * x, uint64_t * y, uint64_t foreColor, uint64_t backgroundColor) {
+
+}
+
+void clearScreen(uint32_t hexColor) {
+    for (int i = 0; i < getHeight() ; i++) {
+        for (int j = 0; j < getWidth() ; j++) {
+            putPixel(hexColor, i, j);
+        }
+    }
+}
+
+void newFontSize(int newSize) {
+    if (newSize < 1 || newSize > 5)
+        return;
+    fontSize = newSize;
+}
+
+void newLine(uint64_t * x, uint64_t * y) {
+    *x = 0;
+    *y += FONT_HEIGHT * fontSize;
+}
+
+int getWidth() {
+    return VBE_mode_info->width;
+}
+
+int getHeight() {
+    return VBE_mode_info->height;
 }

@@ -19,6 +19,7 @@ GLOBAL _exception06Handler
 
 GLOBAL _int80Handler
 
+EXTERN getStackBase
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 
@@ -80,9 +81,17 @@ SECTION .text
 
 %macro exceptionHandler 1
 	pushState
+	;Obtener todos los registros
+
+
 
 	mov rdi, %1 ; pasaje de parametro
 	call exceptionDispatcher
+
+	call getStackBase
+	mov rsp, rax
+
+	;incompleto
 
 	popState
 	iretq
@@ -150,7 +159,7 @@ _exception00Handler:
 	exceptionHandler 0
 
 ;Invalid Opcode Exception
-_exception00Handler:
+_exception06Handler:
 	exceptionHandler 1
 
 haltcpu:

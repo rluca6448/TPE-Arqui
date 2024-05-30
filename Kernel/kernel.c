@@ -3,7 +3,7 @@
 #include <moduleLoader.h>
 #include <naiveConsole.h>
 #include <keyboard.h>
-#include <video.h>
+#include <IO.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -80,10 +80,6 @@ void *initializeKernelBinary() {
 }
 
 int main() {
-    for (int i = 0 ; i < 100 ; i++)
-        for (int j = 0 ; j < 100 ; j++)
-            putPixel(0x00FF0000, i, j);
-
     /*
     writeStr("[Kernel Main]", 0x7, 0x0);
     ncNewline();
@@ -115,7 +111,7 @@ int main() {
     writeStr("Ahora podes escribir...", 0xF, 0x0);
     ncNewline();*/
 
-    /*char i = getKey();
+    char i = getKey();
     char key;
 
     while ((key = mapKey(i, keyFlag)) != '\x03') {
@@ -145,15 +141,14 @@ int main() {
                 break;
             default:
                 if (key != '\0') {
-                    writeCharacter(key, 0xF, 0x0);
+                    putChar(key);
                 }
                 break;
         }
         i = getKey();
     }
 
-    ncNewline();
-    writeStr("Terminado!", 0xF, 0x0);*/
+    printf("Terminado!");
     return 0;
 }
 

@@ -9,9 +9,9 @@ const AsciiMap map[256] = {
         {'\x5',  0x0, 0x0, 0},
         {'\x6',  0x0, 0x0, 0},
         {'\x7',  0x0, 0x0, 0},
-        {'\x8',  0x0, 0x0, 0},
+        {'\x8',  0x0E, 0x0, 0}, // Backspace
         {'\x9',  0x0, 0x0, 0},
-        {'\xa',  0x0, 0x0, 0},
+        {'\xa',  0x1C, 0x0, 0}, // Enter
         {'\xb',  0x0, 0x0, 0},
         {'\xc',  0x0, 0x0, 0},
         {'\xd',  0x0, 0x0, 0},
@@ -136,7 +136,7 @@ const AsciiMap map[256] = {
 };
 
 char mapKey(char character, int flags[2]) {
-    for (int i = 0 ; i < 256 ; i++) {
+    for (int i = 0 ; i < 131 ; i++) {
         if (map[i].make_code == character) {
             if (map[i].character >= 'A' && map[i].character <= 'Z') {  // es una letra
                 if (!flags[0]) {    // se fija si mayus esta desactivado (si es 0)

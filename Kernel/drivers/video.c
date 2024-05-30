@@ -1,4 +1,5 @@
 #include <video.h>
+#include <font.h>
 
 // macros Alex:
 #define SIZE_BUFFER 65536
@@ -46,8 +47,10 @@ typedef struct vbe_mode_info_structure * VBEInfoPtr;
 
 VBEInfoPtr VBE_mode_info = (VBEInfoPtr) 0x0000000000005C00;
 
+uint8_t fontSize = 1;
+
 void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
-    uint8_t * framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
+    uint8_t * framebuffer = (uint8_t *) ((uint64_t) VBE_mode_info->framebuffer);
     uint64_t offset = (x * ((VBE_mode_info->bpp)/8)) + (y * VBE_mode_info->pitch);
     framebuffer[offset]     =  (hexColor) & 0xFF;
     framebuffer[offset+1]   =  (hexColor >> 8) & 0xFF;
@@ -72,6 +75,51 @@ static int startsErr = 0;
 int getSizeIn(){
 	return sizeIn;
 }
+
+static char videoModeOn = 0;
+
+void printCharInScreen(char c, int x, int y){
+    if (c == 'c'){
+        // esto es para probar
+        putPixel(0x00ffffff, x, y);
+    }
+
+}
+
+void printOutInScreen(int size){    // size AHORA es pixeles x letra. Esto lo tengo que cambiar
+    if (videoModeOn==1) return;
+
+    int perLine = 1024/size;
+    int height = 768/size;
+    int k = 0;
+    int secondLine = 0;     //esto después se va a modificar
+    while (k<sizeOut){
+        for(int i=0; i<height && k<sizeOut; i++){
+            if (i==1) {
+                secondLine = (startsOut + k) % SIZE_BUFFER;
+            }
+            for(int j=0; j<perLine && k<sizeOut; j++, k++) {
+                int pos = (startsOut + k) % SIZE_BUFFER;
+
+                if (stdoutArr[pos]=='\n'){
+                    break;
+                }
+                switch (stdoutArr[pos]){
+                case '\t': j+=3; break;
+                default:
+                    printCharInScreen(stdoutArr[pos], j*size, i*size);
+                }
+            }
+        }
+        if (k<sizeOut) {
+            sizeOut -= (secondLine-startsOut) % SIZE_BUFFER;
+            startsOut = secondLine;
+            k = 0;
+        }
+    }
+
+}
+
 
 void putOut(char c){
     // mete c en el vector cíclico
@@ -115,9 +163,6 @@ void clearIn(){
 void clearOut(){
     sizeOut = 0;
 }
-
-
-static char videoModeOn = 0;
 
 void disableTextScreen(){
     videoModeOn = 0;
@@ -164,48 +209,69 @@ void sys_putPixel(uint32_t hexColor, uint64_t x, uint64_t y){
 
 
 
-void printOutInScreen(int size){    // size AHORA es pixeles x letra. Esto lo tengo que cambiar
-    if (videoModeOn==1) return;
-    
-	int perLine = 1024/size;
-	int height = 768/size;
-	int k = 0;
-    int secondLine = 0;     //esto después se va a modificar
-    while (k<sizeOut){
-        for(int i=0; i<height && k<sizeOut; i++){
-            if (i==1) {
-                secondLine = (startsOut + k) % SIZE_BUFFER;
-            }
-		    for(int j=0; j<perLine && k<sizeOut; j++, k++) {
-                int pos = (startsOut + k) % SIZE_BUFFER;
-
-			    if (stdoutArr[pos]=='\n'){
-				    break;
-			    }
-			    switch (stdoutArr[pos]){
-			    	case '\t': j+=3; break;
-                    default:
-			    	printCharInScreen(stdoutArr[pos], j*size, i*size);
-			    }
-		    }
-	    }
-        if (k<sizeOut) {
-            sizeOut -= (secondLine-startsOut) % SIZE_BUFFER;
-            startsOut = secondLine;
-            k = 0;
-        }
-    }
-	
-}
-
-
-
-void printCharInScreen(char c, int x, int y){
-    if (c == 'c'){
-        // esto es para probar
-        putPixel(0x00ffffff, x, y);
-    }
-
-}
 
 //1024 width 768 height
+
+void putCharAt(uint8_t c, uint64_t * x, uint64_t * y, uint64_t foreColor, uint64_t backgroundColor) {
+
+    if (xOutOfBounds(x)) {
+        newLine(x, y);
+    }
+
+    if (yOutOfBounds(y)) {
+        clearScreen(backgroundColor);
+        *y = FONT_HEIGHT * fontSize;
+    }
+
+    uint8_t charMap[FONT_HEIGHT][FONT_WIDTH];
+    getCharMap(c, charMap);
+
+    for (int i = 0; i < FONT_HEIGHT * fontSize ; i++) {
+        for (int j = 0; j < FONT_WIDTH * fontSize ; j++) {
+            uint8_t pixelIsOn = charMap[i][j];
+            putPixel(pixelIsOn ? foreColor : backgroundColor, *x + j, *y * fontSize + i + 12);
+        }
+    }
+    *x += FONT_WIDTH * fontSize;
+}
+
+void deleteCharAt(uint64_t * x, uint64_t * y, uint64_t foreColor, uint64_t backgroundColor) {
+    *x -= FONT_WIDTH * fontSize;
+    putCharAt(' ', x, y, foreColor, backgroundColor);
+    *x -= FONT_WIDTH * fontSize;
+}
+
+void clearScreen(uint32_t hexColor) {
+    for (int i = 0; i < VBE_mode_info->height ; i++) {
+        for (int j = 0; j < VBE_mode_info->width ; j++) {
+            putPixel(hexColor, j, i);
+        }
+    }
+}
+
+void newFontSize(int newSize) {
+    if (newSize < 1 || newSize > 5)
+        return;
+    fontSize = newSize;
+}
+
+void newLine(uint64_t * x, uint64_t * y) {
+    *x = 0;
+    *y += FONT_HEIGHT * fontSize;
+}
+
+int getWidth() {
+    return VBE_mode_info->width;
+}
+
+int getHeight() {
+    return VBE_mode_info->height;
+}
+
+int xOutOfBounds(uint64_t * x) {
+    return *x + FONT_WIDTH * fontSize >= getWidth();
+}
+
+int yOutOfBounds(uint64_t * y) {
+    return *y + FONT_HEIGHT * fontSize >= getHeight();
+}

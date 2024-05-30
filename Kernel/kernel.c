@@ -149,6 +149,7 @@ int main() {
             default:
                 if (key != '\0') {
                     putChar(key);
+                    putIn(key);
                 }
                 break;
         }

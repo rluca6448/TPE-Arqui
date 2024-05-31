@@ -4,7 +4,6 @@
 extern char bss;
 extern char endOfBinary;
 
-void test_asm_in_userland();
 
 int main();
 
@@ -13,7 +12,6 @@ void * memset(void * destiny, int32_t c, uint64_t length);
 int _start() {
 	//Clean BSS
 	memset(&bss, 0, &endOfBinary - &bss);
-	test_asm_in_userland();
 
 	return main();
 

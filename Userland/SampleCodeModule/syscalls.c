@@ -30,13 +30,13 @@ void putCharUser(char c){
 
 void printfUser(char* str){
     for(int i=0; str[i]; i++){
-        putCharUser;
+        putCharUser(str[i]);
     }
 }
 
-char getCharUser(){
-    char c[1] = {0};
-    while(!sys_read(0, c, 1));
+char getCharUser() {
+    char c[1];
+    while(sys_read(0, c, 1) <= 0);
     return c[0];
 }
 

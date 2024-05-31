@@ -1,0 +1,43 @@
+#include <stdint.h>
+
+#define SYS_READ 10
+#define SYS_WRITE 20
+
+uint64_t syscall(uint64_t id, uint64_t par2, uint64_t par3, uint64_t par4);
+
+int sys_read(int fd, char* buf, int count){
+    return syscall(SYS_READ, fd, buf, count);
+}
+
+void sys_write(int fd, const char* buf, int count){
+    syscall(SYS_WRITE, fd, buf, count);
+}
+
+// OJO: el sys_read de video.c está mal y hay que cambiarlo por este:
+// int sys_read(int fd, char* buf, int count){
+//     int i;
+//     if (fd==0){
+//         for(i=0; i<count && i<sizeIn; i++){
+//             buf[i] = stdinArr[i];
+//         }
+//     }
+//     return i;
+// }
+
+void putCharUser(char c){
+    sys_write(1, &c, 1);
+}
+
+void printfUser(char* str){
+    for(int i=0; str[i]; i++){
+        putCharUser;
+    }
+}
+
+char getCharUser(){
+    char c[1] = {0};
+    while(!sys_read(0, c, 1));
+    return c[0];
+}
+
+// eu, ni idea cómo implementar unna función que reciba muchos parámetros

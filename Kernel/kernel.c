@@ -7,6 +7,8 @@
 #include <video.h>
 #include <idtLoader.h>
 
+extern void test_int_80h();
+
 extern uint8_t text;
 extern uint8_t rodata;
 extern uint8_t data;
@@ -58,8 +60,10 @@ int main() {
 //    for (int i=0 ; i < 10 ; i++){
 //        putOut('O');
 //    }
-    while(1);
-    /*
+    sys_write(1, "xd", 2);
+    test_int_80h();
+    // while(1);
+
 //    char i = getKey();
 //    char key;
 //

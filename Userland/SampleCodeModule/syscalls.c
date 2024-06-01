@@ -1,9 +1,9 @@
 #include <stdint.h>
 
-#define SYS_READ 10
-#define SYS_WRITE 20
+#define SYS_READ 3
+#define SYS_WRITE 4
 
-uint64_t syscall(uint64_t id, uint64_t par2, uint64_t par3, uint64_t par4);
+extern uint64_t syscall(uint64_t id, uint64_t par2, uint64_t par3, uint64_t par4);
 
 int sys_read(int fd, char* buf, int count){
     return syscall(SYS_READ, fd, buf, count);

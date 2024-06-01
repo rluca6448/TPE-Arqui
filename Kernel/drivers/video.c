@@ -188,12 +188,13 @@ void sys_write(int fd, const char* buf, int count){
     }
 }
 
-void sys_read(int fd, char* buf, int count){
+int sys_read(int fd, char* buf, int count){
     if (fd==0){
         for(int i=0; i<count && i<sizeIn; i++){
             buf[i] = stdinArr[i];
         }
     }
+    return 0;
 }
 
 void sys_textmode(char enabled, int newSize){

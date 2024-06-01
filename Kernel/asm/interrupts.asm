@@ -19,7 +19,6 @@ GLOBAL _exception00Handler
 GLOBAL _exception06Handler
 
 
-GLOBAL _int80Handler
 
 EXTERN getStackBase
 EXTERN int80Dispacher

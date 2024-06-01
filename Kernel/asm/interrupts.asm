@@ -100,23 +100,18 @@ SECTION .text
   mov [regex + 8*14], r14
   mov [regex + 8*15], r15
 
-	mov rax, [rsp] ; RIP
-	mov [regs+8*10], rax
-
-	mov rax, [rsp+8] ; CS
-  mov [regs+8*11], rax
+    mov rax, [rsp] ; RIP
+    mov [regs+8*16], rax
 
   mov rax, [rsp+8*2] ; RFLAGS
-  mov [regs+8*12], rax
+  mov [regs+8*17], rax
 
 	mov rdi, %1 ; pasaje de parametros
 	mov rsi, regex
 	call exceptionDispatcher
 
-	;incompleto
 	call getStackBase
 	mov rsp, rax
-	;incompleto
 
 	popState
 	iretq
@@ -193,7 +188,6 @@ haltcpu:
 	ret
 
 
-
 SECTION .bss
 	aux resq 1
-	regex resq 19 ;reserva espacio para 18 qwords (cada registro para mostrarlos en las excepciones)
+	regex resq 18 ;reserva espacio para 18 qwords (cada registro para mostrarlos en las excepciones)

@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" preserveFilePermissions="true" filePermissions="511" folderPermissions="511" remoteFilesAllowedToDisappearOnAutoupload="false" />
+  <component name="PublishConfigData" preserveFilePermissions="true" filePermissions="511" folderPermissions="511" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="Remote Host (08678a1f-1675-4c1f-80eb-090e34f2e859)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/tmp.bAOGMFDajy" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
 </project>

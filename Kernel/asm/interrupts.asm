@@ -13,6 +13,8 @@ GLOBAL _irq03Handler
 GLOBAL _irq04Handler
 GLOBAL _irq05Handler
 
+GLOBAL _int80Handler
+
 GLOBAL _exception00Handler
 GLOBAL _exception06Handler
 
@@ -20,6 +22,7 @@ GLOBAL _exception06Handler
 GLOBAL _int80Handler
 
 EXTERN getStackBase
+EXTERN int80Dispacher
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 
@@ -63,6 +66,40 @@ SECTION .text
 	pop rax
 %endmacro
 
+%macro pushStateWithoutRax 0
+	push rbx
+	push rcx
+	push rdx
+	push rbp
+	push rdi
+	push rsi
+	push r8
+	push r9
+	push r10
+	push r11
+	push r12
+	push r13
+	push r14
+	push r15
+%endmacro
+
+%macro popStateWithoutRax 0
+	pop r15
+	pop r14
+	pop r13
+	pop r12
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rsi
+	pop rdi
+	pop rbp
+	pop rdx
+	pop rcx
+	pop rbx
+%endmacro
+
 %macro irqHandlerMaster 1
 	pushState
 
@@ -76,8 +113,6 @@ SECTION .text
 	popState
 	iretq
 %endmacro
-
-
 
 %macro exceptionHandler 1
 	pushState
@@ -176,11 +211,29 @@ _irq05Handler:
 
 ;Zero Division Exception
 _exception00Handler:
-	exceptionHandler 0
+;	exceptionHandler 0
 
 ;Invalid Opcode Exception
 _exception06Handler:
-	exceptionHandler 1
+;	exceptionHandler 1
+
+;int 80 Handler
+_int80Handler:
+	pushStateWithoutRax
+
+	mov 	rdi, rax ; pasaje de parametro 1
+	mov 	rsi, rbx ; pasaje de parametro 2
+
+	mov     rax, rdx ;
+	mov     rdx, rcx ; pasaje de parametro 3
+	mov     rcx, rax ; pasaje de parametro 4
+
+	call int80Dispacher; llamada a syscall
+
+	; no hacemos lo de out 20h porque es otro tipo de interrupt
+
+	popStateWithoutRax
+	iretq
 
 haltcpu:
 	cli

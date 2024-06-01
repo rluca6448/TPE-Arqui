@@ -1,4 +1,7 @@
 #include <keyboard.h>
+#include <video.h>
+
+int keyFlag[4] = {0,0}; // index 0: bloq-mayus ; index 1: {1=shift ; 2=CTRL ; 3=alt}
 
 const AsciiMap map[256] = {
         {'\x0',  0x0, 0x0, 0},  // -
@@ -150,4 +153,40 @@ char mapKey(char character, int flags[2]) {
         }
     }
     return '\0';
+}
+
+void keyboard_handler() {
+    char i = getKey();
+    char key;
+    switch (i) {
+        case '\x3A':    // bloq-mayus
+            keyFlag[0] = !keyFlag[0];
+            break;
+        case '\x36':    // right-shift pressed
+        case '\x2A':    // left-shift pressed
+            keyFlag[0] = !keyFlag[0];
+            keyFlag[1] = 1;
+            break;
+        case '\xAA':    // left-shift released
+            keyFlag[0] = !keyFlag[0];
+            keyFlag[1] = 0;
+            break;
+        case '\x9D':    // left-ctrl released
+        case '\xB8':    // left-alt released
+        case '\xB6':    // right-shift released
+            keyFlag[1] = 0;
+            break;
+        case '\x1D':    // left-ctrl pressed
+            keyFlag[1] = 2;
+            break;
+        case '\x38':    // left-alt pressed
+            keyFlag[1] = 3;
+            break;
+        default:
+            if (key != '\0') {
+                putChar(key);
+                putIn(key);
+            }
+            break;
+    }
 }

@@ -32,7 +32,7 @@ void load_idt() {
   setup_IDT_entry (0x06, (uint64_t)&_exception06Handler);
 
   // ej 6
-  // setup_IDT_entry (0x21, (uint64_t)&_irq01Handler);
+   setup_IDT_entry (0x21, (uint64_t)&_irq01Handler);
 
   // ej 7
   // setup_IDT_entry (0x80, (uint64_t)&_int80Handler);

@@ -171,6 +171,26 @@ getKey:
         pop rbp
         ret
 
+GLOBAL get_key_2
+get_key_2:
+	push 	rbp
+	mov     rbp, rsp
+
+	mov		rax, 0
+  	in      al, 64h
+	and		rax, 01h
+
+	cmp		rax, 01h
+	jne		get_key_end		;rax=0
+
+	in		al, 60h
+
+get_key_end
+
+
+  	leave
+  	ret
+
 ;==========================================0
 
 section .data

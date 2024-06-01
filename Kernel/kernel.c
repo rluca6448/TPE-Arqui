@@ -5,6 +5,7 @@
 #include <keyboard.h>
 #include <IO.h>
 #include <video.h>
+#include <idtLoader.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -37,87 +38,28 @@ void *getStackBase() {
 void *initializeKernelBinary() {
     char buffer[10];
 
-    ncPrint("[x64BareBones]");
-    ncNewline();
-
-    ncPrint("CPU Vendor:");
-    ncPrint(cpuVendor(buffer));
-    ncNewline();
-
-    ncPrint("[Loading modules]");
-    ncNewline();
     void *moduleAddresses[] = {
             sampleCodeModuleAddress,
             sampleDataModuleAddress
     };
 
     loadModules(&endOfKernelBinary, moduleAddresses);
-    ncPrint("[Done]");
-    ncNewline();
-    ncNewline();
-
-    ncPrint("[Initializing kernel's binary]");
-    ncNewline();
 
     clearBSS(&bss, &endOfKernel - &bss);
 
-    ncPrint("  text: 0x");
-    ncPrintHex((uint64_t) & text);
-    ncNewline();
-    ncPrint("  rodata: 0x");
-    ncPrintHex((uint64_t) & rodata);
-    ncNewline();
-    ncPrint("  data: 0x");
-    ncPrintHex((uint64_t) & data);
-    ncNewline();
-    ncPrint("  bss: 0x");
-    ncPrintHex((uint64_t) & bss);
-    ncNewline();
-
-    ncPrint("[Done]");
-    ncNewline();
-    ncNewline();
     return getStackBase();
 }
 
 int main() {
-    for (int i=0 ; i < 10 ; i++){
-        putChar('C');
-    }
-    for (int i=0 ; i < 10 ; i++){
-        putOut('O');
-    }
+    load_idt();
+//    for (int i=0 ; i < 10 ; i++){
+//        putChar('C');
+//    }
+//    for (int i=0 ; i < 10 ; i++){
+//        putOut('O');
+//    }
+    while(1);
     /*
-    writeStr("[Kernel Main]", 0x7, 0x0);
-    ncNewline();
-    ncPrint("  Sample code module at 0x");
-    ncPrintHex((uint64_t) sampleCodeModuleAddress);
-    ncNewline();
-    ncPrint("  Calling the sample code module returned: ");
-    ncPrintHex(((EntryPoint) sampleCodeModuleAddress)());
-    ncNewline();
-    ncNewline();
-
-    ncPrint("  Sample data module at 0x");
-    ncPrintHex((uint64_t) sampleDataModuleAddress);
-    ncNewline();
-    ncPrint("  Sample data module contents: ");
-    ncPrint((char *) sampleDataModuleAddress);
-    ncNewline();
-
-    writeStr("[Finished]", 0x7, 0x0);
-
-    ncClear();
-
-    writeStr("Arquitectura de Computadoras", 0xF, 0x2);
-    ncNewline();
-
-    writeStr(RTC(), 0xF, 0x0);
-    ncNewline();
-
-    writeStr("Ahora podes escribir...", 0xF, 0x0);
-    ncNewline();*/
-
 //    char i = getKey();
 //    char key;
 //
@@ -156,7 +98,6 @@ int main() {
 //        i = getKey();
 //    }
 
-//    printf("Terminado!");
-    return 0;
+     return 0;
 }
 

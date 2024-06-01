@@ -21,14 +21,11 @@ void exceptionDispatcher(int exception, const uint64_t regex[18]) {
 	else if (exception == INVALID_OPCODE_ID){
         invalid_opcode(regex);
     }
-    //Mostrar registros
     //showRegisters(regex);
 
-    //Regreso a la shell
-    //return to Shell
 }
 
-static void zero_division(const uint64_t regex[18]) {
+static void zero_division(const uint64_t regex[18]){
 	// Handler para manejar excepcíon
 	//Mensaje de error por pantalla IDEA
     //printErr(zero_division_exception_message);

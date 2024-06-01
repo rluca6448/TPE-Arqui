@@ -1,7 +1,7 @@
 #include <time.h>
 #include <stdint.h>
 #include <naiveConsole.h>
-#include "keyboard.h"
+#include <keyboard.h>
 
 static void int_20();
 static void int_21();

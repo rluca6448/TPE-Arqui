@@ -1,5 +1,7 @@
 #include <keyboard.h>
 #include <video.h>
+#include <IO.h>
+#include <lib.h>
 
 int keyFlag[4] = {0,0}; // index 0: bloq-mayus ; index 1: {1=shift ; 2=CTRL ; 3=alt}
 
@@ -156,8 +158,8 @@ char mapKey(char character, int flags[2]) {
 }
 
 void keyboard_handler() {
-    char i = getKey();
-    char key;
+    char i = get_key_2();
+    char key = mapKey(i, keyFlag);
     switch (i) {
         case '\x3A':    // bloq-mayus
             keyFlag[0] = !keyFlag[0];

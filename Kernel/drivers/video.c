@@ -121,7 +121,6 @@ void printOutInScreen(int size){    // size AHORA es pixeles x letra. Esto lo te
         //     k = 0;
         // }
     }
-
 }
 
 

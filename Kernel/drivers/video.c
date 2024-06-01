@@ -3,7 +3,10 @@
 
 // macros Alex:
 #define SIZE_BUFFER 65536
-
+#define OUT_FORE_COLOR 0x00ffffff
+#define OUT_BACK_COLOR 0x00000000
+#define ERR_FORE_COLOR 0x00ff0000
+#define ERR_BACK_COLOR 0x00000000
 
 struct vbe_mode_info_structure {
     uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
@@ -60,7 +63,7 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
 
 // Comandos Alex (a partir de acá)
 
-static int charSize = 10;
+static int charSize = 2;
 
 static char stdoutArr[SIZE_BUFFER];
 static int sizeOut = 0;
@@ -89,8 +92,8 @@ void printCharInScreen(char c, int x, int y){
 void printOutInScreen(int size){    // size AHORA es pixeles x letra. Esto lo tengo que cambiar
     if (videoModeOn==1) return;
 
-    int perLine = 1024/size;
-    int height = 768/size;
+    int perLine = 1024/(FONT_WIDTH * size);
+    int height = 768/(FONT_HEIGHT * size);
     int k = 0;
     int secondLine = 0;     //esto después se va a modificar
     while (k<sizeOut){
@@ -107,15 +110,16 @@ void printOutInScreen(int size){    // size AHORA es pixeles x letra. Esto lo te
                 switch (stdoutArr[pos]){
                 case '\t': j+=3; break;
                 default:
-                    printCharInScreen(stdoutArr[pos], j*size, i*size);
+                    // printCharInScreen(stdoutArr[pos], j*16, i*16);
+                    simplePutCharAt(stdoutArr[pos], j* FONT_WIDTH * size, i*FONT_HEIGHT*size, OUT_FORE_COLOR, OUT_BACK_COLOR);
                 }
             }
         }
-        if (k<sizeOut) {
-            sizeOut -= (secondLine-startsOut) % SIZE_BUFFER;
-            startsOut = secondLine;
-            k = 0;
-        }
+        // if (k<sizeOut) {
+        //     sizeOut -= (secondLine-startsOut) % SIZE_BUFFER;
+        //     startsOut = secondLine;
+        //     k = 0;
+        // }
     }
 
 }
@@ -207,7 +211,17 @@ void sys_putPixel(uint32_t hexColor, uint64_t x, uint64_t y){
     putPixel(hexColor, x, y);
 }
 
-
+// Funciona igual que putCharAt, pero sin el tema de punteros y manejo de líneas
+void simplePutCharAt(uint8_t c, uint64_t x, uint64_t y, uint64_t foreColor, uint64_t backgroundColor) {
+    uint8_t charMap[FONT_HEIGHT][FONT_WIDTH];
+    getCharMap(c, charMap);
+    for (int i = 0; i < FONT_HEIGHT * fontSize ; i++) {
+        for (int j = 0; j < FONT_WIDTH * fontSize ; j++) {
+            uint8_t pixelIsOn = charMap[i][j];
+            putPixel(pixelIsOn ? foreColor : backgroundColor, x * fontSize + j, y * fontSize + i + 12);
+        }
+    }
+}
 
 
 //1024 width 768 height

@@ -20,6 +20,14 @@ int seconds_elapsed() {
 	return ticks / 18;
 }
 
+uint64_t getElapsedSeconds(){
+    return TICKS_TO_SECONDS(ticks);
+}
+
+char * sys_getTime(){
+    return RTC();
+}
+
 /*void sleep() {
     sys_sleep();
 }

@@ -13,6 +13,7 @@ OBJECTS_DRIVERS=$(SOURCES_DRIVERS:.c=.o)
 OBJECTS_ASM=$(SOURCES_ASM:.asm=.o)
 OBJECTS_NATIVE=$(SOURCES_NATIVE:.c=.o)
 OBJECTS_IDT=$(SOURCES_IDT:.c=.o)
+
 TOTAL_OBJ = $(OBJECTS) $(OBJECTS_DRIVERS) $(OBJECTS_ASM) $(OBJECTS_NATIVE) $(OBJECTS_IDT)
 
 LOADERSRC=loader.asm
@@ -23,7 +24,8 @@ all: $(KERNEL)
 
 $(KERNEL): $(LOADEROBJECT) $(STATICLIBS) $(TOTAL_OBJ)
 	$(LD) $(LDFLAGS) -T kernel.ld -o $(KERNEL) $(LOADEROBJECT) $(STATICLIBS) $(TOTAL_OBJ)
-	$(LD) $(LDFLAGS) -T kernel.ld --oformat=elf64-x86-64 -o kernel.elf $(LOADEROBJECT) $(STATICLIBS) $(TOTAL_OBJ)
+	#$(LD) $(LDFLAGS) -T kernel.ld --oformat=elf64-x86-64 -o kernel.elf $(LOADEROBJECT) $(STATICLIBS) $(TOTAL_OBJ)
+
 %.o: %.c
 	$(GCC) $(GCCFLAGS) -I./include -c $< -o $@
 
@@ -34,6 +36,6 @@ $(LOADEROBJECT):
 	$(ASM) $(ASMFLAGS) $(LOADERSRC) -o $(LOADEROBJECT)
 
 clean:
-	rm -rf asm/*.o drivers/*.o idt/*.o native/*.o *.o *.bin
+	rm -rf asm/*.o *.elf *.bin drivers/*.o idt/*.o native/*.o *.o *.bin
 
 .PHONY: all clean

@@ -11,9 +11,9 @@ uint64_t int80Dispacher(uint64_t id, uint64_t param_1, char * param_2, uint64_t 
         return 0;
     } else if (id == SYS_READ) {
         return sys_read(param_1, param_2, param_3);
-        case SYS_CLEAR_SCREEN:
-            sys_clearScreen();
-            return;
+    } else if (id == SYS_CLEAR_SCREEN) {
+        sys_clearScreen();
+        return 0;
     }
     return 0;
 }

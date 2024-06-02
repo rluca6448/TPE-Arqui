@@ -263,6 +263,10 @@ void clearScreen(uint32_t hexColor) {
     }
 }
 
+void sys_clearScreen(){
+    clearScreen(OUT_BACK_COLOR);
+}
+
 void newFontSize(int newSize) {
     if (newSize < 1 || newSize > 5)
         return;

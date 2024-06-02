@@ -1,5 +1,7 @@
 #include <stdint.h>
 #include "video.h"
+#include <exceptions.h>
+
 #define ZERO_EXCEPTION_ID 0
 #define INVALID_OPCODE_ID 1
 
@@ -25,13 +27,13 @@ void exceptionDispatcher(int exception, const uint64_t regex[18]) {
 
 }
 
-static void zero_division(const uint64_t regex[18]){
+static void zero_division(const uint64_t regex[18]) {
 	// Handler para manejar excepcíon
 	//Mensaje de error por pantalla IDEA
     //printErr(zero_division_exception_message);
 }
 
-static void invalid_opcode(const uint64_t regex[18]){
+static void invalid_opcode(const uint64_t regex[18]) {
 	//Handler para manejar excepcion
 	//Mensaje de error por pantalla IDEA
     //printErr(invalid_opcode_exception_message);

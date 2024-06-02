@@ -1,5 +1,8 @@
 #include <video.h>
 #include <font.h>
+#include <video.h>
+#include <keyboard.h>
+#include <IO.h>
 
 // macros Alex:
 #define SIZE_BUFFER 65536
@@ -63,7 +66,7 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
 
 // Comandos Alex (a partir de acá)
 
-static int charSize = 2;
+static int charSize = 4;
 
 static char stdoutArr[SIZE_BUFFER];
 static int sizeOut = 0;
@@ -175,10 +178,10 @@ void enableTextScreen(){
     videoModeOn = 1;
 }
 
-void sys_write(int fd, const char* buf, int count){
+void sys_write(int fd, const char* buf, int count) {
     if (fd==1){
         for(int i=0; i<count; i++){
-            putOut(buf[i]);
+            putChar(buf[i]);
         }
     }
     if (fd==2){
@@ -243,7 +246,7 @@ void putCharAt(uint8_t c, uint64_t * x, uint64_t * y, uint64_t foreColor, uint64
     for (int i = 0; i < FONT_HEIGHT * fontSize ; i++) {
         for (int j = 0; j < FONT_WIDTH * fontSize ; j++) {
             uint8_t pixelIsOn = charMap[i][j];
-            putPixel(pixelIsOn ? foreColor : backgroundColor, *x + j, *y * fontSize + i + 12);
+            putPixel(pixelIsOn ? foreColor : backgroundColor, *x + j, *y * fontSize + i);
         }
     }
     *x += FONT_WIDTH * fontSize;

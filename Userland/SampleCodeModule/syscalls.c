@@ -10,7 +10,7 @@ int sys_read(int fd, char* buf, int count){
     return syscall(SYS_READ, fd, buf, count);
 }
 
-void sys_write(int fd, const char* buf, int count){
+void sys_write(int fd, char* buf, int count){
     syscall(SYS_WRITE, fd, buf, count);
 }
 

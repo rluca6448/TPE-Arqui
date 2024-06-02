@@ -9,45 +9,46 @@ void putChar(char c) {
     putCharColoured(c, 0xFFFFFF, 0x000000);
 }
 
-void printf(char * str) {
-    for (int i = 0; str[i] != '\0'; i++) {
-        putChar(str[i]);
-    }
-}
-
 void putCharColoured(char c, uint64_t foreGround, uint64_t backGround) {
     switch (c) {
-        case 0x0A:
+        case 0x0A:  // es la tecla enter
             newLine(&x, &y);
             break;
-        case 0x08:
+        case 0x08:  // es la tecla backspace
             deleteCharAt(&x, &y, foreGround, backGround);
             break;
-        default:
+        case 0x09:  // es la tecla tab (4 espacios)
+            for (int i = 0; i < 3; i++, putCharAt(' ', &x, &y, foreGround, backGround));
+            break;
+        default:    // corresponde a otro simbolo escribible
             putCharAt(c, &x, &y, foreGround, backGround);
             break;
     }
 }
 
-/*void printf(const char * str, ...) {
-    va_list args;
-    va_start(args, str);
 
-    for (int i = 0; str[i] != '\0'; i++) {
-        if (str[i] == '\x5C' && str[i+1] != '\0') {
-            switch (str[i+1]) {
-                case '':
-                    newLine()
-            }
-        } else if (str[i] == '\x25' && str[i+1] != '\0') {
+void printfCouloured(const char * fmt, uint64_t foreGround, uint64_t backGround) {
+    return;
+}
 
-            switch (str[i+1]) {
-                case 'i':
-                    int elem = va_arg(args, 1);
+void printf(const char * fmt, ...) {
+    printfCouloured(fmt, 0xFFFFFF, 0x000000);
+}
+
+int scanf(const char * fmt, ...) {
+    return 0;
+}
+
+void setPosition(uint64_t * x, uint64_t * y) {
+    return;
+}
+
+void clear() {
+    return;
+}
 
 
-            }
-        }
-        putChar(str[i]);
-    }
-}*/
+
+
+
+

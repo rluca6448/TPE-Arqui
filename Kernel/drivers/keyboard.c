@@ -157,8 +157,8 @@ char mapKey(char character, int flags[2]) {
     return '\0';
 }
 
-void keyboard_handler() {
-    char i = get_key_2();
+void getKey() {
+    int i = getAsmKey();
     char key = mapKey(i, keyFlag);
     switch (i) {
         case '\x3A':    // bloq-mayus
@@ -191,4 +191,8 @@ void keyboard_handler() {
             }
             break;
     }
+}
+
+void keyboard_handler() {
+    getAsmKey();
 }

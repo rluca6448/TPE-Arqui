@@ -74,8 +74,6 @@ hexToString:
         pop rbp
         ret
 
-hexToStr:
-
 RTC:
         push rbp
         mov rbp, rsp
@@ -152,9 +150,9 @@ RTC:
         pop rbp
         ret
 
-GLOBAL getKey
+GLOBAL getAsmKey
 
-getKey:
+getAsmKey:
         push rbp
         mov rbp, rsp
 
@@ -172,24 +170,23 @@ getKey:
         ret
 
 GLOBAL get_key_2
+
 get_key_2:
-	push 	rbp
-	mov     rbp, rsp
+        push 	rbp
+        mov     rbp, rsp
 
-	mov		rax, 0
-  	in      al, 64h
-	and		rax, 01h
+        mov		rax, 0
+        in      al, 64h
+        and		rax, 01h
 
-	cmp		rax, 01h
-	jne		get_key_end		;rax=0
+        cmp		rax, 01h
+        jne		get_key_end		;rax=0
 
-	in		al, 60h
+        in		al, 60h
 
-get_key_end
-
-
-  	leave
-  	ret
+    get_key_end:
+        leave
+        ret
 
 GLOBAL test_int_80h ; FUNCIONA!!!
 test_int_80h:

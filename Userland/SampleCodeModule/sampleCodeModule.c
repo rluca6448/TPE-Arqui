@@ -10,7 +10,7 @@ static int var1 = 0;
 static int var2 = 0;
 
 int main() {
-	test_int_80h;
+	test_int_80h();
 	sys_write(1, "este es un mensaje", 18);
 
     //Test if BSS is properly set up

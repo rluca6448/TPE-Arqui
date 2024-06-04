@@ -1,4 +1,4 @@
-#include <syscalls.h>
+#include "syscalls.h"
 
 #define SYS_READ 3
 #define SYS_WRITE 4
@@ -15,7 +15,7 @@ void sys_write(int fd, const char* buf, int count){
 }
 
 void sys_clearScreen(){
-    syscall(SYS_CLEAR_SCREEN)
+    syscall(SYS_CLEAR_SCREEN, 0, 0, 0);
 }
 // OJO: el sys_read de video.c está mal y hay que cambiarlo por este:
 // int sys_read(int fd, char* buf, int count){

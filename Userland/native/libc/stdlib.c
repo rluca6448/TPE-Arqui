@@ -1,9 +1,8 @@
-#include <stdlib.h>
-#include <syscalls.h>
+#include "stdlib.h"
+#include "syscalls.h"
+#include "string.h"
 
-void putchar(char c) {
-    putcharColoured(c, 0xFFFFFF, 0x000000);
-}
+uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base);
 
 void putcharColoured(char c, uint64_t foreground, uint64_t background) {
     char buf[1] = {c};
@@ -35,30 +34,45 @@ uint64_t gets(char * buf, uint64_t length) {
     return i;
 }
 
-uint64_t atoi(char * str) {
-    return 1;
+uint64_t atoi(char * str) { // ascii to integer
+    uint64_t res = 0;
+    int length = strlen(str);
+
+    for (int i = 0; i < length; i++) {
+        if (str[i] < '0' || str[i] > '9') {
+            return 0;
+        }
+        res = res * 10 + (str[i] - '0');
+    }
+    return res;
 }
 
 void itoa(uint64_t num, char * buf) {
-    return;
-}
+    char aux[1024];     //todo: poner como macro
+    int i = 0;
 
-int strcmp(char *s1, char *s2) {
-    while (*s1 != 0 && *s2 != 0 && *s1 == *s2)
-    {
-        s1++;
-        s2++;
+    if (num == 0) {
+        aux[i++] = '0';
     }
 
-    return *s1 == 0 && *s2 == 0;
+    while (num > 0) {
+        aux[i++] = num % 10 + '0';
+        num /= 10;
+    }
+    aux[i] = '\0';
+
+    int bufLen = i;
+    for (int j = 0; j < bufLen; ++j) {
+        buf[j] = aux[bufLen - j - 1];
+    }
+    buf[bufLen] = '\0';
 }
 
-static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base) {
+uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base) {
     char *p = buffer;
     char *p1, *p2;
     uint32_t digits = 0;
 
-    //Calculate characters for each digit
     do
     {
         uint32_t remainder = value % base;
@@ -67,10 +81,8 @@ static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base) {
     }
     while (value /= base);
 
-    // Terminate string in buffer.
     *p = 0;
 
-    //Reverse string in buffer.
     p1 = buffer;
     p2 = p - 1;
     while (p1 < p2)

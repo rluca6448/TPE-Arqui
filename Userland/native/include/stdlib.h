@@ -13,7 +13,10 @@ uint64_t gets(char * buf, uint64_t length);
 
 uint64_t atoi(char * str);
 void itoa(uint64_t num, char * buf);
-int strcmp(const char *s1,const char *s2);
-static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base);
+uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base);
+
+void putPixel(uint32_t hexColor, uint64_t x, uint64_t y);
+void putSquare(uint32_t hexColor, uint64_t x, uint64_t y, uint64_t size);
+char getKey();
 
 #endif //TPE_STDLIB_H

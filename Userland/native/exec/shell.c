@@ -8,8 +8,8 @@
 #define MAX_BUF 1024
 #define REG_SIZE 17
 
-static char * commands[] = {"clear", "dividebyzero", "help", "inforeg", "invalidopcode", "time"};
-static void (*commands_functions[])() = {clear,  divideByZero, print_help, inforeg, invalidOPCode, print_time};
+char * commands[] = {"clear", "dividebyzero", "help", "inforeg", "invalidopcode", "time", "eliminator"};
+void (*commands_functions[])() = {clear,  divideByZero, print_help, inforeg, invalidOPCode, print_time, eliminator};
 
 void shell() {
     printHeader();
@@ -41,45 +41,4 @@ void execute(char *inputBuffer) {
         }
     }
     printf("Invalid command, try again.\n");
-}
-
-static void help() {
-
-    const char* helpstring =
-            "CLEAR                Clears the console.\n"
-            "DIVIDEBYZERO         Command to verify the operation of the exception routine \"Divide by zero\"\n"
-            "HELP                 Provides help information for commands.\n"
-            "INFOREG              Prints on screen the value of all registers.\n"
-            "INVALIDOPCODE        Command to verify the operation of the exception routine \"Invalid Opcode\"\n"
-            "TIME                 Command to display the system time.\n";
-    printf("%s", helpstring);
-}
-
-static void divideByZero(){
-    runDivideByZero();
-}
-
-static void invalidOpcode(){
-    runInvalidOpcode();
-}
-
-static void clear(){
-    sys_clear();
-}
-
-static void printRegisters(uint64_t *reg){
-    static char *regs[REG_SIZE] = {
-            "RAX", "RBX", "RCX", "RDX", "RDI", "RSI","RBP", "RSP",
-            "R08", "R09", "R10", "R11", "R12", "R13", "R14",
-            "R15", "IP "};
-
-    char toPrint[30];
-    for (int i = 0; i < REG_SIZE; i++)
-    {
-        printf_color(regs[i], 0xFFEA00,0x000000);
-        uintToBase(reg[i], toPrint, 16);
-        printf(":");
-        printf("%s", toPrint);
-        putchar('\n');
-    }
 }

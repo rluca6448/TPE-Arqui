@@ -25,7 +25,7 @@ void eliminator() {
 }
 
 void clear() {
-
+    sys_clear();
 }
 
 void divideByZero() {

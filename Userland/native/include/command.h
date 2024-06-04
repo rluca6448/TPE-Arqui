@@ -16,6 +16,8 @@ void inforeg();
 void invalidOPCode();
 void time();
 
-void eliminator();
+//para excepciones
+extern void runInvalidOpcodeException(void);
+extern void runZeroDivisionException(void);
 
 #endif //TPE_COMMAND_H

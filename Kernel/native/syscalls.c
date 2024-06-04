@@ -1,8 +1,8 @@
-#include <video.h>
-#include <IO.h> // importante agregar todos los headers necesarios
-#include <time.h>
-#include <lib.h
-#include <interrupts.h>
+#include "video.h"
+#include "IO.h" // importante agregar todos los headers necesarios
+#include "time.h"
+#include "lib.h"
+#include "interrupts.h"
 
 #define SYS_HLT 0
 #define SYS_SOUND 1

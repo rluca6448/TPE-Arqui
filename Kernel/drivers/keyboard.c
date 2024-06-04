@@ -186,7 +186,7 @@ void keyboard_handler() {
             break;
         default:
             if (key != '\0') {
-                putChar(key);
+                // putChar(key);
                 putIn(key);
             }
             break;

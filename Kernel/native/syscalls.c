@@ -1,4 +1,5 @@
 #include <video.h>
+#include <IO.h> // importante agregar todos los headers necesarios
 #define SYS_WRITE 4
 #define SYS_READ 3
 #define SYS_CLEAR_SCREEN 5

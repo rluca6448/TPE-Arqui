@@ -1,6 +1,7 @@
 #include <command.h>
 #include <syscalls.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 static command commands[] = {
         {"help", "Muestra la lista de comandos", print_help},
@@ -8,17 +9,8 @@ static command commands[] = {
         {"eliminator", "Ejecuta el juego eliminator.", eliminator}
 };
 
-void execute(const char * command) {
-    for (int i = 0; i < sizeof(commands)/sizeof(command) ; i++) {
-        if (commands[i].title == command) {
-            commands[i].command();
-            return;
-        }
-    }
-}
-
 void print_help() {
-    //prinf("Comandos disponibles:\n");
+    printf("Comandos disponibles:\n");
     for (int i = 0 ; i < sizeof(commands)/sizeof(command) ; i++) {
         printf("%s : %s\n", commands[i].title, commands[i].desc);
     }
@@ -30,4 +22,24 @@ void print_time() {
 
 void eliminator() {
     return;
+}
+
+void clear() {
+
+}
+
+void divideByZero() {
+
+}
+
+void inforeg() {
+
+}
+
+void invalidOPCode() {
+
+}
+
+void time() {
+    printf("%s\n", sys_time());
 }

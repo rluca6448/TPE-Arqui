@@ -42,13 +42,3 @@ uint64_t atoi(char * str) {
 void itoa(uint64_t num, char * buf) {
     return;
 }
-
-int strcmp(char *s1, char *s2) {
-    while (*s1 != 0 && *s2 != 0 && *s1 == *s2)
-    {
-        s1++;
-        s2++;
-    }
-
-    return *s1 == 0 && *s2 == 0;
-}

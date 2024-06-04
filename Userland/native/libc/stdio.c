@@ -33,7 +33,7 @@ uint64_t printf_color(const char * fmt, uint64_t foreground, uint64_t background
                     print_str(buf, foreground, background);
                     break;
                 case '%':
-                    putchar('%c');
+                    putchar('%');
                     break;
                 default:
                     break;

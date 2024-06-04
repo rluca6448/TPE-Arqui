@@ -7,6 +7,7 @@
 
 void shell();
 void printHeader();
+void execute(char *inputBuffer);
 
 //para excepciones
 void runInvalidOpcode(void);

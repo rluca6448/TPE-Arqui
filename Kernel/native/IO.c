@@ -1,8 +1,8 @@
-#include <IO.h>
-#include <video.h>
+#include "IO.h"
+#include "video.h"
 #include <stdint.h>
-#include <font.h>
-#include <interrupts.h>
+#include "font.h"
+#include "interrupts.h"
 
 
 #define SIZE_BUFFER 1000
@@ -105,7 +105,7 @@ int sys_read(int fd, char* buf, int count){
 }
 
 
-void sys_textmode(int enabled, int newSize){
+void sys_textmode(int enabled, int newSize){        // ojo: la variable enabled no hace nada
     _cli;               //por las dudas paro los in/out
     if (newSize < 1 || newSize > 5)
         return;

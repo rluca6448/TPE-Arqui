@@ -1,5 +1,5 @@
-#include <video.h>
-#include <font.h>
+#include "video.h"
+#include "font.h"
 
 
 #define OUT_BACK_COLOR 0x00ffffff
@@ -66,16 +66,11 @@ void putSquare(uint32_t hexColor, uint64_t x, uint64_t y, uint64_t size) {
 }
 
 
-
 void sys_putPixel(uint32_t hexColor, uint64_t x, uint64_t y){
     // if (!videoModeOn) return;
     putPixel(hexColor, x, y);
 }
 
-void sys_putBigPixel(uint32_t hexColor, uint64_t x, uint64_t y){
-    // if (!videoModeOn) return;
-    putSquare(hexColor, x, y, 8);
-}
 
 void sys_clearScreen(){
     clearScreen(BG_COLOR);

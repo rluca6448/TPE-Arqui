@@ -1,7 +1,7 @@
-#include <keyboard.h>
-#include <video.h>
-#include <IO.h>
-#include <lib.h>
+#include "keyboard.h"
+#include "video.h"
+#include "IO.h"
+#include "lib.h"
 
 int keyFlag[4] = {0,0}; // index 0: bloq-mayus ; index 1: {1=shift ; 2=CTRL ; 3=alt}
 

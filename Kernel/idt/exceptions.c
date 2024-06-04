@@ -1,8 +1,8 @@
 #include <stdint.h>
-#include <video.h>
-#include <exceptions.h>
-#include <IO.h>
-#include <lib.h>
+#include "video.h"
+#include "exceptions.h"
+#include "IO.h"
+#include "lib.h"
 
 #define ZERO_EXCEPTION_ID 0
 #define INVALID_OPCODE_ID 1

@@ -1,4 +1,4 @@
-#include <string.h>
+#include "string.h"
 
 int strcmp(char *s1, char *s2) {
     const unsigned char *p1 = ( const unsigned char * )s1;

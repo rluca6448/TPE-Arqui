@@ -26,7 +26,7 @@ uint64_t int80Dispacher(uint64_t id, uint64_t param_1, uint64_t param_2, uint64_
             sys_clearScreen();
             return;
         case SYS_PUT_PIXEL:
-            sys_putBigPixel(param_1, param_2, param_3);
+            sys_putPixel(param_1, param_2, param_3);
             return;
         case SYS_TEXTMODE:
             sys_textmode(param_1, param_2);

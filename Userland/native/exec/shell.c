@@ -6,7 +6,6 @@
 #include <string.h>
 
 #define MAX_BUF 1024
-#define REG_SIZE 17
 
 char * commands[] = {"clear", "dividebyzero", "help", "inforeg", "invalidopcode", "time", "eliminator"};
 void (*commands_functions[])() = {clear,  divideByZero, print_help, inforeg, invalidOPCode, print_time, eliminator};

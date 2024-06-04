@@ -9,11 +9,16 @@ void putcharColoured(char c, uint64_t foreground, uint64_t background) {
     sys_write(1, buf, 1);
 }
 
+void putchar(char c) {
+    putcharColoured(c, 0xFFFFFF, 0x000000);
+}
+
 uint64_t getchar() {
     char buf[1];
     sys_read(0, buf, 1);
     return buf[0];
 }
+
 
 uint64_t gets(char * buf, uint64_t length) {
     char c;

@@ -1,5 +1,8 @@
 GLOBAL runInvalidOpcodeException
 GLOBAL runZeroDivisionException
+GLOBAL inforeg
+
+EXTERN printRegisters
 
 section .text
 
@@ -35,7 +38,7 @@ inforeg:
     mov [regex + 8*15], r15
 
 	mov rax, [rsp] ; RIP.
-    mov [regMem + 8*16], rax
+    mov [regex + 8*16], rax
 
     mov rdi, regex
 	call printRegisters
@@ -43,4 +46,4 @@ inforeg:
     ret
 
 section .bss
-    regex resq 17; ;reserva espacio para 18 qwords (cada registro para mostrarlos en las excepciones)
+    regex: resq 17; ;reserva espacio para 18 qwords (cada registro para mostrarlos en las excepciones)

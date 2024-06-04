@@ -1,6 +1,6 @@
-#include <time.h>
-#include <lib.h>
-#include <naiveConsole.h>
+#include "time.h"
+#include "lib.h"
+#include "naiveConsole.h"
 
 static unsigned long ticks = 0;
 

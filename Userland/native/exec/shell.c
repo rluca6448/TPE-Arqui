@@ -3,12 +3,13 @@
 #include <command.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define MAX_BUF 1024
 #define REG_SIZE 17
 
-static const char* commands[] = {"clear", "dividebyzero", "help", "inforeg", "invalidopcode", "time"};
-static void (*commands_functions[])() = {clear,  divideByZero, help, inforeg, invalidOpcode, time};
+static char * commands[] = {"clear", "dividebyzero", "help", "inforeg", "invalidopcode", "time"};
+static void (*commands_functions[])() = {clear,  divideByZero, print_help, inforeg, invalidOPCode, print_time};
 
 void shell() {
     printHeader();
@@ -18,7 +19,7 @@ void shell() {
         printf_color("user", 0xcdff00, 0x000000);
         printf(":~$");
         gets(buf, MAX_BUF);
-        putchar('\n')
+        putchar('\n');
         execute(buf);
         sys_hlt();
     }
@@ -30,17 +31,16 @@ void printHeader() {
     return;
 }
 
-int execute(char *inputBuffer) {
-    for (int i = 0; i < sizeC; i++)
+void execute(char *inputBuffer) {
+    for (int i = 0; i < sizeof(commands) ; i++)
     {
-        if (strcmp(args[0], commands[i].name))
+        if (strcmp(inputBuffer, commands[i]))
         {
             commands_functions[i]();
-            return 1;
+            return;
         }
     }
     printf("Invalid command, try again.\n");
-    return 0;
 }
 
 static void help() {

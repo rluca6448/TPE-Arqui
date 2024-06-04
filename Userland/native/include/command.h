@@ -10,8 +10,12 @@ typedef struct {
 void print_time();
 void print_help();
 
-void eliminator();
+void clear();
+void divideByZero();
+void inforeg();
+void invalidOPCode();
+void time();
 
-void execute(const char * command);
+void eliminator();
 
 #endif //TPE_COMMAND_H

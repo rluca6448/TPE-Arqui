@@ -7,7 +7,7 @@
 #define MAX_BUF 1024
 
 static const char* commands[] = {"clear", "dividebyzero", "help", "inforeg", "invalidopcode", "time"};
-static void (*commands_functions[])() = {clear,  divideByZero, help, inforeg, invalidOPCode, time};
+static void (*commands_functions[])() = {clear,  divideByZero, help, inforeg, invalidOpcode, time};
 
 void shell() {
     printHeader();
@@ -52,4 +52,12 @@ static void help() {
             "INVALIDOPCODE        Command to verify the operation of the exception routine \"Invalid Opcode\"\n"
             "TIME                 Command to display the system time.\n";
     printf(helpstring);
+}
+
+static void divideByZero(){
+    runDivideByZero();
+}
+
+static void invalidOpcode(){
+    runInvalidOpcode();
 }

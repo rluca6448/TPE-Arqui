@@ -27,6 +27,7 @@ void putCharAt(uint8_t c, uint64_t * x, uint64_t * y, uint64_t foreColor, uint64
 void deleteCharAt(uint64_t * x, uint64_t * y, uint64_t foreColor, uint64_t backgroundColor);
 void clearScreen(uint32_t hexColor);
 void newLine(uint64_t * x, uint64_t * y);
+void simplePutCharAt(uint8_t c, uint64_t x, uint64_t y, uint64_t foreColor, uint64_t backgroundColor)
 
 void newFontSize(int newSize);
 

@@ -1,4 +1,7 @@
 GLOBAL cpuVendor
+GLOBAL RTC
+GLOBAL getKey
+GLOBAL get_key_2
 
 section .text
 	

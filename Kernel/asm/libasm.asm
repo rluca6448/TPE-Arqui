@@ -26,7 +26,7 @@ cpuVendor:
 	pop rbp
 	ret
 
-global RTC
+global getTime
 global hexToString
 
 ; recibe en eax un numero, y deja en eax un string
@@ -74,9 +74,7 @@ hexToString:
         pop rbp
         ret
 
-hexToStr:
-
-RTC:
+getTime:
         push rbp
         mov rbp, rsp
         push rbx

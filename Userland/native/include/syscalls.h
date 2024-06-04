@@ -1,22 +1,41 @@
 #ifndef TPE_ARQUI_SYSCALLS_H
 #define TPE_ARQUI_SYSCALLS_H
 
-#define SYS_READ 3
-#define SYS_WRITE 4
-#define SYS_CLEAR_SCREEN 5
-#define SYS_HLT 12
+/*
+ * hlt = 0
+ * read = 1
+ * write = 2
+ * time = 3
+ * sleep = 4
+ * sound = 5
+ * clear = 6
+ * */
+
+#define SYS_HLT 0
+#define SYS_READ 1
+#define SYS_WRITE 2
+#define SYS_TIME 3
+#define SYS_SLEEP 4
+#define SYS_SOUND 5
+#define SYS_CLEAR 6
 
 #include <stdint.h>
 
-int sys_read(int fd, char* buf, int count);
-void print_help();
-void sys_hlt();
-char * getTime();
-void sys_write(int fd, const char* buf, int count);
-void sys_clearScreen(void);
-
 extern uint64_t syscall(uint64_t id, uint64_t par2, void * par3, uint64_t par4);
 
+void sys_hlt();
+
+int sys_read(int fd, char * buf, int count);
+void sys_write(int fd, char* buf, int count);
+
+char * sys_time();
+
+void sys_sleep();
+
+void sys_sound();
+void sys_clear();
+
+void print_help();
 void test_int_80h();
 
 #endif //TPE_ARQUI_SYSCALLS_H

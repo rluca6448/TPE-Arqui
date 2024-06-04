@@ -38,7 +38,6 @@ void *getStackBase() {
 }
 
 void *initializeKernelBinary() {
-    char buffer[10];
 
     void *moduleAddresses[] = {
             sampleCodeModuleAddress,
@@ -54,31 +53,14 @@ void *initializeKernelBinary() {
 
 int main() {
     load_idt();
-    // putSquare(0x00ffffff, 0, 0, 5);
-
-    // while(seconds_elapsed() < 2);
-    // char* buf[2];
-    // int charsRead = sys_read(0, buf, 2);
-    // sys_write(1, buf, 2);
-    // sys_write(1, "xd", 2);
-    // test_int_80h();
-
-    // for(int i=0; i<140; i++){
-    //     sys_write(1, "0123456789", 10);
-    // }
-    sys_textmode(1, 2);
-    while(seconds_elapsed() < 3){
-        char* buf[1];
-        char hasRead = sys_read(0, buf, 1);
-        if (hasRead) sys_write(1, buf, 1);
-    }
-    sys_textmode(1, 4);
-
-    while(seconds_elapsed() < 10){
-        char* buf[1];
-        char hasRead = sys_read(0, buf, 1);
-        if (hasRead) sys_write(2, buf, 1);
-    }
+//    for (int i=0 ; i < 10 ; i++){
+//        putChar('C');
+//    }
+//    for (int i=0 ; i < 10 ; i++){
+//        putOut('O');
+//    }
+    sys_write(1, "xd", 2);
+    test_int_80h();
     // while(1);
 
 //    char i = getKey();
@@ -119,5 +101,6 @@ int main() {
 //        i = getKey();
 //    }
 
-    return 0;
+     return 0;
 }
+

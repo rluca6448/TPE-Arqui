@@ -158,7 +158,7 @@ char mapKey(char character, int flags[2]) {
 }
 
 void keyboard_handler() {
-    char i = getKey();
+    char i = get_key_2();
     char key = mapKey(i, keyFlag);
     switch (i) {
         case '\x3A':    // bloq-mayus
@@ -186,7 +186,7 @@ void keyboard_handler() {
             break;
         default:
             if (key != '\0') {
-                // putChar(key);
+                putChar(key);
                 putIn(key);
             }
             break;

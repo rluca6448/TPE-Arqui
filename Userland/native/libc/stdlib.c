@@ -6,15 +6,33 @@ void putchar(char c) {
 }
 
 void putcharColoured(char c, uint64_t foreground, uint64_t background) {
-    sys_write(SYS_WRITE, &c, 1);
+    char buf[1] = {c};
+    sys_write(1, buf, 1);
 }
 
 uint64_t getchar() {
-    return 1;
+    char buf[1];
+    sys_read(0, buf, 1);
+    return buf[0];
 }
 
 uint64_t gets(char * buf, uint64_t length) {
-    return 1;
+    char c;
+    int i = 0;
+    do {
+        c=getchar();
+        if (c >= 0x20 && c <= 0x7F) {
+            *buf = c;
+            putchar(c);
+        } else if (c == '\n') {
+            *buf = '\0';
+            putchar('\n');
+            return i;
+        }
+        buf++;
+    } while (i < length-1);
+    *buf = '\0';
+    return i;
 }
 
 uint64_t atoi(char * str) {
@@ -22,5 +40,5 @@ uint64_t atoi(char * str) {
 }
 
 void itoa(uint64_t num, char * buf) {
-
+    return;
 }

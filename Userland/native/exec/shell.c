@@ -2,6 +2,7 @@
 #include <syscalls.h>
 #include <command.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define MAX_BUF 1024
 
@@ -12,7 +13,7 @@ void shell() {
     while (1) {
         printf_color("user", 0xcdff00, 0x000000);
         printf(":~$");
-        //gets(buff, MAX_BUF);
+        gets(buf, MAX_BUF);
         execute(buf);
         sys_hlt();
     }

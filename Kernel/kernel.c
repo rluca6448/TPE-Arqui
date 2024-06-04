@@ -66,6 +66,7 @@ int main() {
     // for(int i=0; i<140; i++){
     //     sys_write(1, "0123456789", 10);
     // }
+/*
     sys_textmode(1, 2);
     while(seconds_elapsed() < 10){
         char* buf[1];
@@ -97,7 +98,12 @@ int main() {
         char hasRead = sys_read(0, buf, 1);
         if (hasRead) sys_write(2, buf, 1);
     }
+*/
+    ((EntryPoint) sampleCodeModuleAddress)();
 
-     return 0;
+    while (1)
+        ;
+
+    return 0;
 }
 

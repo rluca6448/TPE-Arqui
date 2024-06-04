@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 #define MAX_BUF 1024
+#define REG_SIZE 17
 
 static const char* commands[] = {"clear", "dividebyzero", "help", "inforeg", "invalidopcode", "time"};
 static void (*commands_functions[])() = {clear,  divideByZero, help, inforeg, invalidOpcode, time};
@@ -64,4 +65,21 @@ static void invalidOpcode(){
 
 static void clear(){
     sys_clear();
+}
+
+static void printRegisters(uint64_t *reg){
+    static char *regs[REG_SIZE] = {
+            "RAX", "RBX", "RCX", "RDX", "RDI", "RSI","RBP", "RSP",
+            "R08", "R09", "R10", "R11", "R12", "R13", "R14",
+            "R15", "IP "};
+
+    char toPrint[30];
+    for (int i = 0; i < REG_SIZE; i++)
+    {
+        printf_color(regs[i], 0xFFEA00,0x000000);
+        uintToBase(reg[i], toPrint, 16);
+        printf(":");
+        printf(toPrint);
+        putchar('\n');
+    }
 }

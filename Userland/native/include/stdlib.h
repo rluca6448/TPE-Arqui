@@ -14,5 +14,6 @@ uint64_t gets(char * buf, uint64_t length);
 uint64_t atoi(char * str);
 void itoa(uint64_t num, char * buf);
 int strcmp(const char *s1,const char *s2);
+static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base);
 
 #endif //TPE_STDLIB_H

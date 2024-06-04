@@ -27,21 +27,21 @@ void exceptionDispatcher(int exception, const uint64_t regex[18]) {
     showRegisters(regex);
     int secondsElapsed = seconds_elapsed();
     //Esperamos 4 segundos para que el usuario tenga tiempo de ver el error
-    do { _hlt() } while (secondsElapsed - seconds_elapsed() < 4);
+    do { _hlt(); } while (secondsElapsed - seconds_elapsed() < 4);
     clearIn();
-    printfCouloured("Presione cualquier tecla para volver", OUT_FORE_COLOR, OUT_BACK_COLOR);
-    do { _hlt() } while ( getIn() == 0);
+    //printfCouloured("Presione cualquier tecla para volver", OUT_FORE_COLOR, OUT_BACK_COLOR);
+    do { _hlt(); } while ( getIn() == 0);
     clearIn();
     clearScreen(OUT_BACK_COLOR);
     _cli();
 }
 
 static void zero_division() {
-    printfCouloured(zero_division_exception_message, ERR_FORE_COLOR, ERR_BACK_COLOR);
+    //printfCouloured(zero_division_exception_message, ERR_FORE_COLOR, ERR_BACK_COLOR);
 }
 
 static void invalid_opcode() {
-    printfCouloured(invalid_opcode_exception_message, ERR_FORE_COLOR, ERR_BACK_COLOR);
+    //printfCouloured(invalid_opcode_exception_message, ERR_FORE_COLOR, ERR_BACK_COLOR);
 }
 
 //FALTA DESARROLLAR

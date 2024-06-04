@@ -60,9 +60,8 @@ int main() {
 //    for (int i=0 ; i < 10 ; i++){
 //        putOut('O');
 //    }
-    sys_write(1, "xd", 2);
-    test_int_80h();
-    // while(1);
+    while(1)
+        ;
 
 //    char i = getKey();
 //    char key;

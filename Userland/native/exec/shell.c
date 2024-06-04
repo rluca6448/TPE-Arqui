@@ -1,9 +1,10 @@
-#include <shell.h>
-#include <syscalls.h>
-#include <command.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "shell.h"
+#include "syscalls.h"
+#include "command.h"
+#include "eliminator.h"
+#include "stdio.h"
+#include "stdlib.h"
+#include "string.h"
 
 #define MAX_BUF 1024
 
@@ -12,12 +13,18 @@ void (*commands_functions[])() = {clear,  divideByZero, print_help, inforeg, inv
 
 void shell() {
     printHeader();
-    char buf[MAX_BUF];
+    char buf[MAX_BUF] = {0};
+
+
 
     while (1) {
         printf_color("user", 0xcdff00, 0x000000);
         printf(":~$");
-        gets(buf, MAX_BUF);
+//        gets(buf, MAX_BUF);
+        while(c!='\n') {
+            c = getchar();
+            putchar(c);
+        }
         putchar('\n');
         execute(buf);
         sys_hlt();

@@ -34,7 +34,7 @@ uint64_t gets(char * buf, uint64_t length) {
             return i;
         }
         buf++;
-    } while (i < length-1);
+    } while (i < length-1 && c != '\n');
     *buf = '\0';
     return i;
 }
@@ -100,4 +100,24 @@ uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base) {
     }
 
     return digits;
+}
+
+void putPixel(uint32_t hexColor, uint64_t x, uint64_t y){
+    sys_putPixel(hexColor, x, y);
+}
+
+void putSquare(uint32_t hexColor, uint64_t x, uint64_t y, uint64_t size) {
+    for(int i=0; i<size; i++) {
+        for (int j=0; j<size; j++) {
+            putPixel(hexColor, x+j, y+i);
+        }
+    }
+}
+
+char getKey() {
+    char c[1];
+    if(sys_read(0, c, 1) <= 0){
+        c[0] = 0;
+    }
+    return c[0];
 }

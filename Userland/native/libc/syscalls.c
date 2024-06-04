@@ -28,3 +28,11 @@ void sys_sound() {
 void sys_clear(){
     syscall(SYS_CLEAR, 0, 0, 0);
 }
+
+void sys_putPixel(uint32_t hexColor, uint64_t x, uint64_t y){
+    syscall(SYS_PUT_PIXEL, hexColor, x, y);
+}
+
+void ticks_elapsed() {
+    return syscall(SYS_GET_ELAPSED_SECONDS, 0, 0, 0);
+}

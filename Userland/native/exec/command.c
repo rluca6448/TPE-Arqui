@@ -23,10 +23,6 @@ void print_time() {
     printf("%s\n", sys_time());
 }
 
-void eliminator() {
-    return;
-}
-
 void clear() {
     sys_clear();
 }

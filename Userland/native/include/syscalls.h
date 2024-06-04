@@ -40,5 +40,6 @@ void sys_clear();
 
 void print_help();
 void test_int_80h();
-
+void sys_putPixel(uint32_t hexColor, uint64_t x, uint64_t y);
+void ticks_elapsed();
 #endif //TPE_ARQUI_SYSCALLS_H

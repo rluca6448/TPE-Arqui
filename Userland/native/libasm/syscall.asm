@@ -49,6 +49,7 @@ syscall:
     ret
 
 GLOBAL test_int_80h
+
 test_int_80h:
     push 	rbp
 	mov     rbp, rsp

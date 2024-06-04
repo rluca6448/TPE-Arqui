@@ -18,7 +18,8 @@ void shell() {
     }
 }
 
-void print_header() {
+void printHeader() {
     //printf_color("Bienvenido a la Shell!\n", 0xcdff00, 0x000000);
     //printf("Ejecuta 'help' para ver una lista de comandos.\n");
+    return;
 }

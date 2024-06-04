@@ -2,10 +2,7 @@
 
 #include <stdint.h>
 #include <string.h>
-
-extern void sys_write(int fd, const char* buf, int count);
-extern void test_int_80h();
-
+#include <syscalls.h>
 
 static int var1 = 0;
 static int var2 = 0;

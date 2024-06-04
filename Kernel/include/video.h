@@ -35,4 +35,6 @@ int getHeight();
 int xOutOfBounds(uint64_t * x);
 int yOutOfBounds(uint64_t * y);
 
+void simplePutCharAt(uint8_t c, uint64_t x, uint64_t y, uint64_t foreColor, uint64_t backgroundColor);
+
 #endif //TPE_ARQUI_VIDEO_H

@@ -3,10 +3,11 @@
 
 static command commands[] = {
         {"help", "Muestra la lista de comandos", print_help},
-        {"time", "Muestra la hora", print_time}
+        {"time", "Muestra la hora", print_time},
+        {"eliminator", "Ejecuta el juego eliminator.", eliminator}
 };
 
-void execute(char * command) {
+void execute(const char * command) {
     for (int i = 0; i < sizeof(commands)/sizeof(command) ; i++) {
         if (commands[i].title == command) {
             commands[i].command();
@@ -24,4 +25,8 @@ void print_help() {
 
 void print_time() {
     //printf("%s\n", getTime());
+}
+
+void eliminator() {
+    return;
 }

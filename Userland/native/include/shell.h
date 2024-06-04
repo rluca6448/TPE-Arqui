@@ -2,6 +2,6 @@
 #define TPE_SHELL_H
 
 void shell();
-void print_header();
+void printHeader();
 
 #endif //TPE_SHELL_H

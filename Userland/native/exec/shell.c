@@ -41,3 +41,15 @@ int execute(char *inputBuffer) {
     printf("Invalid command, try again.\n");
     return 0;
 }
+
+static void help() {
+
+    const char* helpstring =
+            "CLEAR                Clears the console.\n"
+            "DIVIDEBYZERO         Command to verify the operation of the exception routine \"Divide by zero\"\n"
+            "HELP                 Provides help information for commands.\n"
+            "INFOREG              Prints on screen the value of all registers.\n"
+            "INVALIDOPCODE        Command to verify the operation of the exception routine \"Invalid Opcode\"\n"
+            "TIME                 Command to display the system time.\n";
+    printf(helpstring);
+}

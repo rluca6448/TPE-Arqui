@@ -12,15 +12,14 @@
  * */
 
 #define SYS_HLT 0
+#define SYS_SOUND 1
+#define SYS_SLEEP 2
 #define SYS_READ 3
 #define SYS_WRITE 4
-#define SYS_TIME 8
-#define SYS_SLEEP 4
-#define SYS_SOUND 5
 #define SYS_CLEAR 5
-
 #define SYS_PUT_PIXEL 6
 #define SYS_TEXTMODE 7
+#define SYS_TIME 8
 #define SYS_GET_ELAPSED_SECONDS 9
 
 #include <stdint.h>

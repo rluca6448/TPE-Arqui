@@ -28,9 +28,3 @@ void sys_sound() {
 void sys_clear(){
     syscall(SYS_CLEAR, 0, 0, 0);
 }
-
-char getCharUser() {
-    char c[1];
-    while(sys_read(0, c, 1) <= 0);
-    return c[0];
-}

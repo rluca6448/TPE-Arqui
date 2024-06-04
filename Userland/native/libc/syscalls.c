@@ -1,0 +1,36 @@
+#include <syscalls.h>
+
+
+void sys_hlt() {
+    syscall(SYS_HLT, 0, 0, 0);
+}
+
+int sys_read(int fd, char * buf, int count){
+    return syscall(SYS_READ, fd, buf, count);
+}
+
+void sys_write(int fd, char * buf, int count){
+    syscall(SYS_WRITE, fd, buf, count);
+}
+
+char * sys_time() {
+    return syscall(SYS_TIME, 0, 0, 0);
+}
+
+void sys_sleep() {
+    syscall(SYS_SLEEP, 0, 0, 0);
+}
+
+void sys_sound() {
+    syscall(SYS_SOUND, 0, 0, 0);
+}
+
+void sys_clear(){
+    syscall(SYS_CLEAR, 0, 0, 0);
+}
+
+char getCharUser() {
+    char c[1];
+    while(sys_read(0, c, 1) <= 0);
+    return c[0];
+}

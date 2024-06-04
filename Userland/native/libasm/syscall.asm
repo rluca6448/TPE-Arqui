@@ -1,5 +1,3 @@
-GLOBAL syscall
-
 section .text
 
 %macro pushState 0
@@ -36,6 +34,8 @@ section .text
 	pop rbx
 %endmacro
 
+GLOBAL syscall
+
 syscall:
     pushState
     mov     rax, rcx
@@ -49,6 +49,7 @@ syscall:
     ret
 
 GLOBAL test_int_80h
+
 test_int_80h:
     push 	rbp
 	mov     rbp, rsp

@@ -2,7 +2,7 @@
 #include <font.h>
 
 
-
+#define OUT_BACK_COLOR 0x00ffffff
 
 
 struct vbe_mode_info_structure {

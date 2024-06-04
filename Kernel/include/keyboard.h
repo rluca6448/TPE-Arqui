@@ -9,6 +9,7 @@ typedef struct {
 } AsciiMap;
 
 char mapKey(char character, int flags[4]);
+void keyboard_handler();
 extern char getKey();
 
 #endif

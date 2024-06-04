@@ -1,6 +1,13 @@
 #include <video.h>
 #include <font.h>
 
+// macros Alex:
+#define SIZE_BUFFER 65536
+#define OUT_FORE_COLOR 0x00ffffff
+#define OUT_BACK_COLOR 0x00000000
+#define ERR_FORE_COLOR 0x00ff0000
+#define ERR_BACK_COLOR 0x00000000
+
 struct vbe_mode_info_structure {
     uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
     uint8_t window_a;			// deprecated
@@ -53,6 +60,172 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
     framebuffer[offset+2]   =  (hexColor >> 16) & 0xFF;
 }
 
+
+// Comandos Alex (a partir de acá)
+
+static int charSize = 2;
+
+static char stdoutArr[SIZE_BUFFER];
+static int sizeOut = 0;
+static int startsOut = 0;
+static char stdinArr[SIZE_BUFFER];
+static int sizeIn = 0;
+static int startsIn = 0;
+static char stderrArr[SIZE_BUFFER];
+static int sizeErr = 0;
+static int startsErr = 0;
+
+int getSizeIn(){
+	return sizeIn;
+}
+
+static char videoModeOn = 0;
+
+void printCharInScreen(char c, int x, int y){
+    if (c == 'c'){
+        // esto es para probar
+        putPixel(0x00ffffff, x, y);
+    }
+
+}
+
+void printOutInScreen(int size){    // size AHORA es pixeles x letra. Esto lo tengo que cambiar
+    if (videoModeOn==1) return;
+
+    int perLine = 1024/(FONT_WIDTH * size);
+    int height = 768/(FONT_HEIGHT * size);
+    int k = 0;
+    int secondLine = 0;     //esto después se va a modificar
+    while (k<sizeOut){
+        for(int i=0; i<height && k<sizeOut; i++){
+            if (i==1) {
+                secondLine = (startsOut + k) % SIZE_BUFFER;
+            }
+            for(int j=0; j<perLine && k<sizeOut; j++, k++) {
+                int pos = (startsOut + k) % SIZE_BUFFER;
+
+                if (stdoutArr[pos]=='\n'){
+                    break;
+                }
+                switch (stdoutArr[pos]){
+                case '\t': j+=3; break;
+                default:
+                    // printCharInScreen(stdoutArr[pos], j*16, i*16);
+                    simplePutCharAt(stdoutArr[pos], j* FONT_WIDTH * size, i*FONT_HEIGHT*size, OUT_FORE_COLOR, OUT_BACK_COLOR);
+                }
+            }
+        }
+        // if (k<sizeOut) {
+        //     sizeOut -= (secondLine-startsOut) % SIZE_BUFFER;
+        //     startsOut = secondLine;
+        //     k = 0;
+        // }
+    }
+}
+
+
+void putOut(char c){
+    // mete c en el vector cíclico
+    // TODO: falta manejar excepciones especialmente si sizeOut es demasiado grande
+
+    int pos = (startsOut + sizeOut) % SIZE_BUFFER;
+	stdoutArr[pos]=c;
+    sizeOut++;
+    if (sizeOut > SIZE_BUFFER) sizeOut -= SIZE_BUFFER;
+
+    printOutInScreen(charSize);
+}
+
+void putErr(char c){
+	// TODO: falta manejar excepciones
+	stderrArr[sizeErr++ % SIZE_BUFFER]=c;
+    printOutInScreen(charSize);
+}
+
+void putIn(char c){
+    // caso especial donde se pasa del límite: no se pueden agregar caracteres
+    // podríamos hacer que aparezca un mensaje o algo así
+    if (sizeIn >= SIZE_BUFFER-1) return;
+
+    // mete c en el vector cíclico
+    int pos = (startsIn + sizeIn) % SIZE_BUFFER;
+
+    switch (stdinArr[pos]){      //agregar quizás casos especiales
+    default:
+    	// TODO: falta manejar excepciones
+        stdinArr[pos] = c;
+        sizeIn++;
+
+    }
+}
+
+void clearIn(){
+    sizeIn = 0;
+}
+
+void clearOut(){
+    sizeOut = 0;
+}
+
+void disableTextScreen(){
+    videoModeOn = 0;
+}
+
+void enableTextScreen(){
+    videoModeOn = 1;
+}
+
+void sys_write(int fd, const char* buf, int count){
+    if (fd==1){
+        for(int i=0; i<count; i++){
+            putOut(buf[i]);
+        }
+    }
+    if (fd==2){
+        for(int i=0; i<count; i++){
+            putErr(buf[i]);
+        }
+    }
+}
+
+int sys_read(int fd, char* buf, int count){
+    if (fd==0){
+        for(int i=0; i<count && i<sizeIn; i++){
+            buf[i] = stdinArr[i];
+        }
+    }
+    return 0;
+}
+
+void sys_textmode(char enabled, int newSize){
+    if (enabled) videoModeOn = 0;
+    else videoModeOn = 1;
+    // el size se cambia de todas formas si está en un valor en el rango;
+    if (newSize > 1 && newSize < 50) {
+        charSize = newSize;
+    }
+}
+
+void sys_putPixel(uint32_t hexColor, uint64_t x, uint64_t y){
+    if (!videoModeOn) return;
+    putPixel(hexColor, x, y);
+}
+
+// Funciona igual que putCharAt, pero sin el tema de punteros y manejo de líneas
+void simplePutCharAt(uint8_t c, uint64_t x, uint64_t y, uint64_t foreColor, uint64_t backgroundColor) {
+    uint8_t charMap[FONT_HEIGHT][FONT_WIDTH];
+    getCharMap(c, charMap);
+    for (int i = 0; i < FONT_HEIGHT * fontSize ; i++) {
+        for (int j = 0; j < FONT_WIDTH * fontSize ; j++) {
+            uint8_t pixelIsOn = charMap[i][j];
+            putPixel(pixelIsOn ? foreColor : backgroundColor, x * fontSize + j, y * fontSize + i + 12);
+        }
+    }
+}
+
+
+//1024 width 768 height
+
 void putCharAt(uint8_t c, uint64_t * x, uint64_t * y, uint64_t foreColor, uint64_t backgroundColor) {
 
     if (xOutOfBounds(x)) {
@@ -88,6 +261,10 @@ void clearScreen(uint32_t hexColor) {
             putPixel(hexColor, j, i);
         }
     }
+}
+
+void sys_clearScreen(){
+    clearScreen(OUT_BACK_COLOR);
 }
 
 void newFontSize(int newSize) {

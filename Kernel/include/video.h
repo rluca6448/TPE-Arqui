@@ -5,6 +5,16 @@
 
 void putPixel(uint32_t hexColor, uint64_t x, uint64_t y);
 
+// Alex
+void putOut(char c);
+void putIn(char c);
+void clearIn();
+void clearOut();
+void sys_write(int fd, const char* buf, int count);
+int sys_read(int fd, char* buf, int count);
+void sys_clearScreen();
+
+
 void putCharAt(uint8_t c, uint64_t * x, uint64_t * y, uint64_t foreColor, uint64_t backgroundColor);
 void deleteCharAt(uint64_t * x, uint64_t * y, uint64_t foreColor, uint64_t backgroundColor);
 void clearScreen(uint32_t hexColor);

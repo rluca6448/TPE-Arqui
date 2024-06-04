@@ -171,10 +171,45 @@ getKey:
         pop rbp
         ret
 
+GLOBAL get_key_2
+get_key_2:
+	push 	rbp
+	mov     rbp, rsp
+
+	mov		rax, 0
+  	in      al, 64h
+	and		rax, 01h
+
+	cmp		rax, 01h
+	jne		get_key_end		;rax=0
+
+	in		al, 60h
+
+get_key_end
+
+
+  	leave
+  	ret
+
+GLOBAL test_int_80h ; FUNCIONA!!!
+test_int_80h:
+    push 	rbp
+	mov     rbp, rsp
+    mov     eax, 4
+    mov     ebx, 1
+    mov     ecx, test_int_80h_data
+    mov     edx, 1
+    int     80h
+
+    leave
+    ret
+
+
 ;==========================================0
 
 section .data
     date db "00:00:00", 0
+    test_int_80h_data db 0x63
 
 section .bss
     placeholder resb 2

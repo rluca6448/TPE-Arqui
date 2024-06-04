@@ -4,6 +4,7 @@
 extern char bss;
 extern char endOfBinary;
 
+
 int main();
 
 void * memset(void * destiny, int32_t c, uint64_t length);
@@ -26,3 +27,4 @@ void * memset(void * destiation, int32_t c, uint64_t length) {
 
 	return destiation;
 }
+

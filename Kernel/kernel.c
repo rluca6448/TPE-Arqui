@@ -4,6 +4,10 @@
 #include <naiveConsole.h>
 #include <keyboard.h>
 #include <IO.h>
+#include <video.h>
+#include <idtLoader.h>
+
+extern void test_int_80h();
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -19,7 +23,7 @@ static void *const sampleDataModuleAddress = (void *) 0x500000;
 
 typedef int (*EntryPoint)();
 
-int keyFlag[4] = {0,0};        // index 0: bloq-mayus ; index 1: {1=shift ; 2=CTRL ; 3=alt}
+//int keyFlag[4] = {0,0};        // index 0: bloq-mayus ; index 1: {1=shift ; 2=CTRL ; 3=alt}
 
 void clearBSS(void *bssAddress, uint64_t bssSize) {
     memset(bssAddress, 0, bssSize);
@@ -36,119 +40,68 @@ void *getStackBase() {
 void *initializeKernelBinary() {
     char buffer[10];
 
-    ncPrint("[x64BareBones]");
-    ncNewline();
-
-    ncPrint("CPU Vendor:");
-    ncPrint(cpuVendor(buffer));
-    ncNewline();
-
-    ncPrint("[Loading modules]");
-    ncNewline();
     void *moduleAddresses[] = {
             sampleCodeModuleAddress,
             sampleDataModuleAddress
     };
 
     loadModules(&endOfKernelBinary, moduleAddresses);
-    ncPrint("[Done]");
-    ncNewline();
-    ncNewline();
-
-    ncPrint("[Initializing kernel's binary]");
-    ncNewline();
 
     clearBSS(&bss, &endOfKernel - &bss);
 
-    ncPrint("  text: 0x");
-    ncPrintHex((uint64_t) & text);
-    ncNewline();
-    ncPrint("  rodata: 0x");
-    ncPrintHex((uint64_t) & rodata);
-    ncNewline();
-    ncPrint("  data: 0x");
-    ncPrintHex((uint64_t) & data);
-    ncNewline();
-    ncPrint("  bss: 0x");
-    ncPrintHex((uint64_t) & bss);
-    ncNewline();
-
-    ncPrint("[Done]");
-    ncNewline();
-    ncNewline();
     return getStackBase();
 }
 
 int main() {
-    /*
-    writeStr("[Kernel Main]", 0x7, 0x0);
-    ncNewline();
-    ncPrint("  Sample code module at 0x");
-    ncPrintHex((uint64_t) sampleCodeModuleAddress);
-    ncNewline();
-    ncPrint("  Calling the sample code module returned: ");
-    ncPrintHex(((EntryPoint) sampleCodeModuleAddress)());
-    ncNewline();
-    ncNewline();
+    load_idt();
+//    for (int i=0 ; i < 10 ; i++){
+//        putChar('C');
+//    }
+//    for (int i=0 ; i < 10 ; i++){
+//        putOut('O');
+//    }
+    sys_write(1, "xd", 2);
+    test_int_80h();
+    // while(1);
 
-    ncPrint("  Sample data module at 0x");
-    ncPrintHex((uint64_t) sampleDataModuleAddress);
-    ncNewline();
-    ncPrint("  Sample data module contents: ");
-    ncPrint((char *) sampleDataModuleAddress);
-    ncNewline();
+//    char i = getKey();
+//    char key;
+//
+//    while ((key = mapKey(i, keyFlag)) != '\x03') {
+//        switch (i) {
+//            case '\x3A':    // bloq-mayus
+//                keyFlag[0] = !keyFlag[0];
+//                break;
+//            case '\x36':    // right-shift pressed
+//            case '\x2A':    // left-shift pressed
+//                keyFlag[0] = !keyFlag[0];
+//                keyFlag[1] = 1;
+//                break;
+//            case '\xAA':    // left-shift released
+//                keyFlag[0] = !keyFlag[0];
+//                keyFlag[1] = 0;
+//                break;
+//            case '\x9D':    // left-ctrl released
+//            case '\xB8':    // left-alt released
+//            case '\xB6':    // right-shift released
+//                keyFlag[1] = 0;
+//                break;
+//            case '\x1D':    // left-ctrl pressed
+//                keyFlag[1] = 2;
+//                break;
+//            case '\x38':    // left-alt pressed
+//                keyFlag[1] = 3;
+//                break;
+//            default:
+//                if (key != '\0') {
+//                    putChar(key);
+//                    putIn(key);
+//                }
+//                break;
+//        }
+//        i = getKey();
+//    }
 
-    writeStr("[Finished]", 0x7, 0x0);
-
-    ncClear();
-
-    writeStr("Arquitectura de Computadoras", 0xF, 0x2);
-    ncNewline();
-
-    writeStr(RTC(), 0xF, 0x0);
-    ncNewline();
-
-    writeStr("Ahora podes escribir...", 0xF, 0x0);
-    ncNewline();*/
-
-    char i = getKey();
-    char key;
-
-    while ((key = mapKey(i, keyFlag)) != '\x03') {
-        switch (i) {
-            case '\x3A':    // bloq-mayus
-                keyFlag[0] = !keyFlag[0];
-                break;
-            case '\x36':    // right-shift pressed
-            case '\x2A':    // left-shift pressed
-                keyFlag[0] = !keyFlag[0];
-                keyFlag[1] = 1;
-                break;
-            case '\xAA':    // left-shift released
-                keyFlag[0] = !keyFlag[0];
-                keyFlag[1] = 0;
-                break;
-            case '\x9D':    // left-ctrl released
-            case '\xB8':    // left-alt released
-            case '\xB6':    // right-shift released
-                keyFlag[1] = 0;
-                break;
-            case '\x1D':    // left-ctrl pressed
-                keyFlag[1] = 2;
-                break;
-            case '\x38':    // left-alt pressed
-                keyFlag[1] = 3;
-                break;
-            default:
-                if (key != '\0') {
-                    putChar(key);
-                }
-                break;
-        }
-        i = getKey();
-    }
-
-    printf("Terminado!");
-    return 0;
+     return 0;
 }
 

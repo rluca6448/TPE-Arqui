@@ -67,57 +67,36 @@ int main() {
     //     sys_write(1, "0123456789", 10);
     // }
     sys_textmode(1, 2);
-    while(seconds_elapsed() < 3){
+    while(seconds_elapsed() < 10){
         char* buf[1];
         char hasRead = sys_read(0, buf, 1);
         if (hasRead) sys_write(1, buf, 1);
     }
     sys_textmode(1, 4);
 
-    while(seconds_elapsed() < 10){
+    while(seconds_elapsed() < 20){
         char* buf[1];
         char hasRead = sys_read(0, buf, 1);
         if (hasRead) sys_write(2, buf, 1);
     }
-    // while(1);
-
-//    char i = getKey();
-//    char key;
-//
-//    while ((key = mapKey(i, keyFlag)) != '\x03') {
-//        switch (i) {
-//            case '\x3A':    // bloq-mayus
-//                keyFlag[0] = !keyFlag[0];
-//                break;
-//            case '\x36':    // right-shift pressed
-//            case '\x2A':    // left-shift pressed
-//                keyFlag[0] = !keyFlag[0];
-//                keyFlag[1] = 1;
-//                break;
-//            case '\xAA':    // left-shift released
-//                keyFlag[0] = !keyFlag[0];
-//                keyFlag[1] = 0;
-//                break;
-//            case '\x9D':    // left-ctrl released
-//            case '\xB8':    // left-alt released
-//            case '\xB6':    // right-shift released
-//                keyFlag[1] = 0;
-//                break;
-//            case '\x1D':    // left-ctrl pressed
-//                keyFlag[1] = 2;
-//                break;
-//            case '\x38':    // left-alt pressed
-//                keyFlag[1] = 3;
-//                break;
-//            default:
-//                if (key != '\0') {
-//                    putChar(key);
-//                    putIn(key);
-//                }
-//                break;
-//        }
-//        i = getKey();
-//    }
+    sys_textmode(1, 5);
+    while(seconds_elapsed() < 30){
+        char* buf[1];
+        char hasRead = sys_read(0, buf, 1);
+        if (hasRead) sys_write(2, buf, 1);
+    }
+    sys_textmode(1, 3);
+    while(seconds_elapsed() < 40){
+        char* buf[1];
+        char hasRead = sys_read(0, buf, 1);
+        if (hasRead) sys_write(2, buf, 1);
+    }
+    sys_textmode(1, 1);
+    while(1){
+        char* buf[1];
+        char hasRead = sys_read(0, buf, 1);
+        if (hasRead) sys_write(2, buf, 1);
+    }
 
      return 0;
 }

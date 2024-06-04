@@ -5,21 +5,18 @@
 #include <interrupts.h>
 
 
-//defines Alex
-
-#define SIZE_BUFFER 65536
-
-
+#define SIZE_BUFFER 1000
 
 uint64_t x = 0;
 uint64_t y = 0;
+uint8_t fontSize = 1;
 
 void putChar(char c) {
-    putCharColoured(c, 0xFFFFFF, 0x000000);
+    putCharColoured(c, 0xFFFFFF, BG_COLOR);     // BORRAR TODA LA FUNCIÓN (es inútil)
 }
 
 void printf(char * str) {
-    for (int i = 0; str[i] != '\0'; i++) {
+    for (int i = 0; str[i] != '\0'; i++) {      // Esta también es inútil, pues se van a usar los printf y putchar definidos en Userland
         putChar(str[i]);
     }
 }
@@ -40,38 +37,7 @@ void putCharColoured(char c, uint64_t foreGround, uint64_t backGround) {
 }
 
 
-/*void printf(const char * str, ...) {
-    va_list args;
-    va_start(args, str);
 
-    for (int i = 0; str[i] != '\0'; i++) {
-        if (str[i] == '\x5C' && str[i+1] != '\0') {
-            switch (str[i+1]) {
-                case '':
-                    newLine()
-            }
-        } else if (str[i] == '\x25' && str[i+1] != '\0') {
-
-            switch (str[i+1]) {
-                case 'i':
-                    int elem = va_arg(args, 1);
-
-
-            }
-        }
-        putChar(str[i]);
-    }
-}*/
-
-
-
-// Comandos Alex (a partir de acá)
-
-
-
-static char stdoutArr[SIZE_BUFFER];
-static int sizeOut = 0;
-static int startsOut = 0;
 static char stdinArr[SIZE_BUFFER];
 static int sizeIn = 0;
 static int startsIn = 0;
@@ -82,44 +48,19 @@ int getSizeIn(){
 
 static char videoModeOn = 0;
 
-void printCharInScreen(char c, int x, int y){
-    if (c == 'c'){
-        // esto es para probar
-        putPixel(0x00ffffff, x, y);
-    }
 
-}
-
-
-// 1. imprime en un color
+// Funciones que manejan stdin, stdout y stderr
 void putOut(char c){
-    // mete c en el vector cíclico
-    // TODO: falta manejar excepciones especialmente si sizeOut es demasiado grande
-
-    int pos = (startsOut + sizeOut) % SIZE_BUFFER;
-	stdoutArr[pos]=c;
-    sizeOut++;
-    if (sizeOut > SIZE_BUFFER) sizeOut -= SIZE_BUFFER;
-    putChar(c);
-
-    // printOutInScreen(charSize);
+    putCharColoured(c, 0x00ffffff, BG_COLOR);
 }
 
 
 void putErr(char c){
-	// TODO: falta cambiar putChar por putColorChar o como se llame
-
-	int pos = (startsOut + sizeOut) % SIZE_BUFFER;
-	stdoutArr[pos]=c;
-    sizeOut++;
-    if (sizeOut > SIZE_BUFFER) sizeOut -= SIZE_BUFFER;
-    putCharColoured(c, 0x00ff0000, 0x00000000);
-
+    putCharColoured(c, 0x00ff0000, BG_COLOR);
 }
 
 void putIn(char c){
     // caso especial donde se pasa del límite: no se pueden agregar caracteres
-    // podríamos hacer que aparezca un mensaje o algo así
     if (sizeIn >= SIZE_BUFFER-1) return;
 
     // mete c en el vector cíclico
@@ -133,17 +74,8 @@ void clearIn(){
     sizeIn = 0;
 }
 
-void clearOut(){
-    sizeOut = 0;
-}
 
-void disableTextScreen(){
-    videoModeOn = 0;
-}
 
-void enableTextScreen(){
-    videoModeOn = 1;
-}
 
 void sys_write(int fd, const char* buf, int count){
     if (fd==1){
@@ -172,18 +104,20 @@ int sys_read(int fd, char* buf, int count){
     return i;
 }
 
-uint8_t fontSize = 2;
 
-void sys_textmode(char enabled, int newSize){
-    if (enabled) videoModeOn = 0;
-    else videoModeOn = 1;
-    // el size se cambia de todas formas si está en un valor en el rango;
-    newFontSize(newSize);
+void sys_textmode(int enabled, int newSize){
+    _cli;               //por las dudas paro los in/out
+    if (newSize < 1 || newSize > 5)
+        return;
+    fontSize = newSize;
+    sys_clearScreen();
+    x = 0;
+    y = 0;
+    _sti;
 }
 
-
+// imprime caracter y modifica coordenadas
 void putCharAt(uint8_t c, uint64_t * x, uint64_t * y, uint64_t foreColor, uint64_t backgroundColor) {
-
     if (xOutOfBounds(x)) {
         newLine(x, y);
     }
@@ -219,22 +153,10 @@ void deleteCharAt(uint64_t * x, uint64_t * y, uint64_t foreColor, uint64_t backg
 }
 
 
-// TODO: falta testear
-void newFontSize(int newSize) {
-    if (newSize < 1 || newSize > 5)
-        return;
-    fontSize = newSize;
-    sys_clearScreen();
-    x = 0;
-    y = 0;
-}
-
 void newLine(uint64_t * x, uint64_t * y) {
     *x = 0;
     *y += FONT_HEIGHT * fontSize;
 }
-
-
 
 int xOutOfBounds(uint64_t * x) {
     return *x + FONT_WIDTH * fontSize >= getWidth() || (int)*x < 0;     // casteo a int para que me tome que existen los negativos

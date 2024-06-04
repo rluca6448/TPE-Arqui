@@ -72,6 +72,14 @@ void sys_putPixel(uint32_t hexColor, uint64_t x, uint64_t y){
     putPixel(hexColor, x, y);
 }
 
+void sys_putBigPixel(uint32_t hexColor, uint64_t x, uint64_t y){
+    // if (!videoModeOn) return;
+    putSquare(hexColor, x, y, 8);
+}
+
+void sys_clearScreen(){
+    clearScreen(BG_COLOR);
+}
 
 
 
@@ -83,9 +91,7 @@ void clearScreen(uint32_t hexColor) {
     }
 }
 
-void sys_clearScreen(){
-    clearScreen(OUT_BACK_COLOR);
-}
+
 
 int getWidth() {
     return VBE_mode_info->width;

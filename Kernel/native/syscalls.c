@@ -1,7 +1,9 @@
 #include <video.h>
+#include <sound.h>
 #define SYS_WRITE 4
 #define SYS_READ 3
 #define SYS_CLEAR_SCREEN 5
+#define SYS_SOUND 6
 
 uint64_t int80Dispacher(uint64_t id, uint64_t param_1, uint64_t param_2, uint64_t param_3){
     switch (id) {
@@ -13,5 +15,7 @@ uint64_t int80Dispacher(uint64_t id, uint64_t param_1, uint64_t param_2, uint64_
         case SYS_CLEAR_SCREEN:
             sys_clearScreen();
             return;
+        case SYS_SOUND:
+            sys_sound(param_1);
     }
 }

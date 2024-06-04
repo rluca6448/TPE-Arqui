@@ -38,6 +38,7 @@ void *getStackBase() {
 }
 
 void *initializeKernelBinary() {
+    char buffer[10];
 
     void *moduleAddresses[] = {
             sampleCodeModuleAddress,
@@ -118,6 +119,5 @@ int main() {
 //        i = getKey();
 //    }
 
-     return 0;
+    return 0;
 }
-

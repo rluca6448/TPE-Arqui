@@ -1,5 +1,4 @@
 #include <video.h>
-#include <IO.h> // importante agregar todos los headers necesarios
 #include <lib.h>
 #include <syscalls.h>
 #include <time.h>
@@ -27,7 +26,7 @@
 static uint8_t regs_flag = 0;
 static uint64_t regs[REGS_SIZE];
 
-uint64_t int80Dispacher(uint64_t id, uint64_t param_1, uint64_t param_2, uint64_t param_3) {
+uint64_t int80Dispacher(uint64_t id, uint64_t param_1, void * param_2, uint64_t param_3) {
     switch (id) {
         case SYS_HLT:
             sys_hlt();
@@ -48,29 +47,6 @@ uint64_t int80Dispacher(uint64_t id, uint64_t param_1, uint64_t param_2, uint64_
         case SYS_CLEAR:
             sys_clear();
             return 1;
-    }
-    return 0;
-}
-
-void sys_write(int fd, const char * buf, int count) {
-    if (fd == 1) {
-        for (int i = 0; i < count; i++) {
-            putOut(buf[i]);
-        }
-    }
-    if (fd == 2) {
-        for (int i = 0; i < count; i++) {
-            putErr(buf[i]);
-        }
-    }
-}
-
-int sys_read(int fd, const char * buf, int count) {
-    char *stdinArr = getstdinArr();
-    if (fd == 0) {
-        for (int i = 0; i < count && i < getSizeIn(); i++) {
-            buf[i] = stdinArr[i];
-        }
     }
     return 0;
 }

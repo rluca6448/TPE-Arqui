@@ -1,10 +1,7 @@
 GLOBAL cpuVendor
-GLOBAL RTC
-GLOBAL getKey
-GLOBAL get_key_2
 
 section .text
-	
+
 cpuVendor:
 	push rbp
 	mov rbp, rsp
@@ -76,6 +73,8 @@ hexToString:
         mov rsp, rbp
         pop rbp
         ret
+
+hexToStr:
 
 getTime:
         push rbp
@@ -186,7 +185,7 @@ get_key_2:
 
 	in		al, 60h
 
-get_key_end
+    get_key_end:
 
 
   	leave

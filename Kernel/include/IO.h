@@ -5,9 +5,8 @@
 
 void putChar(char c);
 void putCharColoured(char c, uint64_t foreGround, uint64_t backGround);
-void printfColoured(const char * fmt, uint64_t foreGround, uint64_t backGround);
 
-void print(char * str);
+void printf(char * str);
 
 
 //antes estaban en video.h

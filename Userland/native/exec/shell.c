@@ -61,3 +61,7 @@ static void divideByZero(){
 static void invalidOpcode(){
     runInvalidOpcode();
 }
+
+static void clear(){
+    sys_clear();
+}

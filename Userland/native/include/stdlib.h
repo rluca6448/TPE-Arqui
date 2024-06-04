@@ -13,5 +13,6 @@ uint64_t gets(char * buf, uint64_t length);
 
 uint64_t atoi(char * str);
 void itoa(uint64_t num, char * buf);
+int strcmp(const char *s1,const char *s2);
 
 #endif //TPE_STDLIB_H

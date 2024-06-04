@@ -19,6 +19,14 @@ int seconds_elapsed() {
 	return ticks / 18;
 }
 
+uint64_t sys_getElapsedSeconds(){
+    return TICKS_TO_SECONDS(ticks);
+}
+
+char * sys_getTime(){
+    return RTC();
+}
+
 // void keyboard_handler() {
 
 // 	char key = get_key();

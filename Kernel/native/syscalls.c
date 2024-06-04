@@ -1,14 +1,19 @@
 #include <video.h>
 #include <IO.h> // importante agregar todos los headers necesarios
 #include <time.h>
-#define SYS_WRITE 4
+#include <lib.h
+#include <interrupts.h>
+
+#define SYS_HLT 0
+#define SYS_SOUND 1
+#define SYS_SLEEP 2
 #define SYS_READ 3
+#define SYS_WRITE 4
 #define SYS_CLEAR_SCREEN 5
 #define SYS_PUT_PIXEL 6
 #define SYS_TEXTMODE 7
 #define SYS_GET_TIME 8
 #define SYS_GET_ELAPSED_SECONDS 9
-
 
 uint64_t int80Dispacher(uint64_t id, uint64_t param_1, uint64_t param_2, uint64_t param_3){
     switch (id) {
@@ -30,5 +35,10 @@ uint64_t int80Dispacher(uint64_t id, uint64_t param_1, uint64_t param_2, uint64_
             return sys_getTime();
         case SYS_GET_ELAPSED_SECONDS:
             return sys_getElapsedSeconds();
+        case SYS_HLT:
+            _hlt();
+            return;
+        case SYS_SLEEP: // falta implementar
+            return;
     }
 }

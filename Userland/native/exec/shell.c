@@ -7,7 +7,7 @@
 #define MAX_BUF 1024
 
 static const char* commands[] = {"clear", "dividebyzero", "help", "inforeg", "invalidopcode", "time"};
-static void (*commands_functions[])(char parameters[MAX_PARAMETERS][LENGTH_PARAMETERS]) = {clear,  divideByZero, help, inforeg, invalidOPCode, time};
+static void (*commands_functions[])() = {clear,  divideByZero, help, inforeg, invalidOPCode, time};
 
 void shell() {
     printHeader();

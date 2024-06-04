@@ -9,9 +9,15 @@ void putChar(char c) {
     putCharColoured(c, 0xFFFFFF, 0x000000);
 }
 
-void printf(char * str) {
+void print(char * str) {
     for (int i = 0; str[i] != '\0'; i++) {
         putChar(str[i]);
+    }
+}
+
+void printfColoured(const char * str, uint64_t foreGround, uint64_t backGround) {
+    for (int i = 0; str[i] != '\0'; i++) {
+        putCharColoured(str[i], foreGround, backGround);
     }
 }
 

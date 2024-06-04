@@ -1,12 +1,7 @@
 #include <video.h>
 #include <font.h>
 
-// macros Alex:
-#define SIZE_BUFFER 65536
-#define OUT_FORE_COLOR 0x00ffffff
-#define OUT_BACK_COLOR 0x00000000
-#define ERR_FORE_COLOR 0x00ff0000
-#define ERR_BACK_COLOR 0x00000000
+
 
 struct vbe_mode_info_structure {
     uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
@@ -165,6 +160,10 @@ void clearIn(){
 
 void clearOut(){
     sizeOut = 0;
+}
+
+int getIn(){
+    return sizeIn;
 }
 
 void disableTextScreen(){

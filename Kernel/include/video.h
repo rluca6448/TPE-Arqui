@@ -3,12 +3,20 @@
 
 #include <stdint.h>
 
+// macros Alex:
+#define SIZE_BUFFER 65536
+#define OUT_FORE_COLOR 0x00ffffff
+#define OUT_BACK_COLOR 0x00000000
+#define ERR_FORE_COLOR 0x00ff0000
+#define ERR_BACK_COLOR 0x00000000
+
 void putPixel(uint32_t hexColor, uint64_t x, uint64_t y);
 
 // Alex
 void putOut(char c);
 void putIn(char c);
 void clearIn();
+int getIn();
 void clearOut();
 void sys_write(int fd, const char* buf, int count);
 int sys_read(int fd, char* buf, int count);

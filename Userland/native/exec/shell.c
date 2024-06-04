@@ -52,7 +52,7 @@ static void help() {
             "INFOREG              Prints on screen the value of all registers.\n"
             "INVALIDOPCODE        Command to verify the operation of the exception routine \"Invalid Opcode\"\n"
             "TIME                 Command to display the system time.\n";
-    printf(helpstring);
+    printf("%s", helpstring);
 }
 
 static void divideByZero(){
@@ -79,7 +79,7 @@ static void printRegisters(uint64_t *reg){
         printf_color(regs[i], 0xFFEA00,0x000000);
         uintToBase(reg[i], toPrint, 16);
         printf(":");
-        printf(toPrint);
+        printf("%s", toPrint);
         putchar('\n');
     }
 }

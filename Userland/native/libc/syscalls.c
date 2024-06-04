@@ -1,9 +1,4 @@
-#include "../include/syscalls.h"
-
-#define SYS_READ 3
-#define SYS_WRITE 4
-#define SYS_CLEAR_SCREEN 5
-#define SYS_HLT 12
+#include <syscalls.h>
 
 int sys_read(int fd, char* buf, int count){
     return syscall(SYS_READ, fd, buf, count);
@@ -19,16 +14,6 @@ void sys_write(int fd, const char* buf, int count){
 
 void sys_clearScreen(){
     syscall(SYS_CLEAR_SCREEN, 0, 0, 0);
-}
-
-void putCharUser(char c){
-    sys_write(1, &c, 1);
-}
-
-void printfUser(char* str){
-    for(int i=0; str[i]; i++){
-        putCharUser(str[i]);
-    }
 }
 
 char getCharUser() {

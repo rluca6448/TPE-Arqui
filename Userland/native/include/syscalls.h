@@ -1,6 +1,11 @@
 #ifndef TPE_ARQUI_SYSCALLS_H
 #define TPE_ARQUI_SYSCALLS_H
 
+#define SYS_READ 3
+#define SYS_WRITE 4
+#define SYS_CLEAR_SCREEN 5
+#define SYS_HLT 12
+
 #include <stdint.h>
 
 int sys_read(int fd, char* buf, int count);

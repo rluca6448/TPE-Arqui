@@ -1,8 +1,5 @@
-/* sampleCodeModule.c */
-
-#include <stdint.h>
-#include <string.h>
-#include <syscalls.h>
+#include <shell.h>
+#include <stdio.h>
 
 static int var1 = 0;
 static int var2 = 0;
@@ -26,11 +23,6 @@ static int var2 = 0;
 //      runZeroDivisionException();
 //  }
 
-
-//DECLARACION DE VECTOR DE COMANDOS DE LA SHELL
-//static const char* commands[] = {"commando 1","commando 2", "commando 3"}
-
-
 //FUNCION QUE DEVUELVE NRO DE COMANDO LEYENDO DEL BUFFER (DEBE PASARSELO LA FUNCION readInput)
 //#define COMMANDS_LENGTH (sizeof(commands)/sizeof(commands[0]))
 //static int indexCommand(char* readBuffer) {
@@ -52,14 +44,8 @@ static int var2 = 0;
 // 1 STRING[]: LOS PARAMETROS INGRESADOS POR EL USUARIO
 //static void readInput(char command[COMMAND_LENGTH], char parameters[PARAM_QUANT][PARAM_LENGTH], char readBuffer[READ_BUFF_LEGTH])
 
-//FUNCION QUE EJECUTE EL COMANDO CON LOS PARAMETROS DADOS
-//static void executeCommand(int commandIndex, char parameters[PARAM_QUANT][PARAM_LENGTH]){
-//
-// }
-
-
 int main() {
-    test_int_80h;
+    shell();
     //Limpiar pantalla
 
     //Print de entrada a shell + Print de Type "HELP" for a list of commands.

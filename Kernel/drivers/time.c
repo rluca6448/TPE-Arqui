@@ -24,7 +24,7 @@ uint64_t sys_getElapsedSeconds(){
 }
 
 char * sys_getTime(){
-    return RTC();
+    return getTime();
 }
 
 // void keyboard_handler() {

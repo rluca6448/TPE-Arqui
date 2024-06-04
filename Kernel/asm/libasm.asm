@@ -26,9 +26,7 @@ cpuVendor:
 	pop rbp
 	ret
 
-global RTC
 global hexToString
-
 ; recibe en eax un numero, y deja en eax un string
 hexToString:
 		push rbp
@@ -74,9 +72,9 @@ hexToString:
         pop rbp
         ret
 
-hexToStr:
 
-RTC:
+global getTime
+getTime:
         push rbp
         mov rbp, rsp
         push rbx
@@ -153,43 +151,22 @@ RTC:
         ret
 
 GLOBAL getKey
-
 getKey:
-        push rbp
-        mov rbp, rsp
+        push 	rbp
+        mov     rbp, rsp
 
-    .loop:
-        in al, 0x64
-        mov cl, al
-        and al, 0x01
-        cmp al, 0
-        je .loop
+        mov		rax, 0
+        in      al, 64h
+        and		rax, 01h
 
-        in al, 0x60
-    .fin:
-        mov rsp, rbp
-        pop rbp
+        cmp		rax, 01h
+        jne		get_key_end		;rax=0
+
+        in		al, 60h
+
+    get_key_end:
+        leave
         ret
-
-GLOBAL get_key_2
-get_key_2:
-	push 	rbp
-	mov     rbp, rsp
-
-	mov		rax, 0
-  	in      al, 64h
-	and		rax, 01h
-
-	cmp		rax, 01h
-	jne		get_key_end		;rax=0
-
-	in		al, 60h
-
-get_key_end
-
-
-  	leave
-  	ret
 
 GLOBAL test_int_80h ; FUNCIONA!!!
 test_int_80h:

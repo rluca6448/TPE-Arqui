@@ -1,10 +1,13 @@
 #include <video.h>
 #include <IO.h> // importante agregar todos los headers necesarios
+#include <time.h>
 #define SYS_WRITE 4
 #define SYS_READ 3
 #define SYS_CLEAR_SCREEN 5
 #define SYS_PUT_PIXEL 6
 #define SYS_TEXTMODE 7
+#define SYS_GET_TIME 8
+#define SYS_GET_ELAPSED_SECONDS 9
 
 
 uint64_t int80Dispacher(uint64_t id, uint64_t param_1, uint64_t param_2, uint64_t param_3){
@@ -23,5 +26,9 @@ uint64_t int80Dispacher(uint64_t id, uint64_t param_1, uint64_t param_2, uint64_
         case SYS_TEXTMODE:
             sys_textmode(param_1, param_2);
             return;
+        case SYS_GET_TIME:
+            return sys_getTime();
+        case SYS_GET_ELAPSED_SECONDS:
+            return sys_getElapsedSeconds();
     }
 }

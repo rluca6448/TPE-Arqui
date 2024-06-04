@@ -2,6 +2,7 @@
 #include <video.h>
 #include <time.h>
 #include <interrupts.h>
+#include <IO.h>
 #define ZERO_EXCEPTION_ID 0
 #define INVALID_OPCODE_ID 1
 
@@ -27,21 +28,21 @@ void exceptionDispatcher(int exception, const uint64_t regex[18]) {
     showRegisters(regex);
     int secondsElapsed = seconds_elapsed();
     //Esperamos 4 segundos para que el usuario tenga tiempo de ver el error
-    do { _hlt() } while (secondsElapsed - seconds_elapsed() < 4);
+    do { _hlt(); } while (secondsElapsed - seconds_elapsed() < 4);
     clearIn();
-    printfCouloured("Presione cualquier tecla para volver", OUT_FORE_COLOR, OUT_BACK_COLOR);
-    do { _hlt() } while ( getIn() == 0);
+    printfColoured("Presione cualquier tecla para volver", OUT_FORE_COLOR, OUT_BACK_COLOR);
+    do { _hlt(); } while ( getIn() == 0);
     clearIn();
     clearScreen(OUT_BACK_COLOR);
     _cli();
 }
 
 static void zero_division() {
-    printfCouloured(zero_division_exception_message, ERR_FORE_COLOR, ERR_BACK_COLOR);
+    printfColoured(zero_division_exception_message, ERR_FORE_COLOR, ERR_BACK_COLOR);
 }
 
 static void invalid_opcode() {
-    printfCouloured(invalid_opcode_exception_message, ERR_FORE_COLOR, ERR_BACK_COLOR);
+    printfColoured(invalid_opcode_exception_message, ERR_FORE_COLOR, ERR_BACK_COLOR);
 }
 
 //FALTA DESARROLLAR

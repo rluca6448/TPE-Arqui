@@ -1,12 +1,26 @@
 #include "string.h"
 
-int strcmp(char *s1, char *s2) {
-    const unsigned char *p1 = ( const unsigned char * )s1;
-    const unsigned char *p2 = ( const unsigned char * )s2;
+int strcmp(const char *str1, const char *str2) {
+    while (*str1 && (*str1 == *str2)) {
+        str1++;
+        str2++;
+    }
+    return *(unsigned char *)str1 - *(unsigned char *)str2;
+}
 
-    while ( *p1 && *p1 == *p2 ) ++p1, ++p2;
+char* strcat(char* destination, const char* source) {
+    // Find the end of the destination string
+    char* ptr = destination + strlen(destination);
 
-    return ( *p1 > *p2 ) - ( *p2  > *p1 );
+    // Append the source string to the destination string
+    while (*source != '\0') {
+        *ptr++ = *source++;
+    }
+
+    // Null-terminate the resulting string
+    *ptr = '\0';
+
+    return destination;
 }
 
 int strlen(const char * str) {

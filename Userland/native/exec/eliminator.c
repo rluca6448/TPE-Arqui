@@ -1,10 +1,12 @@
-#include "command.h"
-#include "stdlib.h"
-#include "eliminator.h"
+#include "../include/command.h"
+#include "../include/stdlib.h"
+#include "../include/string.h"
+#include "../include/stdio.h"
+#include "../include/eliminator.h"
 
 #define WIDTH 80
 #define HEIGHT 24
-#define DELAY 9
+#define DELAY 1
 #define MAX_TAIL_LENGTH (WIDTH * HEIGHT)
 
 //void putSquare(int x, int y, const char *hex_color) {
@@ -25,11 +27,24 @@ typedef struct {
 Player player;
 int game_over = 0;
 
+static char * player_to_string(Player player){
+    char * to_return = "Player pos: ";
+    char x_pos[3] = {0};
+    char y_pos[3] = {0};
+    itoa(player.x, x_pos);
+    itoa(player.x, y_pos);
+    to_return = strcat(to_return, x_pos);
+    to_return = strcat(to_return, " | ");
+    to_return = strcat(to_return, y_pos);
+    return to_return;
+}
+
 // Function prototypes for time functions
 extern int ticks_elapsed();
 extern void timer_handler();
 
 void init() {
+    clear();
     player.x = WIDTH / 2;
     player.y = HEIGHT / 2;
     player.dir = 'd';  // Initialize direction to right
@@ -87,20 +102,22 @@ void move_player() {
 
 void draw() {
     // Draw player
-    putPixel("#FF0000", player.x, player.y);
+    //todo
+//    putPixel("#FF0000", player.x, player.y);
 
+//    printf(player.x)
+    printf(player_to_string(player));
     // Draw tail
     for (int i = 0; i < player.tail_length; i++) {
-        //todo revisar coords
-        putPixel("#00FF00", player.tail[i].x, player.tail[i].y);
+        //todo
+//        putPixel("#00FF00", player.tail[i].x, player.tail[i].y);
     }
 }
 
 void handle_input() {
     // Simple input handling (replace with appropriate input mechanism)
     // This is just a placeholder to demonstrate the logic.
-    char ch;
-    char c = getKey();
+    char ch = getKey();
         switch (ch) {
             case 'w':
             case 's':

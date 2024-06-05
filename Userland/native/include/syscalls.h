@@ -31,7 +31,7 @@ void sys_hlt();
 int sys_read(int fd, char * buf, int count);
 void sys_write(int fd, char* buf, int count);
 
-char * sys_time();
+uint64_t sys_time(int d);
 
 void sys_sleep();
 

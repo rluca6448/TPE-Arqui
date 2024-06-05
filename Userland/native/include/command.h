@@ -15,6 +15,11 @@ void divideByZero();
 void inforeg();
 void invalidOPCode();
 void time();
+void changeSize_1();
+void changeSize_2();
+void changeSize_3();
+void changeSize_4();
+void changeSize_5();
 
 //para excepciones
 extern void runInvalidOpcodeException(void);

@@ -7,7 +7,7 @@
 
 void shell();
 void printHeader();
-void execute(char *inputBuffer);
+void execute(const char *inputBuffer);
 
 
 #endif //TPE_SHELL_H

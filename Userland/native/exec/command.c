@@ -1,8 +1,8 @@
-#include "command.h"
-#include "syscalls.h"
-#include "stdio.h"
-#include "stdlib.h"
-#include "eliminator.h"
+#include "../include/command.h"
+#include "../include/syscalls.h"
+#include "../include/stdio.h"
+#include "../include/stdlib.h"
+#include "../include/eliminator.h"
 
 #define REG_SIZE 17
 
@@ -19,9 +19,9 @@ void print_help() {
     }
 }
 
-void print_time() {
-    printf("%s\n", sys_time());
-}
+//void print_time() {
+//    printf("%s\n", sys_time());
+//}
 
 void clear() {
     sys_clear();

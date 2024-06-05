@@ -19,7 +19,7 @@ GLOBAL _exception00Handler
 GLOBAL _exception06Handler
 
 
-
+EXTERN main
 EXTERN getStackBase
 EXTERN int80Dispacher
 EXTERN irqDispatcher
@@ -135,10 +135,10 @@ SECTION .text
   mov [regex + 8*15], r15
 
     mov rax, [rsp] ; RIP
-    mov [regs+8*16], rax
+    mov [regex+8*16], rax
 
   mov rax, [rsp+8*2] ; RFLAGS
-  mov [regs+8*17], rax
+  mov [regex+8*17], rax
 
 	mov rdi, %1 ; pasaje de parametros
 	mov rsi, regex
@@ -146,9 +146,7 @@ SECTION .text
 
 	call getStackBase
 	mov rsp, rax
-
-	popState
-	iretq
+	call main
 %endmacro
 
 
@@ -210,11 +208,11 @@ _irq05Handler:
 
 ;Zero Division Exception
 _exception00Handler:
-;	exceptionHandler 0
+	exceptionHandler 0
 
 ;Invalid Opcode Exception
 _exception06Handler:
-;	exceptionHandler 1
+	exceptionHandler 1
 
 ;int 80 Handler
 _int80Handler:

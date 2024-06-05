@@ -16,7 +16,7 @@ void clearScreen(uint32_t hexColor);
 
 
 void sys_putPixel(uint32_t hexColor, uint64_t x, uint64_t y);
-void sys_clearScreen();
+
 
 
 #endif //TPE_ARQUI_VIDEO_H

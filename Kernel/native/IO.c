@@ -105,14 +105,12 @@ int sys_read(int fd, char* buf, int count){
 }
 
 
-void sys_textmode(int enabled, int newSize){        // ojo: la variable enabled no hace nada
+void sys_new_size(int newSize){        // ojo: la variable enabled no hace nada
     _cli;               //por las dudas paro los in/out
     if (newSize < 1 || newSize > 5)
         return;
     fontSize = newSize;
     sys_clearScreen();
-    x = 0;
-    y = 0;
     _sti;
 }
 
@@ -164,4 +162,10 @@ int xOutOfBounds(uint64_t * x) {
 
 int yOutOfBounds(uint64_t * y) {
     return *y + FONT_HEIGHT * fontSize >= getHeight() || (int)*y < 0;
+}
+
+void sys_clearScreen(){
+    clearScreen(BG_COLOR);
+    y = 0;
+    x = 0;
 }

@@ -72,9 +72,7 @@ void sys_putPixel(uint32_t hexColor, uint64_t x, uint64_t y){
 }
 
 
-void sys_clearScreen(){
-    clearScreen(BG_COLOR);
-}
+
 
 void clearScreen(uint32_t hexColor) {
     for (int i = 0; i < VBE_mode_info->height ; i++) {

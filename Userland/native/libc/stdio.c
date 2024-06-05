@@ -1,8 +1,10 @@
-#include <stdio.h>
-#include <stdarg.h>
-#include <stdlib.h>
+#include "../include/stdio.h"
+#include "../include/stdarg.h"
+#include "../include/stdlib.h"
 
 #define MAX_BUF 1024
+
+
 
 void scanf(const char * fmt, ...) {
     return;
@@ -53,3 +55,7 @@ void printf(const char * fmt, ...) {
     printf_color(fmt, 0xFFFFFF, 0x000000, args);
     va_end(args);
 }
+
+// void simplePrintf(char* str){
+//    for (int i=0; str[i]; i++) putchar(str[i]);
+// }

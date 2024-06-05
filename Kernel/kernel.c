@@ -6,6 +6,7 @@
 #include <IO.h>
 #include <video.h>
 #include <idtLoader.h>
+#include <sound.h>
 
 extern void test_int_80h();
 
@@ -54,6 +55,9 @@ void *initializeKernelBinary() {
 
 int main() {
     load_idt();
+    play_sound(440);
+    while(seconds_elapsed() < 2);
+    nosound();
     // putSquare(0x00ffffff, 0, 0, 5);
 
     // while(seconds_elapsed() < 2);
@@ -100,10 +104,6 @@ int main() {
     }
 */
     ((EntryPoint) sampleCodeModuleAddress)();
-
-    while (1)
-        ;
-
+    while (1);
     return 0;
 }
-

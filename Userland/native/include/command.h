@@ -13,7 +13,7 @@ void print_help();
 void clear();
 void divideByZero();
 void inforeg();
-void invalidOPCode();
+void invalidOpcode();
 void time();
 void changeSize_1();
 void changeSize_2();

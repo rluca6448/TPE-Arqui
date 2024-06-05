@@ -18,7 +18,7 @@
 #define SYS_WRITE 4
 #define SYS_CLEAR 5
 #define SYS_PUT_PIXEL 6
-#define SYS_TEXTMODE 7
+#define SYS_NEW_SIZE 7
 #define SYS_TIME 8
 #define SYS_GET_ELAPSED_SECONDS 9
 
@@ -42,4 +42,6 @@ void print_help();
 void test_int_80h();
 void sys_putPixel(uint32_t hexColor, uint64_t x, uint64_t y);
 void ticks_elapsed();
+
+void sys_new_size(int newSize);
 #endif //TPE_ARQUI_SYSCALLS_H

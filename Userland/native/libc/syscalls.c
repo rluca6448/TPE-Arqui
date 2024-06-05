@@ -1,4 +1,4 @@
-#include <syscalls.h>
+#include "../include/syscalls.h"
 
 
 void sys_hlt() {
@@ -13,8 +13,8 @@ void sys_write(int fd, char * buf, int count){
     syscall(SYS_WRITE, fd, buf, count);
 }
 
-char * sys_time() {
-    return syscall(SYS_TIME, 0, 0, 0);
+uint64_t sys_time(int d) {
+    return syscall(SYS_TIME, d, 0, 0);
 }
 
 void sys_sleep() {
@@ -27,6 +27,10 @@ void sys_sound() {
 
 void sys_clear(){
     syscall(SYS_CLEAR, 0, 0, 0);
+}
+
+void sys_new_size(int newSize){
+    syscall(SYS_NEW_SIZE, newSize, 0, 0);
 }
 
 void sys_putPixel(uint32_t hexColor, uint64_t x, uint64_t y){

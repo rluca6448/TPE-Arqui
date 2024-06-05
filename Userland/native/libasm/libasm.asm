@@ -6,16 +6,14 @@ EXTERN printRegisters
 
 section .text
 
-;encontre los ejemplo con el chatGPT ...
 runInvalidOpcodeException:
-    ; Trigger an invalid opcode exception using 0x66 incorrectly
-    db 0x66, 0xFF ; This sequence is undefined and will cause an exception
+    db 0x66, 0xFF
     ret
 
 runZeroDivisionException:
-    xor rax, rax   ; Clear RAX (the dividend)
-    xor rdx, rdx   ; Clear RDX (the divisor, set to zero)
-    div rdx        ; Attempt to divide RAX by RDX (which is zero)
+    xor rax, rax   ; rax=0
+    xor rdx, rdx   ; rdx=0
+    div rdx        ; rax/rdx
     ret
 
 inforeg:

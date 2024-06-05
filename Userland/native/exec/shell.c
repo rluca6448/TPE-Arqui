@@ -17,7 +17,32 @@ void (*commands_functions[])() = {clear,  divideByZero, print_help, inforeg, inv
 
 void shell() {
     printHeader();
-    char buf[MAX_BUF] = {0};
+
+    do{
+        printf_color("user", 0xcdff00, 0x000000);
+        printf(":~$ ");
+        int break_line = 0;
+        int i = 0;
+        char command[MAX_BUF] = {0};
+        while(!break_line){
+            char buf[1];
+            char hasRead = sys_read(0, buf, 1);
+            if (hasRead) {
+                sys_write(1, buf, 1);
+                if (buf[0] == '\n') {
+                    execute(command);
+                    break_line = 1;
+                } else if (buf[0] == 0x08 && i>0){  // borrado (tiene que haber algo en el buffer)
+                    command[i-1] = 0;
+                    i--;
+                } else if (buf[0] != 0x08) {        //
+                    command[i] = *buf;
+                    i++;
+                }
+            }
+        }
+    } while (1);
+
 
 
 

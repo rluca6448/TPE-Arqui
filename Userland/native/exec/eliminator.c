@@ -6,13 +6,9 @@
 
 #define WIDTH 80
 #define HEIGHT 24
-#define DELAY 1
+#define DELAY 2
 #define MAX_TAIL_LENGTH (WIDTH * HEIGHT)
 
-//void putSquare(int x, int y, const char *hex_color) {
-//    // Implementation of this function should draw a square on the screen at position (x, y) with the color specified
-//    printf("Drawing square at (%d, %d) with color %s\n", x, y, hex_color);
-//}
 
 typedef struct {
     int x, y;
@@ -27,16 +23,14 @@ typedef struct {
 Player player;
 int game_over = 0;
 
-static char * player_to_string(Player player){
-    char * to_return = "Player pos: ";
-    char x_pos[3] = {0};
-    char y_pos[3] = {0};
+static char * player_to_string(Player player) {
+    static char buffer[256];
+    char x_pos[12];
+    char y_pos[12];
     itoa(player.x, x_pos);
-    itoa(player.x, y_pos);
-    to_return = strcat(to_return, x_pos);
-    to_return = strcat(to_return, " | ");
-    to_return = strcat(to_return, y_pos);
-    return to_return;
+    itoa(player.y, y_pos);
+    printf(buffer, sizeof(buffer), "Player pos: %s | %s", x_pos, y_pos);
+    return buffer;
 }
 
 // Function prototypes for time functions
@@ -106,7 +100,7 @@ void draw() {
 //    putPixel("#FF0000", player.x, player.y);
 
 //    printf(player.x)
-    printf(player_to_string(player));
+    printf("test");
     // Draw tail
     for (int i = 0; i < player.tail_length; i++) {
         //todo

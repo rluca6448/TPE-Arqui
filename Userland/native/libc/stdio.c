@@ -1,5 +1,5 @@
 #include "../include/stdio.h"
-#include "../include/stdarg.h"
+#include <stdarg.h>
 #include "../include/stdlib.h"
 
 #define MAX_BUF 1024

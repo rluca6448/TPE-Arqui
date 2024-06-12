@@ -15,7 +15,12 @@ docker exec -it NOMBRE make -C/root/
 docker stop NOMBRE
 
 # para ejecutar;
-./run.sh
+# qemu-system-x86_64 -hda Image/x64BareBonesImage.qcow2 -m 512 -audiodev sdl,id=audio0 -machine pcspk-audiodev=audio0
+
+# para mac?
+export AUDIO_DRIVER="coreaudio"
+qemu-system-x86_64 -hda Image/x64BareBonesImage.qcow2 -m 512 -audiodev $AUDIO_DRIVER,id=audio0 -machine pcspk-audiodev=audio0
+
 # para cerrar:
 docker rm NOMBRE
 

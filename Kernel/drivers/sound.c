@@ -1,16 +1,7 @@
 #include <sound.h>
 #include <time.h>
-//
-////sacados de la libreria de SYS/IO.h
-static void outb (unsigned char __value, unsigned short int __port) {
-    __asm__ __volatile__ ("outb %b0,%w1": :"a" (__value), "Nd" (__port));
-}
+#include <lib.h>
 
-static unsigned char inb (unsigned short int __port) {
-    unsigned char _v;
-    __asm__ __volatile__ ("inb %w1,%0":"=a" (_v):"Nd" (__port));
-    return _v;
-}
 
 void play_sound(uint32_t nFrequence)
 {
@@ -34,10 +25,6 @@ void nosound() {
     outb(0x61, tmp);
 }
 
-void beep() {
-    play_sound(1000);
-    nosound();
-}
 
 void sys_sound(uint32_t frec) {
     play_sound(frec);

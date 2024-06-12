@@ -66,6 +66,29 @@ test_int_80h:
     leave
     ret
 
+GLOBAL inb
+
+inb:
+    ; Inputs:
+    ; rdi - port address
+    ; Outputs:
+    ; rax - data read from the port (only the lower 8 bits will be used)
+    mov dx, di    ; Move port address from rdi to dx
+    in al, dx     ; Read a byte from the port specified in DX into AL
+    movzx eax, al ; Zero-extend AL to EAX (clear upper bits)
+    ret           ; Return from the function
+
+GLOBAL outb
+
+outb:
+    ; Inputs:
+    ; rdi - port address
+    ; rsi - data to send to the port
+    mov dx, di    ; Move port address from rdi to dx
+    mov al, sil   ; Move data from rsi to al (sil is the lower 8 bits of rsi)
+    out dx, al    ; Send the byte in AL to the port specified in DX
+    ret           ; Return from the function
+
 
 ;==========================================0
 

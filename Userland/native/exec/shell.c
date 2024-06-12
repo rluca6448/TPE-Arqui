@@ -16,6 +16,7 @@ void (*commands_functions[])() = {clear,  divideByZero, print_help, inforeg, inv
                                   changeSize_1, changeSize_2, changeSize_3, changeSize_4, changeSize_5};
 
 void shell() {
+    sys_sound(440); //debería imprimir la
     printHeader();
 
     do {

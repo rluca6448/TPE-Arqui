@@ -55,10 +55,9 @@ void *initializeKernelBinary() {
 
 int main() {
     load_idt();
-    beep();
-    play_sound(1000);
-    while(seconds_elapsed() < 2);
-    nosound();
+    // play_sound(440);
+    char play = 0;
+    // sys_sound(440); //toca LA por 1 segundo
     // putSquare(0x00ffffff, 0, 0, 5);
 
     // while(seconds_elapsed() < 2);
@@ -108,3 +107,6 @@ int main() {
     while (1);
     return 0;
 }
+
+
+// TODO: borrar unos cuantos comentarios

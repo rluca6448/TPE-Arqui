@@ -6,6 +6,5 @@
 void play_sound(uint32_t nFrequence);
 void sys_sound(uint32_t frec);
 void nosound();
-void beep();
 
 #endif //TPE_SOUND_H

@@ -11,6 +11,7 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y);
 void putSquare(uint32_t hexColor, uint64_t x, uint64_t y, uint64_t size);
 int getWidth();
 int getHeight();
+int getSize(int id);
 
 void clearScreen(uint32_t hexColor);
 

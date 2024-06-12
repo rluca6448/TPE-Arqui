@@ -55,7 +55,8 @@ void *initializeKernelBinary() {
 
 int main() {
     load_idt();
-    play_sound(440);
+    beep();
+    play_sound(1000);
     while(seconds_elapsed() < 2);
     nosound();
     // putSquare(0x00ffffff, 0, 0, 5);

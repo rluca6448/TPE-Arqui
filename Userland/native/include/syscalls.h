@@ -21,6 +21,8 @@
 #define SYS_NEW_SIZE 7
 #define SYS_TIME 8
 #define SYS_GET_ELAPSED_SECONDS 9
+#define SYS_GET_ELAPSED_TICKS 10
+#define SYS_WIDTH_HEIGHT 11
 
 #include <stdint.h>
 
@@ -35,13 +37,16 @@ uint64_t sys_time(int d);
 
 void sys_sleep();
 
-void sys_sound();
+void sys_sound(int frec);
 void sys_clear();
 
 void print_help();
 void test_int_80h();
 void sys_putPixel(uint32_t hexColor, uint64_t x, uint64_t y);
-void ticks_elapsed();
+int ticks_elapsed();
+int sys_secondsElapsed();
 
 void sys_new_size(int newSize);
+int sys_getWindowSize(int elem);
+
 #endif //TPE_ARQUI_SYSCALLS_H

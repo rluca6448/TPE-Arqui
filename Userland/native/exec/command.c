@@ -14,16 +14,19 @@
 #define YEAR 9
 
 static command commands[] = {
-        {"help", "Muestra la lista de comandos", print_help},
-        {"time", "Muestra la hora", time},
-        {"eliminator", "Ejecuta el juego eliminator.", eliminator},
-        {"size <1-5>", "cambia tamanio de letra (entre 1 a 5)", changeSize_1},
+        {"help            :  ", "Muestra la lista de comandos.", print_help},
+        {"time            :  ", "Muestra la hora.", time},
+        {"eliminator      :  ", "Ejecuta el juego eliminator.", eliminator},
+        {"size_<1-5>      :  ", "cambia tamanio de letra (entre 1 a 5).", changeSize_1},
+        {"dividebyzero    :  ", "Muestra excepcion de divicion de 0.", changeSize_1},
+        {"invalidopcode   :  ", "Muestra excepcion de codigo invalido.", changeSize_1},
+        {"inforeg         :  ", "Muestra la informacion de los registros.", changeSize_1},
+        {"clear           :  ", "Limpia toda la pantalla.", clear},
 };
 
 void print_help() {
     printf("Comandos disponibles:\n");
     for (int i = 0 ; i < sizeof(commands)/sizeof(command) ; i++) {
-//        printf("%s : %s\n", commands[i].title, commands[i].desc);
         printf(commands[i].title);
         printf(" : ");
         printf(commands[i].desc);
@@ -31,9 +34,6 @@ void print_help() {
     }
 }
 
-//void print_time() {
-//    printf("%s\n", sys_time());
-//}
 
 void clear() {
     sys_clear();
@@ -63,12 +63,7 @@ void changeSize_5() {
     sys_new_size(5);
 }
 
-static void printInt(int num)
-{
-    char buffer[40];
-    uintToBase(num, buffer, 10);
-    printf(buffer);
-}
+
 
 void time() {
     int minutes;
@@ -84,7 +79,7 @@ void time() {
     printInt(sys_time(MONTH));
     printf("/");
     printInt(sys_time(YEAR) + 2000);
-    printf('\n');
+    printf("\n");
 }
 
 void printRegisters(uint64_t *reg){

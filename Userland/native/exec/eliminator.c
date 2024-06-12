@@ -1,14 +1,16 @@
 #include "../include/command.h"
+#include "../include/shell.h"
 #include "../include/stdlib.h"
-#include "../include/string.h"
-#include "../include/stdio.h"
 #include "../include/eliminator.h"
+#include "../include/syscalls.h"
+#include "../include/stdio.h"
 
-#define WIDTH 80
-#define HEIGHT 24
-#define DELAY 2
-#define MAX_TAIL_LENGTH (WIDTH * HEIGHT)
+#define DELAY 3
+#define SQUARE_SIZE 35
 
+static int width = 950;   //declaro por las dudas
+static int height = 700;
+int ticks_delay = 3;
 
 typedef struct {
     int x, y;
@@ -16,31 +18,19 @@ typedef struct {
 
 typedef struct {
     int x, y, dir;
-    Segment tail[MAX_TAIL_LENGTH];
+    Segment tail[100000];
     int tail_length;
 } Player;
 
 Player player;
 int game_over = 0;
 
-static char * player_to_string(Player player) {
-    static char buffer[256];
-    char x_pos[12];
-    char y_pos[12];
-    itoa(player.x, x_pos);
-    itoa(player.y, y_pos);
-    printf(buffer, sizeof(buffer), "Player pos: %s | %s", x_pos, y_pos);
-    return buffer;
-}
-
-// Function prototypes for time functions
-extern int ticks_elapsed();
-extern void timer_handler();
 
 void init() {
-    clear();
-    player.x = WIDTH / 2;
-    player.y = HEIGHT / 2;
+    width = sys_getWindowSize(0);
+    height = sys_getWindowSize(1);
+    player.x = width / 2;
+    player.y = height / 2;
     player.dir = 'd';  // Initialize direction to right
     player.tail_length = 0;
 }
@@ -50,7 +40,7 @@ void end_game() {
 }
 
 void add_tail_segment(int x, int y) {
-    if (player.tail_length < MAX_TAIL_LENGTH) {
+    if (player.tail_length < width*height) {
         player.tail[player.tail_length].x = x;
         player.tail[player.tail_length].y = y;
         player.tail_length++;
@@ -62,14 +52,14 @@ void move_player() {
     int new_y = player.y;
 
     switch (player.dir) {
-        case 'w': new_y--; break;
-        case 's': new_y++; break;
-        case 'a': new_x--; break;
-        case 'd': new_x++; break;
+        case 'w': new_y-= SQUARE_SIZE; break;
+        case 's': new_y+= SQUARE_SIZE; break;
+        case 'a': new_x-= SQUARE_SIZE; break;
+        case 'd': new_x+= SQUARE_SIZE; break;
     }
 
-    // Check for collisions with walls
-    if (new_x < 0 || new_x >= WIDTH || new_y < 0 || new_y >= HEIGHT) {
+    // Check for collisions with wall
+    if (new_x < 0 || new_x >= width - 2*SQUARE_SIZE || new_y < 0 || new_y >= height - 2*SQUARE_SIZE) {
         end_game();
     }
 
@@ -95,16 +85,10 @@ void move_player() {
 }
 
 void draw() {
-    // Draw player
-    //todo
-//    putPixel("#FF0000", player.x, player.y);
-
-//    printf(player.x)
-    printf("test");
+    putSquare(0xFF0000, player.x, player.y, SQUARE_SIZE);  // Draw player as red square
     // Draw tail
     for (int i = 0; i < player.tail_length; i++) {
-        //todo
-//        putPixel("#00FF00", player.tail[i].x, player.tail[i].y);
+        putSquare(0x00FF00, player.tail[i].x, player.tail[i].y, SQUARE_SIZE);  // Draw tail as green squares
     }
 }
 
@@ -112,17 +96,17 @@ void handle_input() {
     // Simple input handling (replace with appropriate input mechanism)
     // This is just a placeholder to demonstrate the logic.
     char ch = getKey();
-        switch (ch) {
-            case 'w':
-            case 's':
-            case 'a':
-            case 'd':
-                player.dir = ch;
-                break;
-            case 'q':
-                end_game();
-                break;
-        }
+    switch (ch) {
+        case 'w':
+        case 's':
+        case 'a':
+        case 'd':
+            player.dir = ch;
+            break;
+        case 'q':
+            end_game();
+            break;
+    }
 }
 
 void delay(int target_ticks) {
@@ -132,13 +116,66 @@ void delay(int target_ticks) {
     }
 }
 
-void eliminator() {
-    init();
+void printMenu() {
 
-    while (!game_over) {
-        handle_input();
-        move_player();
-        draw();
-        delay(DELAY); // delay for 0.5s
+    printf("Welcome to THE GAME\nPress a number from 1 to 5 for difficulty\n");
+    char difficulty;
+    char selected = 0;
+    do {
+        difficulty = getchar();
+        switch (difficulty) {
+            case '1': ticks_delay = 10; selected = 1; break;
+            case '2': ticks_delay = 8; selected = 1; break;
+            case '3': ticks_delay = 6; selected = 1; break;
+            case '4': ticks_delay = 4; selected = 1; break;
+            case '5': ticks_delay = 2; selected = 1; break;
+        }
+    } while (!selected);
+
+}
+
+void gameOver(int score) {
+    printf_color("\n\tGame Over!\n", 0xFF0000, 0x000000);
+    printf("\tYour score was: ");
+    printInt(score);
+    printf("\n");
+    printf("\n Press q to quit the game, press w to try again\n");
+}
+
+void eliminator() {
+    char quit_game =0;
+    while (!quit_game){
+        sys_clear();
+        printMenu();
+        sys_clear();
+        init();
+
+        int startingPoint = sys_secondsElapsed();
+        while (!game_over) {
+            handle_input();
+            move_player();
+            draw();
+            delay(ticks_delay);
+        }
+
+        game_over = 0;
+
+        int endingPoint = sys_secondsElapsed();
+        int score = endingPoint - startingPoint;
+        sys_clear();
+
+        gameOver(score);
+
+        char selected = 0;
+        char input;
+        do {
+            input = getchar();
+            switch (input) {
+                case 'q': quit_game = 1 ; selected = 1; break;
+                case 'w': selected = 1 ; break;
+            }
+        } while (!selected);
     }
+    sys_clear();
+    shell();
 }

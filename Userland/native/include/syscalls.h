@@ -13,6 +13,7 @@
 
 #define SYS_HLT 0
 #define SYS_SOUND 1
+#define SYS_NOSOUND 12
 #define SYS_SLEEP 2
 #define SYS_READ 3
 #define SYS_WRITE 4
@@ -38,12 +39,14 @@ uint64_t sys_time(int d);
 void sys_sleep();
 
 void sys_sound(int frec);
+void sys_nosound();
+
 void sys_clear();
 
 void print_help();
 void test_int_80h();
 void sys_putPixel(uint32_t hexColor, uint64_t x, uint64_t y);
-int ticks_elapsed();
+int sys_ticks_elapsed();
 int sys_secondsElapsed();
 
 void sys_new_size(int newSize);

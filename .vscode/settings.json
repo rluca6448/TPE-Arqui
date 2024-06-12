@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "video.h": "c",
-        "stdint.h": "c"
+        "stdint.h": "c",
+        "shell.h": "c"
     }
 }

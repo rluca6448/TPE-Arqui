@@ -110,8 +110,8 @@ void handle_input() {
 }
 
 void delay(int target_ticks) {
-    int start_ticks = ticks_elapsed();
-    while (ticks_elapsed() - start_ticks < target_ticks) {
+    int start_ticks = sys_ticks_elapsed();
+    while (sys_ticks_elapsed() - start_ticks < target_ticks) {
         // Busy-wait loop
     }
 }

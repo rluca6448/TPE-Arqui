@@ -25,6 +25,10 @@ void sys_sound(int frec) {
     syscall(SYS_SOUND, frec, 0, 0);
 }
 
+void sys_nosound(){
+    syscall(SYS_NOSOUND, 0, 0, 0);
+}
+
 void sys_clear(){
     syscall(SYS_CLEAR, 0, 0, 0);
 }
@@ -41,7 +45,7 @@ int sys_secondsElapsed(){
     return syscall(SYS_GET_ELAPSED_SECONDS, 0, 0, 0);
 }
 
-int ticks_elapsed() {
+int sys_ticks_elapsed() {
     return syscall(SYS_GET_ELAPSED_TICKS, 0, 0, 0);
 }
 

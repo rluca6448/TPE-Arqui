@@ -16,7 +16,10 @@ void (*commands_functions[])() = {clear,  divideByZero, print_help, inforeg, inv
                                   changeSize_1, changeSize_2, changeSize_3, changeSize_4, changeSize_5};
 
 void shell() {
-    sys_sound(440); //debería imprimir la
+    sys_sound(220); //debería imprimir LA
+    int start_ticks = sys_ticks_elapsed();
+    while (sys_ticks_elapsed()-start_ticks < 20);
+    sys_nosound();
     printHeader();
 
     do {

@@ -7,6 +7,7 @@
 
 #define SYS_HLT 0
 #define SYS_SOUND 1
+#define SYS_NOSOUND 12
 #define SYS_SLEEP 2
 #define SYS_READ 3
 #define SYS_WRITE 4
@@ -21,7 +22,10 @@
 uint64_t int80Dispacher(uint64_t id, uint64_t param_1, uint64_t param_2, uint64_t param_3){
     switch (id) {
         case SYS_SOUND:
-            sys_sound(param_1);
+            play_sound(param_1);
+            return;
+        case SYS_NOSOUND:
+            nosound();
             return;
         case SYS_WRITE:
             sys_write(param_1, param_2, param_3);
@@ -40,14 +44,14 @@ uint64_t int80Dispacher(uint64_t id, uint64_t param_1, uint64_t param_2, uint64_
         case SYS_GET_TIME:
             return sys_getTime(param_1);
         case SYS_GET_ELAPSED_SECONDS:
-            return sys_getElapsedSeconds();
+            return seconds_elapsed();
         case SYS_HLT:
             _hlt();
             return;
         case SYS_SLEEP: // falta implementar
             return;
         case SYS_GET_ELAPSED_TICKS:
-            return sys_getTicks();
+            return ticks_elapsed();
         case SYS_WIDTH_HEIGHT:
             return sys_getSize(param_1);
     }

@@ -8,8 +8,6 @@
 void timer_handler();
 int ticks_elapsed();
 int seconds_elapsed();
-uint64_t sys_getElapsedSeconds();
-int sys_getTicks();
 
 
 #define SECONDS 00
@@ -22,10 +20,10 @@ int sys_getTicks();
 extern uint8_t getRTC(uint64_t descriptor);
 uint8_t sys_getTime(int descriptor);
 
-void keyboard_handler();
-char* all_keys();
-int size_keys();
-char key_to_ascii(char key);
+// void keyboard_handler();
+// char* all_keys();
+// int size_keys();
+// char key_to_ascii(char key);
 
 uint64_t sleep(uint64_t millis);
 void sys_sleep(uint64_t millis);

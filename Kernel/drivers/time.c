@@ -16,17 +16,11 @@ int ticks_elapsed() {
 	return ticks;
 }
 
-int sys_getTicks(){
-    return ticks_elapsed();
-}
 
 int seconds_elapsed() {
 	return ticks / 18;
 }
 
-uint64_t sys_getElapsedSeconds(){
-    return TICKS_TO_SECONDS(ticks);
-}
 
 uint8_t getFormat(uint8_t num) {
     int dec = num & 240;

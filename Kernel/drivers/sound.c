@@ -28,7 +28,9 @@ void nosound() {
 
 void sys_sound(uint32_t frec) {
     play_sound(frec);
-    int start = seconds_elapsed();
-    while (seconds_elapsed()-start < 1);
+    int start = ticks_elapsed();
+    while (ticks_elapsed()-start < 20);
+    nosound();
+    while (ticks_elapsed()-start < 21);
     nosound();
 }

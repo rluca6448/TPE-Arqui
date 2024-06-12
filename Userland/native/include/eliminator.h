@@ -2,5 +2,6 @@
 #define TPE_ELIMINATOR_H
 
 void eliminator();
+void gameOver(int score);
 
 #endif //TPE_ELIMINATOR_H

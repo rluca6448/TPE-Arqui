@@ -1,4 +1,5 @@
 #include <sound.h>
+#include <time.h>
 //
 ////sacados de la libreria de SYS/IO.h
 static void outb (unsigned char __value, unsigned short int __port) {
@@ -21,22 +22,26 @@ void play_sound(uint32_t nFrequence)
     outb(0x42, (uint8_t)(Div));
     outb(0x42, (uint8_t)(Div >> 8));
 
-    tmp = inb(0x60);
+    tmp = inb(0x61);
     if (tmp != (tmp | 3))
     {
         outb(0x61, tmp | 3);
     }
 }
 
-//make it shut up
 void nosound() {
     uint8_t tmp = inb(0x61) & 0xFC;
-
     outb(0x61, tmp);
 }
 
-//Make a beep
+void beep() {
+    play_sound(1000);
+    nosound();
+}
 
 void sys_sound(uint32_t frec) {
     play_sound(frec);
+    int start = seconds_elapsed();
+    while (seconds_elapsed()-start < 1);
+    nosound();
 }

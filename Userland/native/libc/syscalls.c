@@ -21,8 +21,8 @@ void sys_sleep() {
     syscall(SYS_SLEEP, 0, 0, 0);
 }
 
-void sys_sound() {
-    syscall(SYS_SOUND, 0, 0, 0);
+void sys_sound(int frec) {
+    syscall(SYS_SOUND, frec, 0, 0);
 }
 
 void sys_clear(){
@@ -37,6 +37,14 @@ void sys_putPixel(uint32_t hexColor, uint64_t x, uint64_t y){
     syscall(SYS_PUT_PIXEL, hexColor, x, y);
 }
 
-void ticks_elapsed() {
+int sys_secondsElapsed(){
     return syscall(SYS_GET_ELAPSED_SECONDS, 0, 0, 0);
+}
+
+int ticks_elapsed() {
+    return syscall(SYS_GET_ELAPSED_TICKS, 0, 0, 0);
+}
+
+int sys_getWindowSize(int elem) {
+    return syscall(SYS_WIDTH_HEIGHT, elem, 0, 0);
 }

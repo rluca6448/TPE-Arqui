@@ -89,3 +89,9 @@ int getWidth() {
 int getHeight() {
     return VBE_mode_info->height;
 }
+
+// 0 --> getWidth   (o cualquier cosa que no sea 1)
+// 1 --> getHeight
+int sys_getSize(int id) {
+    return id == 1 ? getHeight() : getWidth();
+}

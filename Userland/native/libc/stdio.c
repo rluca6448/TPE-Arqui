@@ -56,6 +56,12 @@ void printf(const char * fmt, ...) {
     va_end(args);
 }
 
+void printInt(int num) {
+    char buffer[40];
+    uintToBase(num, buffer, 10);
+    printf(buffer);
+}
+
 // void simplePrintf(char* str){
 //    for (int i=0; str[i]; i++) putchar(str[i]);
 // }

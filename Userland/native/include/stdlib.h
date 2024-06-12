@@ -15,6 +15,7 @@ uint64_t atoi(char * str);
 void itoa(uint64_t num, char * buf);
 uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base);
 
+
 void putPixel(uint32_t hexColor, uint64_t x, uint64_t y);
 void putSquare(uint32_t hexColor, uint64_t x, uint64_t y, uint64_t size);
 char getKey();

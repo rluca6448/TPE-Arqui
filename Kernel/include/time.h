@@ -9,6 +9,7 @@ void timer_handler();
 int ticks_elapsed();
 int seconds_elapsed();
 uint64_t sys_getElapsedSeconds();
+int sys_getTicks();
 
 
 #define SECONDS 00

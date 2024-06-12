@@ -16,6 +16,10 @@ int ticks_elapsed() {
 	return ticks;
 }
 
+int sys_getTicks(){
+    return ticks_elapsed();
+}
+
 int seconds_elapsed() {
 	return ticks / 18;
 }

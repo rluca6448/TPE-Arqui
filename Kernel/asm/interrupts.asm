@@ -15,6 +15,8 @@ GLOBAL _irq05Handler
 
 GLOBAL _int80Handler
 
+GLOBAL saveCurrentRegisters
+
 GLOBAL _exception00Handler
 GLOBAL _exception06Handler
 
@@ -117,28 +119,28 @@ SECTION .text
 	pushState
 	;Obtener todos los registros
 
-  mov [regex + 8*0], rax
-  mov [regex + 8*1], rbx
-  mov [regex + 8*2], rcx
-  mov [regex + 8*3], rdx
-  mov [regex + 8*4], rsi
-  mov [regex + 8*5], rdi
-  mov [regex + 8*6], rbp
-  mov [regex + 8*7], rsp
-  mov [regex + 8*8], r8
-  mov [regex + 8*9], r9
-  mov [regex + 8*10], r10
-  mov [regex + 8*11], r11
-  mov [regex + 8*12], r12
-  mov [regex + 8*13], r13
-  mov [regex + 8*14], r14
-  mov [regex + 8*15], r15
+    mov [regex + 8*0], rax
+    mov [regex + 8*1], rbx
+    mov [regex + 8*2], rcx
+    mov [regex + 8*3], rdx
+    mov [regex + 8*4], rsi
+    mov [regex + 8*5], rdi
+    mov [regex + 8*6], rbp
+    mov [regex + 8*7], rsp
+    mov [regex + 8*8], r8
+    mov [regex + 8*9], r9
+    mov [regex + 8*10], r10
+    mov [regex + 8*11], r11
+    mov [regex + 8*12], r12
+    mov [regex + 8*13], r13
+    mov [regex + 8*14], r14
+    mov [regex + 8*15], r15
 
     mov rax, [rsp] ; RIP
     mov [regex+8*16], rax
 
-  mov rax, [rsp+8*2] ; RFLAGS
-  mov [regex+8*17], rax
+    mov rax, [rsp+8*2] ; RFLAGS
+    mov [regex+8*17], rax
 
 	mov rdi, %1 ; pasaje de parametros
 	mov rsi, regex
@@ -149,6 +151,40 @@ SECTION .text
 	call main
 %endmacro
 
+GLOBAL storeRegs
+
+storeRegs:
+    push rbp
+    mov rbp, rsp
+
+    mov [regex + 8*0], rax
+    mov [regex + 8*1], rbx
+    mov [regex + 8*2], rcx
+    mov [regex + 8*3], rdx
+    mov [regex + 8*4], rsi
+    mov [regex + 8*5], rdi
+    mov [regex + 8*6], rbp
+    mov [regex + 8*7], rsp
+    mov [regex + 8*8], r8
+    mov [regex + 8*9], r9
+    mov [regex + 8*10], r10
+    mov [regex + 8*11], r11
+    mov [regex + 8*12], r12
+    mov [regex + 8*13], r13
+    mov [regex + 8*14], r14
+    mov [regex + 8*15], r15
+
+    mov rax, [rsp] ; RIP
+    mov [regex+8*16], rax
+
+    mov rax, [rsp+8*2] ; RFLAGS
+    mov [regex+8*17], rax
+
+    mov rax, regex
+
+    mov rsp, rbp
+    pop rbp
+    ret
 
 _hlt:
 	sti

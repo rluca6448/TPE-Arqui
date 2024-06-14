@@ -55,55 +55,14 @@ void *initializeKernelBinary() {
 
 int main() {
     load_idt();
+
     // play_sound(440);
-    sys_sound(440);
-    // putSquare(0x00ffffff, 0, 0, 5);
+    //sys_sound(440);
 
-    // while(seconds_elapsed() < 2);
-    // char* buf[2];
-    // int charsRead = sys_read(0, buf, 2);
-    // sys_write(1, buf, 2);
-    // sys_write(1, "xd", 2);
-    // test_int_80h();
-
-    // for(int i=0; i<140; i++){
-    //     sys_write(1, "0123456789", 10);
-    // }
-/*
-    sys_textmode(1, 2);
-    while(seconds_elapsed() < 10){
-        char* buf[1];
-        char hasRead = sys_read(0, buf, 1);
-        if (hasRead) sys_write(1, buf, 1);
-    }
-    sys_textmode(1, 4);
-
-    while(seconds_elapsed() < 20){
-        char* buf[1];
-        char hasRead = sys_read(0, buf, 1);
-        if (hasRead) sys_write(2, buf, 1);
-    }
-    sys_textmode(1, 5);
-    while(seconds_elapsed() < 30){
-        char* buf[1];
-        char hasRead = sys_read(0, buf, 1);
-        if (hasRead) sys_write(2, buf, 1);
-    }
-    sys_textmode(1, 3);
-    while(seconds_elapsed() < 40){
-        char* buf[1];
-        char hasRead = sys_read(0, buf, 1);
-        if (hasRead) sys_write(2, buf, 1);
-    }
-    sys_textmode(1, 1);
-    while(1){
-        char* buf[1];
-        char hasRead = sys_read(0, buf, 1);
-        if (hasRead) sys_write(2, buf, 1);
-    }
-*/
     ((EntryPoint) sampleCodeModuleAddress)();
+
     while (1);
+
     return 0;
 }
 

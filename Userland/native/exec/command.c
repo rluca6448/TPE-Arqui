@@ -18,9 +18,9 @@ static command commands[] = {
         {"time            :  ", "Muestra la hora.", time},
         {"eliminator      :  ", "Ejecuta el juego eliminator.", eliminator},
         {"size_<1-5>      :  ", "cambia tamanio de letra (entre 1 a 5).", changeSize_1},
-        {"dividebyzero    :  ", "Muestra excepcion de divicion de 0.", changeSize_1},
-        {"invalidopcode   :  ", "Muestra excepcion de codigo invalido.", changeSize_1},
-        {"inforeg         :  ", "Muestra la informacion de los registros.", changeSize_1},
+        {"dividebyzero    :  ", "Muestra excepcion de divicion de 0.", divideByZero},
+        {"invalidopcode   :  ", "Muestra excepcion de codigo invalido.", invalidOpcode},
+        {"inforeg         :  ", "Muestra la informacion de los registros.", sys_getRegs},
         {"clear           :  ", "Limpia toda la pantalla.", clear},
 };
 
@@ -81,26 +81,3 @@ void time() {
     printInt(sys_time(YEAR) + 2000);
     printf("\n");
 }
-
-void printRegisters(uint64_t *reg){
-    char *regs[REG_SIZE] = {
-            "RAX", "RBX", "RCX", "RDX", "RDI", "RSI","RBP", "RSP",
-            "R08", "R09", "R10", "R11", "R12", "R13", "R14",
-            "R15", "IP "};
-
-    char toPrint[18];
-    for (int i = 0; i < REG_SIZE; i++)
-    {
-        printf_color(regs[i], 0xFFEA00,0x000000);
-        int digits = uintToBase(reg[i], toPrint, 16);
-        printf(" : 0x");
-        int zeros = 15;
-        while(zeros > digits){
-            printf("0");
-            zeros--;
-        }
-        printf(toPrint);
-        putchar('\n');
-    }
-}
-

@@ -18,41 +18,46 @@
 #define SYS_GET_ELAPSED_SECONDS 9
 #define SYS_GET_ELAPSED_TICKS 10
 #define SYS_WIDTH_HEIGHT 11
+#define SYS_GETREGS 13
+
+uint64_t registers[18] = {0};
 
 uint64_t int80Dispacher(uint64_t id, uint64_t param_1, uint64_t param_2, uint64_t param_3){
     switch (id) {
         case SYS_SOUND:
             play_sound(param_1);
-            return;
+            return 1;
         case SYS_NOSOUND:
             nosound();
-            return;
+            return 1;
         case SYS_WRITE:
             sys_write(param_1, param_2, param_3);
-            return;
+            return 1;
         case SYS_READ:
             return sys_read(param_1, param_2, param_3);
         case SYS_CLEAR_SCREEN:
             sys_clearScreen();
-            return;
+            return 1;
         case SYS_PUT_PIXEL:
             sys_putPixel(param_1, param_2, param_3);
-            return;
+            return 1;
         case SYS_NEW_SIZE:
             sys_new_size(param_1);
-            return;
+            return 1;
         case SYS_GET_TIME:
             return sys_getTime(param_1);
         case SYS_GET_ELAPSED_SECONDS:
             return seconds_elapsed();
         case SYS_HLT:
             _hlt();
-            return;
-        case SYS_SLEEP: // falta implementar
-            return;
+            return 1;
         case SYS_GET_ELAPSED_TICKS:
             return ticks_elapsed();
         case SYS_WIDTH_HEIGHT:
             return sys_getSize(param_1);
+        case SYS_GETREGS:
+            sys_registers();
+            return 1;
     }
+    return 0;
 }

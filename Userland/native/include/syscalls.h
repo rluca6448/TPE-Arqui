@@ -1,16 +1,6 @@
 #ifndef TPE_ARQUI_SYSCALLS_H
 #define TPE_ARQUI_SYSCALLS_H
 
-/*
- * hlt = 0
- * read = 1
- * write = 2
- * time = 3
- * sleep = 4
- * sound = 5
- * clear = 6
- * */
-
 #define SYS_HLT 0
 #define SYS_SOUND 1
 #define SYS_NOSOUND 12
@@ -24,6 +14,7 @@
 #define SYS_GET_ELAPSED_SECONDS 9
 #define SYS_GET_ELAPSED_TICKS 10
 #define SYS_WIDTH_HEIGHT 11
+#define SYS_GETREGS 13
 
 #include <stdint.h>
 
@@ -51,5 +42,7 @@ int sys_secondsElapsed();
 
 void sys_new_size(int newSize);
 int sys_getWindowSize(int elem);
+
+void sys_getRegs();
 
 #endif //TPE_ARQUI_SYSCALLS_H

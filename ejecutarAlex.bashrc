@@ -6,13 +6,14 @@ sudo docker run -d -v "$PWD":/root --security-opt seccomp:unconfined -ti --name 
 # groupadd -g 1000 -o alex
 # useradd -m -u 1000 -g 1000 -o -s /bin/bash alex
 
+NOMBRE="TPEspecial"
 
-docker start NOMBRE
-docker exec -it NOMBRE make clean -C/root/Toolchain
-docker exec -it NOMBRE make clean -C/root/
-docker exec -it NOMBRE make -C/root/Toolchain
-docker exec -it NOMBRE make -C/root/
-docker stop NOMBRE
+docker start $NOMBRE
+docker exec -it $NOMBRE make clean -C/root/Toolchain
+docker exec -it $NOMBRE make clean -C/root/
+docker exec -it $NOMBRE make -C/root/Toolchain
+docker exec -it $NOMBRE make -C/root/
+docker stop $NOMBRE
 
 # para ejecutar;
 # qemu-system-x86_64 -hda Image/x64BareBonesImage.qcow2 -m 512 -audiodev sdl,id=audio0 -machine pcspk-audiodev=audio0
@@ -22,7 +23,7 @@ export AUDIO_DRIVER="coreaudio"
 qemu-system-x86_64 -hda Image/x64BareBonesImage.qcow2 -m 512 -audiodev $AUDIO_DRIVER,id=audio0 -machine pcspk-audiodev=audio0
 
 # para cerrar:
-docker rm NOMBRE
+docker rm $NOMBRE
 
 # ni idea qué es esto:
 # export GCC_COLORS="error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01"

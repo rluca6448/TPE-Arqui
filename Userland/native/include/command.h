@@ -12,7 +12,6 @@ void print_help();
 
 void clear();
 void divideByZero();
-void inforeg();
 void invalidOpcode();
 void time();
 void changeSize_1();

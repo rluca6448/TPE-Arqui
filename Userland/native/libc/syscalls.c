@@ -52,3 +52,7 @@ int sys_ticks_elapsed() {
 int sys_getWindowSize(int elem) {
     return syscall(SYS_WIDTH_HEIGHT, elem, 0, 0);
 }
+
+void sys_getRegs() {
+    syscall(SYS_GETREGS, 0, 0, 0);
+}

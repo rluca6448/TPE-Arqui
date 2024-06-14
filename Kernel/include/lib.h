@@ -13,4 +13,7 @@ char * RTC();
 void outb (unsigned char __value, unsigned short int __port);
 unsigned char inb (unsigned short int __port);
 
+void getRegs();
+void sys_registers();
+
 #endif

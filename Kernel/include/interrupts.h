@@ -1,14 +1,8 @@
- /*
- *   interrupts.h
- *
- *  Created on: Apr 18, 2010
- *      Author: anizzomc
- */
-
 #ifndef INTERRUPS_H_
 #define INTERRUPS_H_
 
 #include "idtLoader.h"
+#include <stdint.h>
 
 void _irq00Handler(void);
 void _irq01Handler(void);
@@ -23,6 +17,8 @@ void _int80Handler(void);
 
 void _exception00Handler(void);
 void _exception06Handler(void);
+
+extern uint64_t * storeRegs();
 
 void _cli(void);
 

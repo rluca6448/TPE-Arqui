@@ -5,6 +5,8 @@
 #include "../include/stdio.h"
 #include "../include/stdlib.h"
 #include "../include/string.h"
+#include "../include/sounds.h"
+
 
 #define MAX_BUF 1024
 
@@ -16,10 +18,8 @@ void (*commands_functions[])() = {clear,  divideByZero, print_help, sys_getRegs,
                                   changeSize_1, changeSize_2, changeSize_3, changeSize_4, changeSize_5};
 
 void shell() {
-    sys_sound(220); //debería imprimir LA
-    int start_ticks = sys_ticks_elapsed();
-    while (sys_ticks_elapsed()-start_ticks < 20);
-    sys_nosound();
+    play_song(2);
+    while (next_part());
     printHeader();
 
     do {

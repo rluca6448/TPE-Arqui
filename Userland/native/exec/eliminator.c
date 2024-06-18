@@ -4,6 +4,7 @@
 #include "../include/eliminator.h"
 #include "../include/syscalls.h"
 #include "../include/stdio.h"
+#include "../include/sounds.h"
 
 #define DELAY 3
 #define SQUARE_SIZE 35
@@ -155,8 +156,13 @@ void eliminator() {
             handle_input();
             move_player();
             draw();
+            if (!next_part_instantly()){
+                play_song(1);       // suena "RETRO_SONG"
+            }
             delay(ticks_delay);
         }
+        play_song(3);               // suena "YOU_LOST"
+        while (next_part());
 
         game_over = 0;
 

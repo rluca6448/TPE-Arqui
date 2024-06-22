@@ -32,7 +32,8 @@ void shell() {
             char buf[1];
             char hasRead = sys_read(0, buf, 1);
             if (hasRead) {
-                sys_write(1, buf, 1);
+                if (!(buf[0]== 0x08 && i == 0))
+                    sys_write(1, buf, 1);
                 if (buf[0] == '\n') {
                     execute(command);
                     break_line = 1;

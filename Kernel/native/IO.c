@@ -11,7 +11,16 @@ uint64_t x = 0;
 uint64_t y = 0;
 uint8_t fontSize = 1;
 
+// putChar y printf facilitan el manejo de IO cuando el Kernel quiere escribir cosas
+void putChar(char c) {
+    putCharColoured(c, 0xFFFFFF, BG_COLOR);
+}
 
+void printf(char * str) {
+    for (int i = 0; str[i] != '\0'; i++) {
+        putChar(str[i]);
+    }
+}
 
 
 void putCharColoured(char c, uint64_t foreGround, uint64_t backGround) {

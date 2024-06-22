@@ -5,8 +5,6 @@
 
 static unsigned long ticks = 0;
 
-// static char keys[200];
-// static int key_amount = 0;
 
 void timer_handler() {
 	ticks++;

@@ -2,7 +2,8 @@
 #include <time.h>
 #include <lib.h>
 
-
+// fuentes: OSDev
+// https://wiki.osdev.org/PC_Speaker
 void play_sound(uint32_t nFrequence)
 {
     uint32_t Div;
@@ -23,14 +24,4 @@ void play_sound(uint32_t nFrequence)
 void nosound() {
     uint8_t tmp = inb(0x61) & 0xFC;
     outb(0x61, tmp);
-}
-
-
-void sys_sound(uint32_t frec) {
-    play_sound(frec);
-    int start = ticks_elapsed();
-    while (ticks_elapsed()-start < 20);
-    nosound();
-    while (ticks_elapsed()-start < 21);
-    nosound();
 }

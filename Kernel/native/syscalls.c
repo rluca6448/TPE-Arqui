@@ -1,5 +1,5 @@
 #include "video.h"
-#include "IO.h" // importante agregar todos los headers necesarios
+#include "IO.h"
 #include "time.h"
 #include "lib.h"
 #include "interrupts.h"
@@ -39,7 +39,7 @@ uint64_t int80Dispacher(uint64_t id, uint64_t param_1, uint64_t param_2, uint64_
             sys_clearScreen();
             return 1;
         case SYS_PUT_PIXEL:
-            sys_putPixel(param_1, param_2, param_3);
+            putPixel(param_1, param_2, param_3);
             return 1;
         case SYS_NEW_SIZE:
             sys_new_size(param_1);

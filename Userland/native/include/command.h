@@ -20,7 +20,7 @@ void changeSize_3();
 void changeSize_4();
 void changeSize_5();
 
-//para excepciones
+//para excepciones (buscan en Assembler)
 extern void runInvalidOpcodeException(void);
 extern void runZeroDivisionException(void);
 

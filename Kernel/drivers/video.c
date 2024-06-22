@@ -66,14 +66,6 @@ void putSquare(uint32_t hexColor, uint64_t x, uint64_t y, uint64_t size) {
 }
 
 
-void sys_putPixel(uint32_t hexColor, uint64_t x, uint64_t y){
-    // if (!videoModeOn) return;
-    putPixel(hexColor, x, y);
-}
-
-
-
-
 void clearScreen(uint32_t hexColor) {
     for (int i = 0; i < VBE_mode_info->height ; i++) {
         for (int j = 0; j < VBE_mode_info->width ; j++) {

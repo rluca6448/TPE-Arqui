@@ -26,6 +26,7 @@ cpuVendor:
 	pop rbp
 	ret
 
+; lo agarra time.h
 GLOBAL getRTC
 getRTC:
 	mov rax, rdi	; recibimos por parámetro.
@@ -34,40 +35,28 @@ getRTC:
 	in al, 71h		; en al se deposita lo pedido por 70h, presente en 71h.
 	ret
 
-
+; lo agarra keyboard.h
 GLOBAL getKey
 getKey:
         push 	rbp
         mov     rbp, rsp
 
         mov		rax, 0
-        in      al, 64h
+        in      al, 64h         ; indica si hay key
         and		rax, 01h
 
         cmp		rax, 01h
         jne		get_key_end		;rax=0
 
-        in		al, 60h
+        in		al, 60h         ; 60h tiene la key id
 
     get_key_end:
         leave
         ret
 
-GLOBAL test_int_80h ; FUNCIONA!!!
-test_int_80h:
-    push 	rbp
-	mov     rbp, rsp
-    mov     eax, 4
-    mov     ebx, 1
-    mov     ecx, test_int_80h_data
-    mov     edx, 1
-    int     80h
 
-    leave
-    ret
-
+; implementar inb y outb son requeridas para las funciones de sound.c sacadas de osDev
 GLOBAL inb
-
 inb:
     ; Inputs:
     ; rdi - port address
@@ -79,7 +68,6 @@ inb:
     ret           ; Return from the function
 
 GLOBAL outb
-
 outb:
     ; Inputs:
     ; rdi - port address

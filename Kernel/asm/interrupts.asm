@@ -157,7 +157,7 @@ SECTION .text
 
 GLOBAL storeRegs
 
-%macro copy_updating_regex 0		; gracias chatgpt
+%macro copy_updating_regex 0		; copia updating_regex en regex. Ver diferencia en section bss
     push rsi                ; Save the RSI register (callee-saved)
     push rdi                ; Save the RDI register (callee-saved)
 

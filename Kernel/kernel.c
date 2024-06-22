@@ -24,7 +24,6 @@ static void *const sampleDataModuleAddress = (void *) 0x500000;
 
 typedef int (*EntryPoint)();
 
-//int keyFlag[4] = {0,0};        // index 0: bloq-mayus ; index 1: {1=shift ; 2=CTRL ; 3=alt}
 
 void clearBSS(void *bssAddress, uint64_t bssSize) {
     memset(bssAddress, 0, bssSize);
@@ -56,8 +55,7 @@ void *initializeKernelBinary() {
 int main() {
     load_idt();
 
-    // play_sound(440);
-    //sys_sound(440);
+    // sys_registers();
 
     ((EntryPoint) sampleCodeModuleAddress)();
 

@@ -18,13 +18,14 @@ static command commands[] = {
         {"time            :  ", "Muestra la hora.", time},
         {"eliminator      :  ", "Ejecuta el juego eliminator.", eliminator},
         {"size_<1-5>      :  ", "cambia tamanio de letra (entre 1 a 5).", changeSize_1},
-        {"dividebyzero    :  ", "Muestra excepcion de divicion de 0.", divideByZero},
+        {"dividebyzero    :  ", "Muestra excepcion de division de 0.", divideByZero},
         {"invalidopcode   :  ", "Muestra excepcion de codigo invalido.", invalidOpcode},
-        {"inforeg         :  ", "Muestra la informacion de los registros.", sys_getRegs},
+        {"inforeg         :  ", "Muestra los registros guardados.", sys_getRegs},
         {"clear           :  ", "Limpia toda la pantalla.", clear},
 };
 
 void print_help() {
+    printf("Presiona left alt para guardar registros en cualquier momento\n");
     printf("Comandos disponibles:\n");
     for (int i = 0 ; i < sizeof(commands)/sizeof(command) ; i++) {
         printf(commands[i].title);

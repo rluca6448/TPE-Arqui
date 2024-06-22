@@ -11,15 +11,7 @@ uint64_t x = 0;
 uint64_t y = 0;
 uint8_t fontSize = 1;
 
-void putChar(char c) {
-    putCharColoured(c, 0xFFFFFF, BG_COLOR);     // BORRAR TODA LA FUNCIÓN (es inútil)
-}
 
-void printf(char * str) {
-    for (int i = 0; str[i] != '\0'; i++) {      // Esta también es inútil, pues se van a usar los printf y putchar definidos en Userland
-        putChar(str[i]);
-    }
-}
 
 
 void putCharColoured(char c, uint64_t foreGround, uint64_t backGround) {
@@ -37,14 +29,12 @@ void putCharColoured(char c, uint64_t foreGround, uint64_t backGround) {
 }
 
 
+// el stdout no se guarda. Solo se guardan las coordenadas de la última posición
 
-static char stdinArr[SIZE_BUFFER];
+// el stdin es un array cíclico
+static char stdinArr[SIZE_BUFFER];  
 static int sizeIn = 0;
 static int startsIn = 0;
-
-int getSizeIn(){
-	return sizeIn;
-}
 
 static char videoModeOn = 0;
 
@@ -76,7 +66,7 @@ void clearIn(){
 
 
 
-
+// inspirado en la función de la API de Linux
 void sys_write(int fd, const char* buf, int count){
     if (fd==1){
         for(int i=0; i<count; i++){
@@ -90,6 +80,7 @@ void sys_write(int fd, const char* buf, int count){
     }
 }
 
+// inspirado en la función de la API de Linux
 int sys_read(int fd, char* buf, int count){
     int i=0;
     if (fd==0){
@@ -105,8 +96,8 @@ int sys_read(int fd, char* buf, int count){
 }
 
 
-void sys_new_size(int newSize){        // ojo: la variable enabled no hace nada
-    _cli;               //por las dudas paro los in/out
+void sys_new_size(int newSize){
+    _cli;               //por las dudas paro los in/out (antes generaba bugs)
     if (newSize < 1 || newSize > 5)
         return;
     fontSize = newSize;
@@ -114,7 +105,7 @@ void sys_new_size(int newSize){        // ojo: la variable enabled no hace nada
     _sti;
 }
 
-// imprime caracter y modifica coordenadas
+// imprime caracter y modifica coordenadas. Usado para representar el stdout
 void putCharAt(uint8_t c, uint64_t * x, uint64_t * y, uint64_t foreColor, uint64_t backgroundColor) {
     if (xOutOfBounds(x)) {
         newLine(x, y);
@@ -137,7 +128,7 @@ void putCharAt(uint8_t c, uint64_t * x, uint64_t * y, uint64_t foreColor, uint64
     *x += FONT_WIDTH * fontSize;
 }
 
-
+// TODO: el foreColor es completamente inútil
 void deleteCharAt(uint64_t * x, uint64_t * y, uint64_t foreColor, uint64_t backgroundColor) {
     if (*x == 0 && *y == 0) return;         // no borra si no hay nada
     *x -= FONT_WIDTH * fontSize;
@@ -156,14 +147,17 @@ void newLine(uint64_t * x, uint64_t * y) {
     *y += FONT_HEIGHT * fontSize;
 }
 
+
 int xOutOfBounds(uint64_t * x) {
     return *x + FONT_WIDTH * fontSize >= getWidth() || (int)*x < 0;     // casteo a int para que me tome que existen los negativos
 }
+
 
 int yOutOfBounds(uint64_t * y) {
     return *y + FONT_HEIGHT * fontSize >= getHeight() || (int)*y < 0;
 }
 
+// resetea coordenadas
 void sys_clearScreen(){
     clearScreen(BG_COLOR);
     y = 0;

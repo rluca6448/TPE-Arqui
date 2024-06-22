@@ -75,7 +75,7 @@ char * regList[REGS_SIZE] = {
         "R15", "IP ", "RFLAGS "};
 
 void getRegs() {
-    regs = storeRegs();
+    regs = storeRegs();		// llamada a Assembler
     regsCaptured = 1;
 }
 

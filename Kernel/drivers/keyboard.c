@@ -161,7 +161,7 @@ char mapKey(char character, int flags[2]) {
 }
 
 void keyboard_handler() {
-    char i = getKey();
+    char i = getKey();      // llamada a Assembler
     char key = mapKey(i, keyFlag);
     switch (i) {
         case '\x3A':    // bloq-mayus
@@ -184,7 +184,7 @@ void keyboard_handler() {
         case '\x1D':    // left-ctrl pressed
             keyFlag[1] = 2;
             break;
-        case '\x38':    // left-alt pressed
+        case '\x38':    // left-alt pressed (guarda registros)
             keyFlag[1] = 3;
             getRegs();
             break;

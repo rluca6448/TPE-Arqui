@@ -67,13 +67,18 @@ void changeSize_5() {
 
 
 void time() {
-    int minutes;
-    printInt(sys_time(HOURS)+1);
-    printf(":");
-    if(minutes <10){
-        printf('0');
+
+    int hours = sys_time(HOURS);
+    hours -= 3;
+    if(hours <= 0){
+        hours += 24;
     }
-    printInt(sys_time(MINUTES));
+    printInt(hours);
+    printf(":");
+    int minutes = sys_time(MINUTES);
+    if(minutes < 10)
+        printf("0");
+    printInt(minutes);
     printf(", ");
     printInt(sys_time(DAY_OF_THE_MONTH));
     printf("/");

@@ -26,12 +26,15 @@ typedef struct {
 Player player;
 int game_over = 0;
 
+int adjust(int coords){
+    return (coords/SQUARE_SIZE)*SQUARE_SIZE;
+}
 
 void init() {
     width = sys_getWindowSize(0);
     height = sys_getWindowSize(1);
-    player.x = width / 2;
-    player.y = height / 2;
+    player.x = adjust(width / 2);
+    player.y = adjust(height / 2);
     player.dir = 'd';  // Initialize direction to right
     player.tail_length = 0;
 }
@@ -41,11 +44,9 @@ void end_game() {
 }
 
 void add_tail_segment(int x, int y) {
-    if (player.tail_length < width*height) {
-        player.tail[player.tail_length].x = x;
-        player.tail[player.tail_length].y = y;
-        player.tail_length++;
-    }
+    player.tail[player.tail_length].x = x;
+    player.tail[player.tail_length].y = y;
+    player.tail_length++;
 }
 
 void move_player() {
@@ -60,7 +61,7 @@ void move_player() {
     }
 
     // Check for collisions with wall
-    if (new_x < 0 || new_x >= width - 2*SQUARE_SIZE || new_y < 0 || new_y >= height - 2*SQUARE_SIZE) {
+    if (new_x < 0 || new_x >= width - SQUARE_SIZE || new_y < 0 || new_y >= height - SQUARE_SIZE) {
         end_game();
     }
 
@@ -79,18 +80,16 @@ void move_player() {
         player.tail[0].x = player.x;
         player.tail[0].y = player.y;
     }
-
+    
+    add_tail_segment(player.x, player.y);
     player.x = new_x;
     player.y = new_y;
-    add_tail_segment(player.x, player.y);
 }
 
 void draw() {
     putSquare(0xFF0000, player.x, player.y, SQUARE_SIZE);  // Draw player as red square
     // Draw tail
-    for (int i = 0; i < player.tail_length; i++) {
-        putSquare(0x00FF00, player.tail[i].x, player.tail[i].y, SQUARE_SIZE);  // Draw tail as green squares
-    }
+    putSquare(0x00FF00, player.tail[player.tail_length-1].x, player.tail[player.tail_length-1].y, SQUARE_SIZE);  // Draw tail as green squares
 }
 
 void handle_input() {
@@ -143,6 +142,29 @@ void gameOver(int score) {
     printf("\n Press q to quit the game, press w to try again\n");
 }
 
+void handleScore(int startingPoint, int lastScore) {
+    int score = sys_secondsElapsed()-startingPoint;
+    if (score > lastScore) {
+        for(int i=0; i<12; i++){     // borra el score anterior
+            putchar(0x08);
+        }
+        printf("score: ");
+        printInt(score);            // pone el nuevo score
+        lastScore = score;
+    }
+}
+
+void printBorders(void) {
+    for(int i=0; i<width; i+=SQUARE_SIZE){
+        putSquare(0xFF0000, i, 0, SQUARE_SIZE);  // Draw player as red square
+        putSquare(0xFF0000, i, adjust(height), SQUARE_SIZE);  // Draw player as red square
+    }
+    for(int j=0; j<height; j+=SQUARE_SIZE){
+        putSquare(0xFF0000, 0, j, SQUARE_SIZE);  // Draw player as red square
+        putSquare(0xFF0000, adjust(width), j, SQUARE_SIZE);  // Draw player as red square
+    }
+}
+
 void eliminator() {
     char quit_game =0;
     while (!quit_game){
@@ -152,7 +174,10 @@ void eliminator() {
         init();
 
         int startingPoint = sys_secondsElapsed();
+        int lastScore = 0;
+        printBorders();
         while (!game_over) {
+            handleScore(startingPoint, lastScore);
             handle_input();
             move_player();
             draw();

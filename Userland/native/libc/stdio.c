@@ -4,10 +4,33 @@
 
 #define MAX_BUF 1024
 
-
-
 void scanf(const char * fmt, ...) {
-    return;
+    va_list args;
+    va_start(args, fmt);
+
+    char buf[MAX_BUF];
+
+    for (int i = 0; fmt[i] != '\0' ; i++) {
+        if (fmt[i++] == '%') {
+            switch (fmt[i]) {
+                case 's':
+                    gets(va_arg(args, char *), MAX_BUF);
+                    break;
+                case 'c':
+                    gets(va_arg(args, char), 1);
+                    break;
+                case 'd':
+                    gets(buf, MAX_BUF);
+                    int value = atoi(buf);
+                    int * aux = va_arg(args, int *);
+                    * aux = value;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    va_end(args);
 }
 
 static void print_str(const char * str, uint64_t foreground, uint64_t background) {

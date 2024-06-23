@@ -53,7 +53,7 @@ uint64_t atoi(char * str) { // ascii to integer
 }
 
 void itoa(uint64_t num, char * buf) {
-    char aux[1024];     // todo: poner como macro
+    char aux[MAX_BUF];
     int i = 0;
 
     if (num == 0) {

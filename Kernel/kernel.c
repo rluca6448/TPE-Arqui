@@ -1,12 +1,7 @@
 #include <stdint.h>
 #include <lib.h>
 #include <moduleLoader.h>
-#include <naiveConsole.h>
-#include <keyboard.h>
-#include <IO.h>
-#include <video.h>
 #include <idtLoader.h>
-#include <sound.h>
 
 extern void test_int_80h();
 
@@ -63,6 +58,3 @@ int main() {
 
     return 0;
 }
-
-
-// TODO: borrar unos cuantos comentarios

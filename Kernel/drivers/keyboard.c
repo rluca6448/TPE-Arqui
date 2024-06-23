@@ -173,12 +173,12 @@ void keyboard_handler() {
             keyFlag[1] = 1;
             break;
         case '\xAA':    // left-shift released
+        case '\xB6':    // right-shift released
             keyFlag[0] = !keyFlag[0];
             keyFlag[1] = 0;
             break;
         case '\x9D':    // left-ctrl released
         case '\xB8':    // left-alt released
-        case '\xB6':    // right-shift released
             keyFlag[1] = 0;
             break;
         case '\x1D':    // left-ctrl pressed

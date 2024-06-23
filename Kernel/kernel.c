@@ -55,7 +55,7 @@ void *initializeKernelBinary() {
 int main() {
     load_idt();
 
-    // sys_registers();
+    // sys_registers();     // descomentar para ver registros del kernel
 
     ((EntryPoint) sampleCodeModuleAddress)();
 

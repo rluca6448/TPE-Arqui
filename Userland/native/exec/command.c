@@ -69,10 +69,10 @@ void changeSize_5() {
 void time() {
 
     int hours = sys_time(HOURS);
-    hours -= 3;
-    if(hours <= 0){
-        hours += 24;
-    }
+    // hours -= 3;          // el tema con pasar a horario de argentina es que habría que cambiar el día (y hasta el año si es 31/12) también, y es todito un lío
+    // if(hours <= 0){
+    //     hours += 24;
+    // }
     printInt(hours);
     printf(":");
     int minutes = sys_time(MINUTES);

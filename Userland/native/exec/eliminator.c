@@ -208,5 +208,5 @@ void eliminator() {
         } while (!selected);
     }
     sys_clear();
-    shell();
+    return;
 }

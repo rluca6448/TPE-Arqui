@@ -151,8 +151,14 @@ SECTION .text
 	call exceptionDispatcher
 
 	call getStackBase
-	mov rsp, rax
-	call main
+	mov [rsp + 15*8 + 24], rax	; rsp
+
+	mov rax, 0x400000
+	mov [rsp + 15*8], rax		; rip
+
+	popState
+	iretq
+
 %endmacro
 
 GLOBAL storeRegs

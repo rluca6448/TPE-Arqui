@@ -29,7 +29,7 @@ void putCharColoured(char c, uint64_t foreGround, uint64_t backGround) {
             newLine(&x, &y);
             break;
         case 0x08:
-            deleteCharAt(&x, &y, foreGround, backGround);
+            deleteCharAt(&x, &y, backGround);
             break;
         default:
             putCharAt(c, &x, &y, foreGround, backGround);
@@ -137,8 +137,7 @@ void putCharAt(uint8_t c, uint64_t * x, uint64_t * y, uint64_t foreColor, uint64
     *x += FONT_WIDTH * fontSize;
 }
 
-// TODO: el foreColor es completamente inútil
-void deleteCharAt(uint64_t * x, uint64_t * y, uint64_t foreColor, uint64_t backgroundColor) {
+void deleteCharAt(uint64_t * x, uint64_t * y, uint64_t backgroundColor) {
     if (*x == 0 && *y == 0) return;         // no borra si no hay nada
     *x -= FONT_WIDTH * fontSize;
     if (xOutOfBounds(x)) {
@@ -146,7 +145,7 @@ void deleteCharAt(uint64_t * x, uint64_t * y, uint64_t foreColor, uint64_t backg
         *x = lastX;
         *y -= FONT_HEIGHT * fontSize;
     }
-    putCharAt(' ', x, y, foreColor, backgroundColor);
+    putCharAt(' ', x, y, backgroundColor, backgroundColor);
     *x -= FONT_WIDTH * fontSize;
 }
 

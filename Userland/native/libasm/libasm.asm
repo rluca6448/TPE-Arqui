@@ -12,6 +12,3 @@ runZeroDivisionException:
     xor rdx, rdx   ; rdx=0
     div rdx        ; rax/rdx
     ret
-
-section .bss
-    regex: resq 17; ;reserva espacio para 18 qwords (cada registro para mostrarlos en las excepciones)

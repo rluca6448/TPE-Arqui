@@ -5,8 +5,8 @@
 #include "lib.h"
 #include "naiveConsole.h"
 
-#define ZERO_EXCEPTION_ID 1
-#define INVALID_OPCODE_ID 0
+#define ZERO_EXCEPTION_ID 0
+#define INVALID_OPCODE_ID 1
 #define REG_SIZE 18
 
 static void zero_division();

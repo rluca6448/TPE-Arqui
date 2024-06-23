@@ -1,13 +1,10 @@
 GLOBAL runInvalidOpcodeException
 GLOBAL runZeroDivisionException
-GLOBAL inforeg
-
-EXTERN printRegisters
 
 section .text
 
 runInvalidOpcodeException:
-    db 0x66, 0xFF
+    db 0xFF, 0xFF
     ret
 
 runZeroDivisionException:

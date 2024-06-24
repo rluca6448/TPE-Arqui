@@ -61,7 +61,7 @@ void move_player() {
     }
 
     // Check for collisions with wall
-    if (new_x < 0 || new_x >= width - SQUARE_SIZE || new_y < 0 || new_y >= height - SQUARE_SIZE) {
+    if (new_x < SQUARE_SIZE || new_x >= width - 2*SQUARE_SIZE || new_y < SQUARE_SIZE || new_y >= height - 2*SQUARE_SIZE) {
         end_game();
     }
 
@@ -87,7 +87,7 @@ void move_player() {
 }
 
 void draw() {
-    putSquare(0xFF0000, player.x, player.y, SQUARE_SIZE);  // Draw player as red square
+    putSquare(0xFFFF00, player.x, player.y, SQUARE_SIZE);  // Draw player as yellow square
     // Draw tail
     putSquare(0x00FF00, player.tail[player.tail_length-1].x, player.tail[player.tail_length-1].y, SQUARE_SIZE);  // Draw tail as green squares
 }
@@ -156,12 +156,15 @@ void handleScore(int startingPoint, int lastScore) {
 
 void printBorders(void) {
     for(int i=0; i<width; i+=SQUARE_SIZE){
-        putSquare(0xFF0000, i, 0, SQUARE_SIZE);  // Draw player as red square
-        putSquare(0xFF0000, i, adjust(height), SQUARE_SIZE);  // Draw player as red square
+        putSquare(0xFF0000, i, 0, SQUARE_SIZE); 
+        putSquare(0xFF0000, i, adjust(height)-SQUARE_SIZE, SQUARE_SIZE); 
+        putSquare(0xFF0000, i, adjust(height), SQUARE_SIZE); 
+
     }
     for(int j=0; j<height; j+=SQUARE_SIZE){
-        putSquare(0xFF0000, 0, j, SQUARE_SIZE);  // Draw player as red square
-        putSquare(0xFF0000, adjust(width), j, SQUARE_SIZE);  // Draw player as red square
+        putSquare(0xFF0000, 0, j, SQUARE_SIZE); 
+        putSquare(0xFF0000, adjust(width)-SQUARE_SIZE, j, SQUARE_SIZE); 
+        putSquare(0xFF0000, adjust(width), j, SQUARE_SIZE); 
     }
 }
 

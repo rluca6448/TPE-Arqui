@@ -1,10 +1,6 @@
 #include <stdint.h>
 #include <lib.h>
 #include <moduleLoader.h>
-#include <naiveConsole.h>
-#include <keyboard.h>
-#include <IO.h>
-#include <video.h>
 #include <idtLoader.h>
 
 extern void test_int_80h();
@@ -23,7 +19,6 @@ static void *const sampleDataModuleAddress = (void *) 0x500000;
 
 typedef int (*EntryPoint)();
 
-//int keyFlag[4] = {0,0};        // index 0: bloq-mayus ; index 1: {1=shift ; 2=CTRL ; 3=alt}
 
 void clearBSS(void *bssAddress, uint64_t bssSize) {
     memset(bssAddress, 0, bssSize);
@@ -38,6 +33,7 @@ void *getStackBase() {
 }
 
 void *initializeKernelBinary() {
+    char buffer[10];
 
     void *moduleAddresses[] = {
             sampleCodeModuleAddress,
@@ -53,54 +49,12 @@ void *initializeKernelBinary() {
 
 int main() {
     load_idt();
-//    for (int i=0 ; i < 10 ; i++){
-//        putChar('C');
-//    }
-//    for (int i=0 ; i < 10 ; i++){
-//        putOut('O');
-//    }
-    sys_write(1, "xd", 2);
-    test_int_80h();
-    // while(1);
 
-//    char i = getKey();
-//    char key;
-//
-//    while ((key = mapKey(i, keyFlag)) != '\x03') {
-//        switch (i) {
-//            case '\x3A':    // bloq-mayus
-//                keyFlag[0] = !keyFlag[0];
-//                break;
-//            case '\x36':    // right-shift pressed
-//            case '\x2A':    // left-shift pressed
-//                keyFlag[0] = !keyFlag[0];
-//                keyFlag[1] = 1;
-//                break;
-//            case '\xAA':    // left-shift released
-//                keyFlag[0] = !keyFlag[0];
-//                keyFlag[1] = 0;
-//                break;
-//            case '\x9D':    // left-ctrl released
-//            case '\xB8':    // left-alt released
-//            case '\xB6':    // right-shift released
-//                keyFlag[1] = 0;
-//                break;
-//            case '\x1D':    // left-ctrl pressed
-//                keyFlag[1] = 2;
-//                break;
-//            case '\x38':    // left-alt pressed
-//                keyFlag[1] = 3;
-//                break;
-//            default:
-//                if (key != '\0') {
-//                    putChar(key);
-//                    putIn(key);
-//                }
-//                break;
-//        }
-//        i = getKey();
-//    }
+    // sys_registers();     // descomentar para ver registros del kernel
 
-     return 0;
+    ((EntryPoint) sampleCodeModuleAddress)();
+
+    while (1);
+
+    return 0;
 }
-

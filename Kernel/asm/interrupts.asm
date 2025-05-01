@@ -15,11 +15,13 @@ GLOBAL _irq05Handler
 
 GLOBAL _int80Handler
 
+GLOBAL saveCurrentRegisters
+
 GLOBAL _exception00Handler
 GLOBAL _exception06Handler
 
 
-
+EXTERN main
 EXTERN getStackBase
 EXTERN int80Dispacher
 EXTERN irqDispatcher
@@ -45,6 +47,34 @@ SECTION .text
 	push r13
 	push r14
 	push r15
+%endmacro
+
+%macro pushAndSaveState 0
+	pushState
+	mov [updating_regex + 8*0], rax
+	mov [updating_regex + 8*1], rbx
+	mov [updating_regex + 8*2], rcx
+    mov [updating_regex + 8*3], rdx
+    mov [updating_regex + 8*4], rsi
+    mov [updating_regex + 8*5], rdi
+	mov [updating_regex + 8*6], rbp
+	mov [updating_regex + 8*8], r8
+    mov [updating_regex + 8*9], r9
+    mov [updating_regex + 8*10], r10
+    mov [updating_regex + 8*11], r11
+    mov [updating_regex + 8*12], r12
+    mov [updating_regex + 8*13], r13
+    mov [updating_regex + 8*14], r14
+    mov [updating_regex + 8*15], r15
+
+	; para registros especiales, los busco en el stack
+	mov rax, [rsp + 15*8]
+	mov [updating_regex + 8*16], rax	; rip
+	mov rax, [rsp + 15*8 + 16]
+	mov [updating_regex + 8*17], rax	; rflags
+	mov rax, [rsp + 15*8 + 24]
+	mov [updating_regex + 8*7], rax		; rsp
+
 %endmacro
 
 %macro popState 0
@@ -100,7 +130,7 @@ SECTION .text
 %endmacro
 
 %macro irqHandlerMaster 1
-	pushState
+	pushAndSaveState
 
 	mov rdi, %1 ; pasaje de parametro
 	call irqDispatcher
@@ -114,43 +144,56 @@ SECTION .text
 %endmacro
 
 %macro exceptionHandler 1
-	pushState
-	;Obtener todos los registros
-
-  mov [regex + 8*0], rax
-  mov [regex + 8*1], rbx
-  mov [regex + 8*2], rcx
-  mov [regex + 8*3], rdx
-  mov [regex + 8*4], rsi
-  mov [regex + 8*5], rdi
-  mov [regex + 8*6], rbp
-  mov [regex + 8*7], rsp
-  mov [regex + 8*8], r8
-  mov [regex + 8*9], r9
-  mov [regex + 8*10], r10
-  mov [regex + 8*11], r11
-  mov [regex + 8*12], r12
-  mov [regex + 8*13], r13
-  mov [regex + 8*14], r14
-  mov [regex + 8*15], r15
-
-    mov rax, [rsp] ; RIP
-    mov [regs+8*16], rax
-
-  mov rax, [rsp+8*2] ; RFLAGS
-  mov [regs+8*17], rax
+	pushAndSaveState	; guarda registros en updating_regex
 
 	mov rdi, %1 ; pasaje de parametros
-	mov rsi, regex
+	mov rsi, updating_regex
 	call exceptionDispatcher
 
 	call getStackBase
-	mov rsp, rax
+	mov [rsp + 15*8 + 24], rax	; rsp
+
+	mov rax, 0x400000
+	mov [rsp + 15*8], rax		; rip
 
 	popState
 	iretq
+
 %endmacro
 
+GLOBAL storeRegs
+
+%macro copy_updating_regex 0		; copia updating_regex en regex. Ver diferencia en section bss
+    push rsi                ; Save the RSI register (callee-saved)
+    push rdi                ; Save the RDI register (callee-saved)
+
+    mov rsi, updating_regex ; Load the source address into RSI
+    mov rdi, regex          ; Load the destination address into RDI
+
+    mov rcx, 18             ; Set the counter to 18 (number of quadwords)
+.copy_loop:
+    mov rax, [rsi]          ; Load a quadword from the source
+    mov [rdi], rax          ; Store the quadword into the destination
+    add rsi, 8              ; Move to the next quadword in the source
+    add rdi, 8              ; Move to the next quadword in the destination
+    loop .copy_loop         ; Decrement the counter and loop if not zero
+
+    pop rdi                 ; Restore the RDI register
+    pop rsi                 ; Restore the RSI register
+%endmacro
+
+
+storeRegs:
+    push rbp
+    mov rbp, rsp
+
+	copy_updating_regex
+
+    mov rax, regex
+
+    mov rsp, rbp
+    pop rbp
+    ret
 
 _hlt:
 	sti
@@ -210,11 +253,11 @@ _irq05Handler:
 
 ;Zero Division Exception
 _exception00Handler:
-;	exceptionHandler 0
+	exceptionHandler 0
 
 ;Invalid Opcode Exception
 _exception06Handler:
-;	exceptionHandler 1
+	exceptionHandler 1
 
 ;int 80 Handler
 _int80Handler:
@@ -242,4 +285,5 @@ haltcpu:
 
 SECTION .bss
 	aux resq 1
-	regex resq 18 ;reserva espacio para 18 qwords (cada registro para mostrarlos en las excepciones)
+	regex resq 18 			;reserva espacio para 18 qwords (cada registro para mostrarlos en las excepciones)
+	updating_regex resq 18	;como regex, pero se actualiza cada tick

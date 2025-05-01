@@ -1,7 +1,9 @@
-#include <keyboard.h>
-#include <video.h>
-#include <IO.h>
-#include <lib.h>
+#include "keyboard.h"
+#include "video.h"
+#include "IO.h"
+#include "lib.h"
+
+#define REGS_SIZE 18
 
 int keyFlag[4] = {0,0}; // index 0: bloq-mayus ; index 1: {1=shift ; 2=CTRL ; 3=alt}
 
@@ -138,6 +140,7 @@ const AsciiMap map[256] = {
         {'\xac', 0x29, 0x0, 3},
         {'\xd1', 0x27, 0x0, 1},
         {'\xf1', 0x27, 0x0, 0},
+        {'\xFF', 0x54, 0x0, 0}  // guarda los registros
 };
 
 char mapKey(char character, int flags[2]) {
@@ -158,7 +161,7 @@ char mapKey(char character, int flags[2]) {
 }
 
 void keyboard_handler() {
-    char i = get_key_2();
+    char i = getKey();      // llamada a Assembler
     char key = mapKey(i, keyFlag);
     switch (i) {
         case '\x3A':    // bloq-mayus
@@ -170,23 +173,23 @@ void keyboard_handler() {
             keyFlag[1] = 1;
             break;
         case '\xAA':    // left-shift released
+        case '\xB6':    // right-shift released
             keyFlag[0] = !keyFlag[0];
             keyFlag[1] = 0;
             break;
         case '\x9D':    // left-ctrl released
         case '\xB8':    // left-alt released
-        case '\xB6':    // right-shift released
             keyFlag[1] = 0;
             break;
         case '\x1D':    // left-ctrl pressed
             keyFlag[1] = 2;
             break;
-        case '\x38':    // left-alt pressed
+        case '\x38':    // left-alt pressed (guarda registros)
             keyFlag[1] = 3;
+            getRegs();
             break;
         default:
             if (key != '\0') {
-                putChar(key);
                 putIn(key);
             }
             break;

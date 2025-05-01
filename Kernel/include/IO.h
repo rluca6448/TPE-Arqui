@@ -3,10 +3,19 @@
 
 #include <stdint.h>
 
-void putChar(char c);
-void putCharColoured(char c, uint64_t foreGround, uint64_t backGround);
-void printfColoured(const char * fmt, uint64_t foreGround, uint64_t backGround);
 
-void print(char * str);
+void putOut(char c);
+void putIn(char c);
+void putChar(char c);
+void printf(char * str);
+void sys_write(int fd, const char* buf, int count);
+int sys_read(int fd, char* buf, int count);
+void sys_new_size(int newSize);
+void sys_clearScreen();
+
+
+
+
+
 
 #endif //TPE_ARQUI_IO_H

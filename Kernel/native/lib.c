@@ -1,4 +1,9 @@
 #include <stdint.h>
+#include "lib.h"
+#include "video.h"
+#include "IO.h"
+#include "interrupts.h"
+#include "naiveConsole.h"
 
 void * memset(void * destination, int32_t c, uint64_t length)
 {
@@ -47,4 +52,52 @@ void * memcpy(void * destination, const void * source, uint64_t length)
 	}
 
 	return destination;
+}
+
+int buflen(const char *s) {
+    int i = 0;
+    while (*s != '\0')
+    {
+        i++;
+        s++;
+    }
+    return i;
+}
+
+#define REGS_SIZE 18
+
+uint64_t * regs = {0};
+int regsCaptured = 0;
+
+char * regList[REGS_SIZE] = {
+        "RAX", "RBX", "RCX", "RDX", "RDI", "RSI","RBP", "RSP",
+        "R08", "R09", "R10", "R11", "R12", "R13", "R14",
+        "R15", "IP ", "RFLAGS "};
+
+void getRegs() {
+    regs = storeRegs();		// llamada a Assembler
+    regsCaptured = 1;
+}
+
+void sys_registers() {
+    if (!regsCaptured) {
+        getRegs();
+    } else {
+        printf("Tenias estos registros guardados:\n");
+    }
+
+    for (int i = 0; i < REGS_SIZE ; i++) {
+        char * buf;
+        printf(regList[i]);
+        uint32_t digits = uintToBase(regs[i], buf, 16);
+        printf(" : 0x");
+        int zeros = 15;
+        while(zeros > digits){
+            printf("0");
+            zeros--;
+        }
+        printf(buf);
+        putChar('\n');
+    }
+    regsCaptured = 0;
 }
